@@ -25,9 +25,9 @@ class PersistenceController {
     }
     return result
   }()
-
+  
   private let inMemory: Bool
-
+  
   lazy var container: NSPersistentCloudKitContainer = {
     
     let container = NSPersistentCloudKitContainer(name: "YourWeatherLife")
@@ -35,10 +35,10 @@ class PersistenceController {
     guard let description = container.persistentStoreDescriptions.first else {
       fatalError("Failed to retrieve a persistent store description.")
     }
-
+    
     let storesURL = description.url?.deletingLastPathComponent()
     description.url = storesURL?.appendingPathComponent("private.sqlite")
-
+    
     if inMemory {
       description.url = URL(fileURLWithPath: "/dev/null")
     }
