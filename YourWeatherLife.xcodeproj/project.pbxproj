@@ -16,6 +16,7 @@
 		634BCC14286028A70062E105 /* YourWeatherLifeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC13286028A70062E105 /* YourWeatherLifeTests.swift */; };
 		634BCC1E286028A70062E105 /* YourWeatherLifeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC1D286028A70062E105 /* YourWeatherLifeUITests.swift */; };
 		634BCC20286028A70062E105 /* YourWeatherLifeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC1F286028A70062E105 /* YourWeatherLifeUITestsLaunchTests.swift */; };
+		634BCC2F2860E4E20062E105 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634BCC2E2860E4E20062E105 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,9 @@
 		634BCC19286028A70062E105 /* YourWeatherLifeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YourWeatherLifeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		634BCC1D286028A70062E105 /* YourWeatherLifeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWeatherLifeUITests.swift; sourceTree = "<group>"; };
 		634BCC1F286028A70062E105 /* YourWeatherLifeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWeatherLifeUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		634BCC2C2860E4D60062E105 /* YourWeatherLife.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YourWeatherLife.entitlements; sourceTree = "<group>"; };
+		634BCC2E2860E4E20062E105 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		634BCC302860E52F0062E105 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634BCC2F2860E4E20062E105 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +87,7 @@
 				634BCC12286028A70062E105 /* YourWeatherLifeTests */,
 				634BCC1C286028A70062E105 /* YourWeatherLifeUITests */,
 				634BCBFB286028A50062E105 /* Products */,
+				634BCC2D2860E4E20062E105 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +104,8 @@
 		634BCBFC286028A50062E105 /* YourWeatherLife */ = {
 			isa = PBXGroup;
 			children = (
+				634BCC302860E52F0062E105 /* Info.plist */,
+				634BCC2C2860E4D60062E105 /* YourWeatherLife.entitlements */,
 				634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */,
 				634BCBFF286028A50062E105 /* ContentView.swift */,
 				634BCC01286028A70062E105 /* Assets.xcassets */,
@@ -131,6 +139,14 @@
 				634BCC1F286028A70062E105 /* YourWeatherLifeUITestsLaunchTests.swift */,
 			);
 			path = YourWeatherLifeUITests;
+			sourceTree = "<group>";
+		};
+		634BCC2D2860E4E20062E105 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				634BCC2E2860E4E20062E105 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -422,12 +438,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2022062001;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YourWeatherLife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather Life";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -451,12 +470,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2022062001;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = YourWeatherLife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather Life";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
