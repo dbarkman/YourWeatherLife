@@ -1,14 +1,17 @@
 //
 //  APIsProvider.swift
-//  YourDay
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/18/22.
 //
 
 import Foundation
 import CoreData
+import OSLog
 
 struct APIsProvider {
+
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "APIsProvider")
   
   static let shared = APIsProvider()
   
@@ -29,21 +32,21 @@ struct APIsProvider {
           let httpResponse = response as? HTTPURLResponse,
           httpResponse.statusCode == 200
     else {
-      print("Failed to received valid response and/or data.")
-      throw YourDayError.missingData
+      logger.debug("Failed to received valid response and/or data.")
+      throw YWLError.missingData
     }
     
     do {
       let jsonDecoder = JSONDecoder()
       let apiDecoder = try jsonDecoder.decode(APIDecoder.self, from: data)
       let apiList = apiDecoder.apisList
-      print("Received \(apiList.count) records.")
+      logger.debug("Received \(apiList.count) records.")
       
-      print("Start importing data to the store...")
+      logger.debug("Start importing data to the store...")
       try await importAPIs(from: apiList)
-      print("Finished importing data.")
+      logger.debug("Finished importing data.")
     } catch {
-      throw YourDayError.wrongDataFormat(error: error)
+      throw YWLError.wrongDataFormat(error: error)
     }
   }
   
@@ -61,10 +64,10 @@ struct APIsProvider {
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      print("Failed to execute batch insert request.")
-      throw YourDayError.batchInsertError
+      logger.debug("Failed to execute batch insert request.")
+      throw YWLError.batchInsertError
     }
-    print("Successfully inserted data.")
+    logger.debug("Successfully inserted data.")
   }
   
   private func newBatchInsertRequest(with apiList: [APIProperties]) -> NSBatchInsertRequest {
@@ -82,8 +85,7 @@ struct APIsProvider {
   private func newTaskContext() -> NSManagedObjectContext {
     let container = PersistenceController.shared.container
     let taskContext = container.newBackgroundContext()
-    taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy //adjust this to affect data overwriting
-    taskContext.undoManager = nil
+    taskContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy //adjust this to affect data overwriting
     return taskContext
   }
   

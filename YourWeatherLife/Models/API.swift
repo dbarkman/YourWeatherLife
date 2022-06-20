@@ -1,6 +1,6 @@
 //
 //  API.swift
-//  YourDay
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/18/22.
 //
@@ -25,7 +25,7 @@ class API: NSManagedObject {
           let newUrlBase = dictionary["urlBase"] as? String,
           let newActive = dictionary["active"] as? Int
     else {
-      throw YourDayError.missingData
+      throw YWLError.missingData
     }
     
     api = newApi

@@ -1,13 +1,13 @@
 //
-//  YourDayError.swift
-//  YourDay
+//  YWLError.swift
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/19/22.
 //
 
 import Foundation
 
-enum YourDayError: Error {
+enum YWLError: Error {
   case wrongDataFormat(error: Error)
   case missingData
   case creationError
@@ -17,7 +17,7 @@ enum YourDayError: Error {
   case unexpectedError(error: Error)
 }
 
-extension YourDayError: LocalizedError {
+extension YWLError: LocalizedError {
   var errorDescription: String? {
     switch self {
       case .wrongDataFormat(let error):
@@ -38,7 +38,7 @@ extension YourDayError: LocalizedError {
   }
 }
 
-extension YourDayError: Identifiable {
+extension YWLError: Identifiable {
   var id: String? {
     errorDescription
   }

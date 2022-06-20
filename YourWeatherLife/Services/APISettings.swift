@@ -1,6 +1,6 @@
 //
 //  APISettings.swift
-//  YourDay
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/18/22.
 //

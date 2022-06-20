@@ -1,6 +1,6 @@
 //
 //  HourDetail.swift
-//  YourDay
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/12/22.
 //

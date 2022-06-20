@@ -14,8 +14,8 @@ struct YourWeatherLifeApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
-        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+      Home()
+//        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
   }
 }

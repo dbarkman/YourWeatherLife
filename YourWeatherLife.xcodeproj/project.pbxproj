@@ -26,7 +26,7 @@
 		634BCC442860ED010062E105 /* APIsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC422860ED010062E105 /* APIsProvider.swift */; };
 		634BCC492860ED220062E105 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC452860ED220062E105 /* API.swift */; };
 		634BCC4A2860ED220062E105 /* Hour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC462860ED220062E105 /* Hour.swift */; };
-		634BCC4B2860ED220062E105 /* YourDayError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC472860ED220062E105 /* YourDayError.swift */; };
+		634BCC4B2860ED220062E105 /* YWLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC472860ED220062E105 /* YWLError.swift */; };
 		634BCC4C2860ED220062E105 /* HourDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC482860ED220062E105 /* HourDetails.swift */; };
 		634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC5C2860EE2C0062E105 /* BackgroundColor.swift */; };
 		634BCC5F2860EE2C0062E105 /* EditEventPencil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC5D2860EE2C0062E105 /* EditEventPencil.swift */; };
@@ -87,7 +87,7 @@
 		634BCC422860ED010062E105 /* APIsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIsProvider.swift; sourceTree = "<group>"; };
 		634BCC452860ED220062E105 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		634BCC462860ED220062E105 /* Hour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hour.swift; sourceTree = "<group>"; };
-		634BCC472860ED220062E105 /* YourDayError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YourDayError.swift; sourceTree = "<group>"; };
+		634BCC472860ED220062E105 /* YWLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YWLError.swift; sourceTree = "<group>"; };
 		634BCC482860ED220062E105 /* HourDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourDetails.swift; sourceTree = "<group>"; };
 		634BCC5C2860EE2C0062E105 /* BackgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundColor.swift; sourceTree = "<group>"; };
 		634BCC5D2860EE2C0062E105 /* EditEventPencil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEventPencil.swift; sourceTree = "<group>"; };
@@ -224,7 +224,7 @@
 				634BCC452860ED220062E105 /* API.swift */,
 				634BCC462860ED220062E105 /* Hour.swift */,
 				634BCC482860ED220062E105 /* HourDetails.swift */,
-				634BCC472860ED220062E105 /* YourDayError.swift */,
+				634BCC472860ED220062E105 /* YWLError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -471,7 +471,7 @@
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
 				634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */,
-				634BCC4B2860ED220062E105 /* YourDayError.swift in Sources */,
+				634BCC4B2860ED220062E105 /* YWLError.swift in Sources */,
 				634BCC00286028A50062E105 /* ContentView.swift in Sources */,
 				634BCC392860ECBB0062E105 /* WeatherSolutions.swift in Sources */,
 				634BCC752860EE5D0062E105 /* Home.swift in Sources */,

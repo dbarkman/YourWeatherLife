@@ -1,6 +1,6 @@
 //
 //  EventListWeekend.swift
-//  YourDay
+//  YourWeatherLife
 //
 //  Created by David Barkman on 6/11/22.
 //
