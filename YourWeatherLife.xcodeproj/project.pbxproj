@@ -11,7 +11,7 @@
 		634BCC00286028A50062E105 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCBFF286028A50062E105 /* ContentView.swift */; };
 		634BCC02286028A70062E105 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC01286028A70062E105 /* Assets.xcassets */; };
 		634BCC05286028A70062E105 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC04286028A70062E105 /* Preview Assets.xcassets */; };
-		634BCC07286028A70062E105 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC06286028A70062E105 /* Persistence.swift */; };
+		634BCC07286028A70062E105 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC06286028A70062E105 /* PersistenceController.swift */; };
 		634BCC0A286028A70062E105 /* YourWeatherLife.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */; };
 		634BCC14286028A70062E105 /* YourWeatherLifeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC13286028A70062E105 /* YourWeatherLifeTests.swift */; };
 		634BCC1E286028A70062E105 /* YourWeatherLifeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC1D286028A70062E105 /* YourWeatherLifeUITests.swift */; };
@@ -42,6 +42,7 @@
 		634BCC742860EE5D0062E105 /* DailyEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC722860EE5D0062E105 /* DailyEvents.swift */; };
 		634BCC752860EE5D0062E105 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC732860EE5D0062E105 /* Home.swift */; };
 		634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC762860EFC00062E105 /* AppDelegate.swift */; };
+		634BCC7A2860F1610062E105 /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 634BCC792860F1610062E105 /* Mixpanel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +68,7 @@
 		634BCBFF286028A50062E105 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		634BCC01286028A70062E105 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		634BCC04286028A70062E105 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		634BCC06286028A70062E105 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		634BCC06286028A70062E105 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		634BCC09286028A70062E105 /* YourWeatherLife.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = YourWeatherLife.xcdatamodel; sourceTree = "<group>"; };
 		634BCC0F286028A70062E105 /* YourWeatherLifeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YourWeatherLifeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		634BCC13286028A70062E105 /* YourWeatherLifeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWeatherLifeTests.swift; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634BCC7A2860F1610062E105 /* Mixpanel in Frameworks */,
 				634BCC2F2860E4E20062E105 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,7 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */,
-				634BCC06286028A70062E105 /* Persistence.swift */,
+				634BCC06286028A70062E105 /* PersistenceController.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -328,6 +330,9 @@
 			dependencies = (
 			);
 			name = YourWeatherLife;
+			packageProductDependencies = (
+				634BCC792860F1610062E105 /* Mixpanel */,
+			);
 			productName = YourWeatherLife;
 			productReference = 634BCBFA286028A50062E105 /* YourWeatherLife.app */;
 			productType = "com.apple.product-type.application";
@@ -400,6 +405,9 @@
 				Base,
 			);
 			mainGroup = 634BCBF1286028A50062E105;
+			packageReferences = (
+				634BCC782860F1610062E105 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+			);
 			productRefGroup = 634BCBFB286028A50062E105 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -448,7 +456,7 @@
 				634BCC742860EE5D0062E105 /* DailyEvents.swift in Sources */,
 				634BCC492860ED220062E105 /* API.swift in Sources */,
 				634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */,
-				634BCC07286028A70062E105 /* Persistence.swift in Sources */,
+				634BCC07286028A70062E105 /* PersistenceController.swift in Sources */,
 				634BCC5F2860EE2C0062E105 /* EditEventPencil.swift in Sources */,
 				634BCC662860EE440062E105 /* EventDetail.swift in Sources */,
 				634BCC442860ED010062E105 /* APIsProvider.swift in Sources */,
@@ -801,6 +809,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		634BCC782860F1610062E105 /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mixpanel/mixpanel-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		634BCC792860F1610062E105 /* Mixpanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 634BCC782860F1610062E105 /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
+			productName = Mixpanel;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */ = {

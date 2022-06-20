@@ -1,13 +1,17 @@
 //
-//  Persistence.swift
+//  PersistenceController.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/19/22.
 //
 
 import CoreData
+import OSLog
 
 class PersistenceController {
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "PersistenceController")
+
   static let shared = PersistenceController()
   
   static let preview: PersistenceController = {
@@ -35,6 +39,7 @@ class PersistenceController {
     guard let description = container.persistentStoreDescriptions.first else {
       fatalError("Failed to retrieve a persistent store description.")
     }
+    logger.debug("Retrieved a persistent store description! 🎉")
     
     let storesURL = description.url?.deletingLastPathComponent()
     description.url = storesURL?.appendingPathComponent("private.sqlite")
