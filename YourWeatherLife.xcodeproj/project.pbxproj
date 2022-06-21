@@ -45,6 +45,8 @@
 		634BCC7D286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC7B286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld */; };
 		634BCC7F286122930062E105 /* CloudPersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC7E286122930062E105 /* CloudPersistenceController.swift */; };
 		634BCC81286123E00062E105 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC80286123E00062E105 /* ContentView.swift */; };
+		634BCC872861886C0062E105 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC862861886C0062E105 /* Current.swift */; };
+		634BCC892861894F0062E105 /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC882861894F0062E105 /* Condition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,8 @@
 		634BCC7C286122590062E105 /* YourWeatherLifeiCloud.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = YourWeatherLifeiCloud.xcdatamodel; sourceTree = "<group>"; };
 		634BCC7E286122930062E105 /* CloudPersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudPersistenceController.swift; sourceTree = "<group>"; };
 		634BCC80286123E00062E105 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		634BCC862861886C0062E105 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
+		634BCC882861894F0062E105 /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +232,8 @@
 				634BCC462860ED220062E105 /* Hour.swift */,
 				634BCC482860ED220062E105 /* HourDetails.swift */,
 				634BCC472860ED220062E105 /* YWLError.swift */,
+				634BCC862861886C0062E105 /* Current.swift */,
+				634BCC882861894F0062E105 /* Condition.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -474,8 +480,10 @@
 				634BCC7F286122930062E105 /* CloudPersistenceController.swift in Sources */,
 				634BCC432860ED010062E105 /* GlobalViewModel.swift in Sources */,
 				634BCC3F2860ECDE0062E105 /* APIRequest.swift in Sources */,
+				634BCC892861894F0062E105 /* Condition.swift in Sources */,
 				634BCC712860EE500062E105 /* EventListWeekend.swift in Sources */,
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
+				634BCC872861886C0062E105 /* Current.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
 				634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */,
 				634BCC4B2860ED220062E105 /* YWLError.swift in Sources */,

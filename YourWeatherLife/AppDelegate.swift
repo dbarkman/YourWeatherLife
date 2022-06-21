@@ -18,15 +18,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
 
-    Task {
-      do {
-        logger.info("Trying to get APIs")
-        try await APIsProvider.shared.fetchAPIs()
-      } catch {
-        logger.error("Error loading APIs: \(error.localizedDescription)")
-      }
-    }
-
 //    NSUbiquitousKeyValueStore.default.set("Earth", forKey: "planet")
 //    if let planet = NSUbiquitousKeyValueStore.default.string(forKey: "planet") {
 //      print("Planet is: \(planet)")

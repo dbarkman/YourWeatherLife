@@ -7,9 +7,14 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct Home: View {
+
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
+  
   @StateObject private var globalViewModel = GlobalViewModel()
+  let context = LocalPersistenceController.shared.container.viewContext
   
   let twoColumns = [
     GridItem(.fixed(100), spacing: 15), //horizontal spacing
@@ -33,16 +38,25 @@ struct Home: View {
                 Text(globalViewModel.currentTemp)
                   .font(.largeTitle)
                   .minimumScaleFactor(0.1)
-                Text(globalViewModel.currentConditions)
-                  .font(.footnote)
+                  .padding(-7)
+                HStack {
+                  Text(globalViewModel.currentConditions)
+                    .font(.footnote)
                   .minimumScaleFactor(0.1)
+                  AsyncImage(url: URL(string: "https:\(globalViewModel.currentConditionIconURL)")) { image in
+                    image
+                      .resizable()
+                      .frame(width: 50, height: 50)
+                      .padding(-20)
+                  } placeholder: {}
+                } //end of HStack
               } //end of VStack
               RoundedRectangle(cornerRadius: 10)
                 .stroke(.gray, lineWidth: 2)
                 .frame(width: 100, height: 100)
             } //end of ZStack
             .task {
-              globalViewModel.fetchCurrentWeather()
+              await globalViewModel.fetchCurrentWeather()
             }
             ZStack {
               VStack(alignment: .trailing) {
