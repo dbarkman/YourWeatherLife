@@ -28,9 +28,7 @@ struct APIsProvider {
     urlRequest.setValue(signature, forHTTPHeaderField: "signature")
     
     let session = URLSession.shared
-    guard let (data, response) = try? await session.data(for: urlRequest),
-          let httpResponse = response as? HTTPURLResponse,
-          httpResponse.statusCode == 200
+    guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
       logger.debug("Failed to received valid response and/or data.")
       throw YWLError.missingData
@@ -83,9 +81,9 @@ struct APIsProvider {
   }
   
   private func newTaskContext() -> NSManagedObjectContext {
-    let container = PersistenceController.shared.container
+    let container = LocalPersistenceController.shared.container
     let taskContext = container.newBackgroundContext()
-    taskContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy //adjust this to affect data overwriting
+    taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy //adjust this to affect data overwriting, Object = API overwrites local storage, Store = API cannot overwrite local storage
     return taskContext
   }
   

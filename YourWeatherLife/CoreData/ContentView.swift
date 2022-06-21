@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  YourWeatherLife
 //
-//  Created by David Barkman on 6/19/22.
+//  Created by David Barkman on 6/20/22.
 //
 
 import SwiftUI
@@ -83,6 +83,6 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView().environment(\.managedObjectContext, CloudPersistenceController.preview.container.viewContext)
   }
 }
