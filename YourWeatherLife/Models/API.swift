@@ -12,6 +12,7 @@ import CoreData
 class API: NSManagedObject {
   
   @NSManaged var api: String
+  @NSManaged var priority: Int
   @NSManaged var apiKey: String
   @NSManaged var secretKey: String
   @NSManaged var urlBase: String
@@ -20,6 +21,7 @@ class API: NSManagedObject {
   func update(from apiProperties: APIProperties) throws {
     let dictionary = apiProperties.dictionaryValue
     guard let newApi = dictionary["api"] as? String,
+          let newPriority = dictionary["priority"] as? Int,
           let newApiKey = dictionary["apiKey"] as? String,
           let newSecretKey = dictionary["secretKey"] as? String,
           let newUrlBase = dictionary["urlBase"] as? String,
@@ -29,6 +31,7 @@ class API: NSManagedObject {
     }
     
     api = newApi
+    priority = newPriority
     apiKey = newApiKey
     secretKey = newSecretKey
     urlBase = newUrlBase
@@ -58,18 +61,20 @@ struct APIDecoder: Decodable {
 
 struct APIProperties: Decodable {
   let api: String
+  let priority: Int
   let apiKey: String
   let secretKey: String
   let urlBase: String
   let active: Int
   
   private enum CodingKeys: String, CodingKey {
-    case api, apiKey, secretKey, urlBase, active
+    case api, priority, apiKey, secretKey, urlBase, active
   }
   
   var dictionaryValue: [String: Any] {
     [
       "api": api,
+      "priority": priority,
       "apiKey": apiKey,
       "secretKey": secretKey,
       "urlBase": urlBase,
