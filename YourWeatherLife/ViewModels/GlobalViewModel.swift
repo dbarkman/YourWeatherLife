@@ -10,8 +10,21 @@ import Mixpanel
 
 class GlobalViewModel: ObservableObject {
   
-  @Published public var isShowingDailyEvents = false
+  //MARK: Home
   
+  @Published public var currentTemp = "--"
+  @Published public var currentConditions = "unkown"
+  
+  func fetchCurrentWeather() {
+//    currentTemp = "110°"
+//    currentConditions = "Sunny ☀️"
+  }
+
+  
+  //MARK: EditEventPencil
+  
+  @Published public var isShowingDailyEvents = false
+
   func showDailyEvents() {
     Mixpanel.mainInstance().track(event: "Showing DailyEvents")
     isShowingDailyEvents.toggle()

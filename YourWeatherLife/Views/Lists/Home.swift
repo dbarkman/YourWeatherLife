@@ -30,10 +30,10 @@ struct Home: View {
                 Text("Currently")
                   .font(.footnote)
                   .minimumScaleFactor(0.1)
-                Text("73°")
+                Text(globalViewModel.currentTemp)
                   .font(.largeTitle)
                   .minimumScaleFactor(0.1)
-                Text("Sunny ☀️")
+                Text(globalViewModel.currentConditions)
                   .font(.footnote)
                   .minimumScaleFactor(0.1)
               } //end of VStack
@@ -41,6 +41,9 @@ struct Home: View {
                 .stroke(.gray, lineWidth: 2)
                 .frame(width: 100, height: 100)
             } //end of ZStack
+            .task {
+              globalViewModel.fetchCurrentWeather()
+            }
             ZStack {
               VStack(alignment: .trailing) {
                 Text("Your Day Today")
@@ -126,9 +129,6 @@ struct Home: View {
             
           } //end of List
           .listStyle(.plain)
-          .task {
-            await loadAPIs()
-          }
         }
         .navigationBarHidden(true)
         
@@ -139,14 +139,6 @@ struct Home: View {
       }
     } //end of NavigationView
     .environmentObject(globalViewModel)
-  }
-  
-  private func loadAPIs() async {
-    do {
-      try await APIsProvider.shared.fetchAPIs()
-    } catch{
-      print("Error loading APIs: \(error)")
-    }
   }
 }
 
