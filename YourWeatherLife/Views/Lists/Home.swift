@@ -14,7 +14,7 @@ struct Home: View {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
   @StateObject private var globalViewModel = GlobalViewModel()
-  let context = LocalPersistenceController.shared.container.viewContext
+  @StateObject private var currentConditions = CurrentConditionsViewModel()
   
   let twoColumns = [
     GridItem(.fixed(100), spacing: 15), //horizontal spacing
@@ -32,35 +32,32 @@ struct Home: View {
           LazyVGrid(columns: twoColumns, spacing: 20) { //vertical spacing
             ZStack {
               VStack {
-                Text("Currently")
-                  .font(.footnote)
-                  .minimumScaleFactor(0.1)
-                Text(globalViewModel.currentTemp)
+                Text(currentConditions.ccDecoder?.current.displayTemp ?? "--")
                   .font(.largeTitle)
                   .minimumScaleFactor(0.1)
                   .padding(-7)
                 HStack {
-                  Text(globalViewModel.currentConditions)
+                  Text(currentConditions.ccDecoder?.current.condition.text ?? "unknown")
                     .font(.footnote)
                   .minimumScaleFactor(0.1)
-                  AsyncImage(url: URL(string: "https:\(globalViewModel.currentConditionIconURL)")) { image in
+                  AsyncImage(url: URL(string: "https:\(currentConditions.ccDecoder?.current.condition.icon ?? "")")) { image in
                     image
                       .resizable()
                       .frame(width: 50, height: 50)
-                      .padding(-20)
+                      .padding(-5)
                   } placeholder: {}
                 } //end of HStack
               } //end of VStack
-              RoundedRectangle(cornerRadius: 10)
-                .stroke(.gray, lineWidth: 2)
-                .frame(width: 100, height: 100)
+//              RoundedRectangle(cornerRadius: 10)
+//                .stroke(.gray, lineWidth: 2)
+//                .frame(width: 100, height: 100)
             } //end of ZStack
             .task {
-              await globalViewModel.fetchCurrentWeather()
+              await currentConditions.fetchCurrentWeather()
             }
             ZStack {
               VStack(alignment: .trailing) {
-                Text("Your Day Today")
+                Text("Your Weather")
                   .font(.largeTitle)
                   .lineLimit(1)
                   .minimumScaleFactor(0.1)
@@ -68,7 +65,10 @@ struct Home: View {
                   Image(systemName: "location.fill")
                     .symbolRenderingMode(.monochrome)
                     .foregroundColor(Color.accentColor)
-                  Text("Mesa, AZ")
+                  Text(currentConditions.ccDecoder?.location.name ?? "")
+                    .font(.title2)
+                    .minimumScaleFactor(0.1)
+                  Text(currentConditions.ccDecoder?.location.region ?? "")
                     .font(.title2)
                     .minimumScaleFactor(0.1)
                   Image(systemName: "chevron.down")
@@ -143,6 +143,9 @@ struct Home: View {
             
           } //end of List
           .listStyle(.plain)
+          .refreshable {
+            await currentConditions.fetchCurrentWeather()
+          }
         }
         .navigationBarHidden(true)
         
