@@ -21,9 +21,17 @@ class CurrentConditionsViewModel: ObservableObject {
   func fetchCurrentWeather() async {
     if UserDefaults.standard.bool(forKey: "apisFetched") {
       let api = DataService().fetchPrimaryAPIFromLocal()
-      guard !api.urlBase.isEmpty, !api.apiKey.isEmpty else { return }
-      let url = api.urlBase + "/current.json" + "?key=" + api.apiKey + "&q=85215"
-      let urlRequest = URLRequest(url: URL(string: url)!)
+      var url = ""
+      switch api.shortName {
+        case "tgw":
+          url = tgw.getCurrentWeatherURL(api)
+        case "aowm":
+          url = aowm.getCurrentWeatherURL(api)
+        default:
+          self.logger.error("Couldn't determine the API by shortname. 😭")
+      }
+      guard !url.isEmpty else { return }
+      let urlRequest = URLRequest(url: URL(string: url)!) //forced is ok since using guard right before to check for empty URL string
       do {
         guard let (data, response) = try? await URLSession.shared.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
         else {
