@@ -6,6 +6,7 @@
         <attribute name="apiKey" optional="YES" attributeType="String"/>
         <attribute name="priority" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="secretKey" optional="YES" attributeType="String"/>
+        <attribute name="shortName" optional="YES" attributeType="String"/>
         <attribute name="urlBase" optional="YES" attributeType="String"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -14,6 +15,6 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="API" positionX="-63" positionY="-18" width="128" height="119"/>
+        <element name="API" positionX="-63" positionY="-18" width="128" height="134"/>
     </elements>
 </model>

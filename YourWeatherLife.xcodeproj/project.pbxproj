@@ -52,6 +52,8 @@
 		634BCCA9286299F30062E105 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCA8286299F30062E105 /* DataService.swift */; };
 		634BCCAB28629DB80062E105 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAA28629DB80062E105 /* Location.swift */; };
 		634BCCAD28629EA70062E105 /* CurrentConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAC28629EA60062E105 /* CurrentConditions.swift */; };
+		634BCCB02866D96F0062E105 /* tgw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAF2866D96F0062E105 /* tgw.swift */; };
+		634BCCB22866DF090062E105 /* aowm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCB12866DF090062E105 /* aowm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		634BCCA8286299F30062E105 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		634BCCAA28629DB80062E105 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		634BCCAC28629EA60062E105 /* CurrentConditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentConditions.swift; sourceTree = "<group>"; };
+		634BCCAF2866D96F0062E105 /* tgw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tgw.swift; sourceTree = "<group>"; };
+		634BCCB12866DF090062E105 /* aowm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aowm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +186,7 @@
 				634BCC312860EB9C0062E105 /* Views */,
 				634BCC322860EBA50062E105 /* Models */,
 				634BCC332860EBAE0062E105 /* ViewModels */,
+				634BCCAE2866D9360062E105 /* APIs */,
 				634BCC342860EBB90062E105 /* Services */,
 				634BCC362860EBD10062E105 /* WeatherSolutions */,
 				634BCC352860EBC60062E105 /* CoreData */,
@@ -339,6 +344,15 @@
 				634BCC732860EE5D0062E105 /* Home.swift */,
 			);
 			path = Lists;
+			sourceTree = "<group>";
+		};
+		634BCCAE2866D9360062E105 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				634BCCAF2866D96F0062E105 /* tgw.swift */,
+				634BCCB12866DF090062E105 /* aowm.swift */,
+			);
+			path = APIs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -500,6 +514,7 @@
 				634BCC712860EE500062E105 /* EventListWeekend.swift in Sources */,
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
 				634BCC872861886C0062E105 /* Current.swift in Sources */,
+				634BCCB02866D96F0062E105 /* tgw.swift in Sources */,
 				634BCCAB28629DB80062E105 /* Location.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
 				634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */,
@@ -510,6 +525,7 @@
 				634BCC392860ECBB0062E105 /* WeatherSolutions.swift in Sources */,
 				634BCC752860EE5D0062E105 /* Home.swift in Sources */,
 				634BCCA9286299F30062E105 /* DataService.swift in Sources */,
+				634BCCB22866DF090062E105 /* aowm.swift in Sources */,
 				634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */,
 				634BCC81286123E00062E105 /* ContentView.swift in Sources */,
 				634BCC402860ECDE0062E105 /* CryptoUtilities.swift in Sources */,
