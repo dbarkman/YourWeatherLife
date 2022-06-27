@@ -16,6 +16,8 @@ struct AOWM_CurrentConditionsDecoder: Decodable {
     case weather, main, visibility, wind, rain, snow, clouds, dt, sys, timezone, id, name
   }
   
+  private(set) var current: Current
+  
   private(set) var aowm_weatherList = [AOWM_Weather]()
   private(set) var aowm_main: AOWM_Main
   private(set) var aowm_currentVisibility: Int
@@ -56,7 +58,19 @@ struct AOWM_CurrentConditionsDecoder: Decodable {
     self.aowm_currentTimezoneOffsetSeconds = try rootContainer.decode(Int.self, forKey: .timezone)
     self.aowm_currentCityId = try rootContainer.decode(Int.self, forKey: .id)
     self.aowm_currentCityName = try rootContainer.decode(String.self, forKey: .name)
-//    self.current.displayTemp = Formatters.format(temp: self.aowm_main.aowm_mainTemp, from: .celsius)
+    
+    let temperature = Formatters.format(temp: self.aowm_main.aowm_mainTemp, from: .celsius)
+    var condition = "Unknown"
+    var isDay = true
+    var icon = "day/113"
+    if aowm_weatherList.count > 0 {
+      condition = aowm_weatherList[0].aowm_weatherMain
+      isDay = aowm_weatherList[0].aowm_weatherIcon.last == "d" ? true : false
+      icon = AOWM_Icon.getCurrentConditionsIcon(iconId: aowm_weatherList[0].aowm_weatherId, isDay: isDay)
+    }
+    let location = aowm_currentCityName
+    
+    current = Current(temperature: temperature, condition: condition, icon: icon, location: location)
   }
 }
 

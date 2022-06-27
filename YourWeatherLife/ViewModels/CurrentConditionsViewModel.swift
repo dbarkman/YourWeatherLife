@@ -16,7 +16,7 @@ class CurrentConditionsViewModel: ObservableObject {
   
   //MARK: Home
   
-  @Published public var ccDecoder: TGW_CurrentConditionsDecoder?
+  @Published public var current: Current?
   
   func fetchCurrentWeather() async {
     if UserDefaults.standard.bool(forKey: "apisFetched") {
@@ -24,11 +24,13 @@ class CurrentConditionsViewModel: ObservableObject {
       var url = ""
       switch api.shortName {
         case "tgw":
+          logger.debug("Fetching from TGW")
           url = tgw.getCurrentWeatherURL(api)
         case "aowm":
+          logger.debug("Fetching from AOWM")
           url = aowm.getCurrentWeatherURL(api)
         default:
-          self.logger.error("Couldn't determine the API by shortname. 😭")
+          logger.error("Couldn't determine the API by shortname. 😭")
       }
       guard !url.isEmpty else { return }
       let urlRequest = URLRequest(url: URL(string: url)!) //forced is ok since using guard right before to check for empty URL string
@@ -43,25 +45,25 @@ class CurrentConditionsViewModel: ObservableObject {
         logger.error("Could not fetch current conditions. ⛈")
       }
       
+      let jsonDecoder = JSONDecoder()
       do {
-        let jsonDecoder = JSONDecoder()
-        do {
-          switch api.shortName {
-            case "tgw":
-              let currentConditionsDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
-              DispatchQueue.main.async {
-                self.ccDecoder = currentConditionsDecoder
-              }
-            case "aowm":
-              _ = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
-//            @todo: move current conditions into local core data and setup a fetch request to get the single record in the Home view.
-            default:
-              self.logger.error("Couldn't determine the Decoder by shortname. 😭")
-          }
-        } catch {
-          logger.error("Could not decode current conditions. 🌧")
-          print(error)
+        switch api.shortName {
+          case "tgw":
+            let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+            DispatchQueue.main.async {
+              self.current = tgwDecoder.current
+            }
+          case "aowm":
+            let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
+            DispatchQueue.main.async {
+              self.current = aowmDecoder.current
+            }
+          default:
+            self.logger.error("Couldn't determine the Decoder by shortname. 😭")
         }
+      } catch {
+        logger.error("Could not decode current conditions. 🌧")
+        print(error)
       }
       
     } else {

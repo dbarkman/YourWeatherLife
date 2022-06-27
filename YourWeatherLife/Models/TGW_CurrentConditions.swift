@@ -6,20 +6,53 @@
 //
 
 import Foundation
+import OSLog
 
 struct TGW_CurrentConditionsDecoder: Decodable {
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "AOWM_CurrentConditions")
+  var container = LocalPersistenceController.shared.container
+
   private enum RootCodingKeys: String, CodingKey {
     case location, current
   }
   
-  private(set) var location: TGW_Location
-  private(set) var current: TGW_Current
+  private(set) var current: Current
+  
+  private(set) var tgw_location: TGW_Location
+  private(set) var tgw_current: TGW_Current
 
   init(from decoder: Decoder) throws {
     let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
-    self.location = try rootContainer.decode(TGW_Location.self, forKey: .location)
-    self.current = try rootContainer.decode(TGW_Current.self, forKey: .current)
-    self.current.displayTemp = Formatters.format(temp: self.current.temp_c, from: .celsius)
+    self.tgw_location = try rootContainer.decode(TGW_Location.self, forKey: .location)
+    self.tgw_current = try rootContainer.decode(TGW_Current.self, forKey: .current)
+    
+    let temperature = Formatters.format(temp: self.tgw_current.temp_c, from: .celsius)
+    let condition = tgw_current.condition.text
+    let isDay = Int16(tgw_current.is_day)
+    let iconFileName = tgw_current.condition.icon.components(separatedBy: "/").last
+    let iconName = iconFileName?.components(separatedBy: ".").first ?? "113"
+    let icon = isDay == 1 ? "day/" + iconName : "night/" + iconName
+    let location = tgw_location.name
+    
+    current = Current(temperature: temperature, condition: condition, icon: icon, location: location)
+
+//    let request = Current.fetchRequest()
+//    let current = try container.viewContext.fetch(request)
+//    logger.debug("Current count: \(current.count)")
+//    if current.count == 0 {
+//      let currentObject = Current(context: container.viewContext)
+//      currentObject.temperature = Formatters.format(temp: self.tgw_current.temp_c, from: .celsius)
+//      currentObject.condition = self.tgw_current.condition.text
+//      currentObject.isDay = isDay
+//      currentObject.icon = isDay == 1 ? "day/" + icon : "night/" + icon
+//      currentObject.dateUpdated = Date()
+//      do {
+//        try container.viewContext.save()
+//      } catch {
+//        logger.error("Couldn't save current conditions. 💾")
+//      }
+//    }
   }
 }
 

@@ -10,18 +10,11 @@ import Mixpanel
 import OSLog
 
 struct Home: View {
-
+  
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
-//  @Environment(\.managedObjectContext) private var viewContext
-
   @StateObject private var globalViewModel = GlobalViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
-  
-  let twoColumns = [
-    GridItem(.fixed(100), spacing: 15), //horizontal spacing
-    GridItem(.flexible())
-  ]
   
   var body: some View {
     
@@ -31,33 +24,22 @@ struct Home: View {
       ZStack {
         BackgroundColor()
         VStack {
-          LazyVGrid(columns: twoColumns, spacing: 20) { //vertical spacing
-            ZStack {
-              VStack {
-                Text(currentConditions.ccDecoder?.current.displayTemp ?? "--")
-                  .font(.largeTitle)
-                  .minimumScaleFactor(0.1)
-                  .padding(-7)
+          List {
+            HStack {
+              VStack(alignment: .leading) {
                 HStack {
-                  Text(currentConditions.ccDecoder?.current.condition.text ?? "unknown")
-                    .font(.footnote)
-                  .minimumScaleFactor(0.1)
-                  AsyncImage(url: URL(string: "https:\(currentConditions.ccDecoder?.current.condition.icon ?? "")")) { image in
-                    image
-                      .resizable()
-                      .frame(width: 50, height: 50)
-                      .padding(-5)
-                  } placeholder: {}
+                  Text(currentConditions.current?.temperature ?? "88°")
+                    .font(.largeTitle)
+                  Image(currentConditions.current?.icon ?? "day/113")
+                    .padding(.vertical, -32)
                 } //end of HStack
+                Text(currentConditions.current?.condition ?? "Sunny")
+                  .font(.body)
+                  .minimumScaleFactor(0.1)
+                  .padding(.vertical, -25)
               } //end of VStack
-//              RoundedRectangle(cornerRadius: 10)
-//                .stroke(.gray, lineWidth: 2)
-//                .frame(width: 100, height: 100)
-            } //end of ZStack
-            .task {
-              await currentConditions.fetchCurrentWeather()
-            }
-            ZStack {
+              .padding(.horizontal, 10)
+              Spacer()
               VStack(alignment: .trailing) {
                 Text("Your Weather")
                   .font(.largeTitle)
@@ -67,26 +49,23 @@ struct Home: View {
                   Image(systemName: "location.fill")
                     .symbolRenderingMode(.monochrome)
                     .foregroundColor(Color.accentColor)
-                  Text(currentConditions.ccDecoder?.location.name ?? "")
-                    .font(.title2)
-                    .minimumScaleFactor(0.1)
-                  Text(currentConditions.ccDecoder?.location.region ?? "")
-                    .font(.title2)
+                  Text(currentConditions.current?.location ?? "Mesa")
+                    .font(.body)
                     .minimumScaleFactor(0.1)
                   Image(systemName: "chevron.down")
                     .symbolRenderingMode(.monochrome)
                     .foregroundColor(Color.accentColor)
                 } //end of HStack
               } //end of VStack
-              RoundedRectangle(cornerRadius: 10)
-                .stroke(.clear, lineWidth: 2)
-                .frame(height: 100)
-            } //end of ZStack
-          } //end of LazyVGrid
-          .padding(.horizontal)
-          .padding(.bottom, 10)
-          
-          List {
+              .padding(.horizontal, 10)
+            } //end of HStack
+            .padding(.bottom, 20)
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .task {
+              await currentConditions.fetchCurrentWeather()
+            }
+            
             ZStack(alignment: .leading) {
               NavigationLink(destination: EventDetail(event: "Morning Commute")) { }
                 .opacity(0)

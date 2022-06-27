@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63481ABE2868C4DB00478C11 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* Icon.swift */; };
+		63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */; };
+		63481AC2286A075600478C11 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC1286A075600478C11 /* Current.swift */; };
 		634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */; };
 		634BCC02286028A70062E105 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC01286028A70062E105 /* Assets.xcassets */; };
 		634BCC05286028A70062E105 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC04286028A70062E105 /* Preview Assets.xcassets */; };
@@ -73,7 +74,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		63481ABD2868C4DB00478C11 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
+		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		634BCBFA286028A50062E105 /* YourWeatherLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YourWeatherLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWeatherLifeApp.swift; sourceTree = "<group>"; };
 		634BCC01286028A70062E105 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				634BCC472860ED220062E105 /* YWLError.swift */,
 				634BCCAC28629EA60062E105 /* TGW_CurrentConditions.swift */,
 				634BCCB328681C860062E105 /* AOWM_CurrentConditions.swift */,
+				63481AC1286A075600478C11 /* Current.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -269,7 +272,7 @@
 				634BCC3D2860ECDE0062E105 /* CryptoUtilities.swift */,
 				634BCCA8286299F30062E105 /* DataService.swift */,
 				634BCCA428628C840062E105 /* Formatters.swift */,
-				63481ABD2868C4DB00478C11 /* Icon.swift */,
+				63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -510,7 +513,7 @@
 				634BCC712860EE500062E105 /* EventListWeekend.swift in Sources */,
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
 				634BCCB428681C860062E105 /* AOWM_CurrentConditions.swift in Sources */,
-				63481ABE2868C4DB00478C11 /* Icon.swift in Sources */,
+				63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */,
 				634BCCB02866D96F0062E105 /* tgw.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
 				634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */,
@@ -525,6 +528,7 @@
 				634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */,
 				634BCC81286123E00062E105 /* ContentView.swift in Sources */,
 				634BCC402860ECDE0062E105 /* CryptoUtilities.swift in Sources */,
+				63481AC2286A075600478C11 /* Current.swift in Sources */,
 				634BCC0A286028A70062E105 /* YourWeatherLife.xcdatamodeld in Sources */,
 				634BCC3E2860ECDE0062E105 /* APISettings.swift in Sources */,
 			);

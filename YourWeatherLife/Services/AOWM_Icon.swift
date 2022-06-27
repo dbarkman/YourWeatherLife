@@ -1,5 +1,5 @@
 //
-//  Icon.swift
+//  AOWM_Icon.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/26/22.
@@ -8,16 +8,13 @@
 import Foundation
 import UIKit
 
-struct icon {
+struct AOWM_Icon {
   
-  static func getCurrentConditionsIcon(iconId: Int, isDay: Bool) -> UIImage {
-    var image = UIImage()
+  static func getCurrentConditionsIcon(iconId: Int, isDay: Bool) -> String {
+    var iconName = "day/113"
     let name = getIconName(iconId: iconId)
-    let iconName = isDay ? "day" + name : "night" + name
-    if let iconImage = UIImage(named: iconName) {
-      image = iconImage
-    }
-    return image
+    iconName = isDay ? "day/" + name : "night/" + name
+    return iconName
   }
   
   static private func getIconName(iconId: Int) -> String {
