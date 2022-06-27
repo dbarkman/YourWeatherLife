@@ -18,9 +18,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
 
-    Task {
-      await DataService().fetchAPIsFromCloud()
-      UserDefaults.standard.set(true, forKey: "apisFetched")
+    if UserDefaults.standard.bool(forKey: "apisFetched") {
+      Task {
+        await DataService().fetchAPIsFromCloud()
+      }
     }
 
 //    NSUbiquitousKeyValueStore.default.set("Earth", forKey: "planet")

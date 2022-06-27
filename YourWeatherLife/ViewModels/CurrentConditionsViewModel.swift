@@ -16,7 +16,7 @@ class CurrentConditionsViewModel: ObservableObject {
   
   //MARK: Home
   
-  @Published public var ccDecoder: CurrentConditionsDecoder?
+  @Published public var ccDecoder: TGW_CurrentConditionsDecoder?
   
   func fetchCurrentWeather() async {
     if UserDefaults.standard.bool(forKey: "apisFetched") {
@@ -46,12 +46,21 @@ class CurrentConditionsViewModel: ObservableObject {
       do {
         let jsonDecoder = JSONDecoder()
         do {
-          let currentConditionsDecoder = try jsonDecoder.decode(CurrentConditionsDecoder.self, from: data)
-          DispatchQueue.main.async {
-            self.ccDecoder = currentConditionsDecoder
+          switch api.shortName {
+            case "tgw":
+              let currentConditionsDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+              DispatchQueue.main.async {
+                self.ccDecoder = currentConditionsDecoder
+              }
+            case "aowm":
+              _ = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
+//            @todo: move current conditions into local core data and setup a fetch request to get the single record in the Home view.
+            default:
+              self.logger.error("Couldn't determine the Decoder by shortname. 😭")
           }
         } catch {
           logger.error("Could not decode current conditions. 🌧")
+          print(error)
         }
       }
       

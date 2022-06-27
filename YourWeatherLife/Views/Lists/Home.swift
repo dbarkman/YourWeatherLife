@@ -13,6 +13,8 @@ struct Home: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
+//  @Environment(\.managedObjectContext) private var viewContext
+
   @StateObject private var globalViewModel = GlobalViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
   
