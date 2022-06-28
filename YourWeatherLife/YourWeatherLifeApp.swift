@@ -6,11 +6,26 @@
 //
 
 import SwiftUI
+import OSLog
+import Mixpanel
 
 @main
 struct YourWeatherLifeApp: App {
 
-  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  //  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "YourWeatherLifeApp")
+
+  init() {
+    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
+    
+    if UserDefaults.standard.bool(forKey: "apisFetched") {
+      Task {
+        await DataService().fetchAPIsFromCloud()
+        try await TGW_ForecastProvider.shared.fetchForecast()
+      }
+    }
+  }
 
   var body: some Scene {
     WindowGroup {

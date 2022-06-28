@@ -7,6 +7,7 @@
 
 import Foundation
 import OSLog
+import CoreData
 
 struct DataService {
 
@@ -31,6 +32,20 @@ struct DataService {
       }
     } catch {
       logger.debug("Fetch failed 😭")
+    }
+    return API()
+  }
+  
+  func fetchAPIFromLocalBy(shortName: String) -> API {
+    let request = API.fetchRequest()
+    request.predicate = NSPredicate(format: "shortName = %@", shortName)
+    request.fetchLimit = 1
+    do {
+      if let api = try container.viewContext.fetch(request).first as? API {
+        return api
+      }
+    } catch {
+      logger.debug("Fetch API from local by name failed 😭")
     }
     return API()
   }

@@ -36,23 +36,6 @@ struct TGW_CurrentConditionsDecoder: Decodable {
     let location = tgw_location.name
     
     current = Current(temperature: temperature, condition: condition, icon: icon, location: location)
-
-//    let request = Current.fetchRequest()
-//    let current = try container.viewContext.fetch(request)
-//    logger.debug("Current count: \(current.count)")
-//    if current.count == 0 {
-//      let currentObject = Current(context: container.viewContext)
-//      currentObject.temperature = Formatters.format(temp: self.tgw_current.temp_c, from: .celsius)
-//      currentObject.condition = self.tgw_current.condition.text
-//      currentObject.isDay = isDay
-//      currentObject.icon = isDay == 1 ? "day/" + icon : "night/" + icon
-//      currentObject.dateUpdated = Date()
-//      do {
-//        try container.viewContext.save()
-//      } catch {
-//        logger.error("Couldn't save current conditions. 💾")
-//      }
-//    }
   }
 }
 

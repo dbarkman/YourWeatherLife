@@ -14,7 +14,11 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="ForecastDay" representedClassName="ForecastDay" syncable="YES" codeGenerationType="class"/>
+    <entity name="ForecastHour" representedClassName="ForecastHour" syncable="YES" codeGenerationType="class"/>
     <elements>
         <element name="API" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="ForecastDay" positionX="-54" positionY="45" width="128" height="29"/>
+        <element name="ForecastHour" positionX="-36" positionY="54" width="128" height="29"/>
     </elements>
 </model>
