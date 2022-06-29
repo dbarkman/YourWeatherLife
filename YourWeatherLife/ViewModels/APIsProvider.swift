@@ -86,6 +86,4 @@ struct APIsProvider {
     taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy //adjust this to affect data overwriting, Object = API overwrites local storage, Store = API cannot overwrite local storage
     return taskContext
   }
-  
-  
 }

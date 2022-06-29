@@ -15,7 +15,7 @@ struct TGW_ForecastProvider {
   
   static let shared = TGW_ForecastProvider()
   
-  func fetchForecast() async throws {
+  func fetchForecast() async {
     let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
     let url = tgw.getWeatherForecastURL(api, days: "14")
     logger.debug("forecast url: \(url)")
@@ -26,54 +26,82 @@ struct TGW_ForecastProvider {
     guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
       logger.debug("Failed to received valid response and/or data.")
-      throw YWLError.missingData
+      return
     }
     
     do {
       let jsonDecoder = JSONDecoder()
       let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: data)
-      let forecastDayArray = forecastDecoder.tgw_forecast.forecastday
-      logger.debug("Received \(forecastDayArray.count) days of forecast.")
-      let forecastHourArray = forecastDecoder.tgw_forecastHours
-      logger.debug("Received \(forecastHourArray.count) hours of forecast.")
+      let forecastDaysArray = forecastDecoder.tgw_forecastDays
+      logger.debug("Received \(forecastDaysArray.count) days of forecast.")
+      let forecastHoursArray = forecastDecoder.tgw_forecastHours
+      logger.debug("Received \(forecastHoursArray.count) hours of forecast.")
 
-//      logger.debug("Start importing data to the store...")
-//      try await importAPIs(from: apiList)
-//      logger.debug("Finished importing data.")
-      logger.debug("Forecast decode worked! 🎉")
+      await importForecastHours(from: forecastHoursArray)
+      await importForecastDays(from: forecastDaysArray)
+      logger.debug("Forecast decode succeeded! 🎉")
     } catch {
       logger.debug("Forecast decode failed 😭")
       print("Forecast decode error: \(error)")
-      throw YWLError.wrongDataFormat(error: error)
     }
   }
   
-  private func importAPIs(from apisList: [APIProperties]) async throws {
-    guard !apisList.isEmpty else { return }
+  private func importForecastHours(from forecastHoursArray: [TGW_ForecastHours]) async {
+    guard !forecastHoursArray.isEmpty else { return }
     
     let taskContext = newTaskContext()
     taskContext.name = "importContext"
-    taskContext.transactionAuthor = "importAPIs"
+    taskContext.transactionAuthor = "importForecastHours"
     
-    try await taskContext.perform {
-      let batchInsertRequest = self.newBatchInsertRequest(with: apisList)
+    await taskContext.perform {
+      let batchInsertRequest = self.newBatchInsertHoursRequest(with: forecastHoursArray)
       if let fetchResult = try? taskContext.execute(batchInsertRequest),
          let batchInsertResult = fetchResult as? NSBatchInsertResult,
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      logger.debug("Failed to execute batch insert request.")
-      throw YWLError.batchInsertError
+      logger.debug("Failed to execute batch insert request of hours. 😭")
     }
-    logger.debug("Successfully inserted data.")
+    logger.debug("Successfully inserted hours. 🎉")
   }
   
-  private func newBatchInsertRequest(with apiList: [APIProperties]) -> NSBatchInsertRequest {
+  private func newBatchInsertHoursRequest(with forecastHoursArray: [TGW_ForecastHours]) -> NSBatchInsertRequest {
     var index = 0
-    let total = apiList.count
-    let batchInsertRequest = NSBatchInsertRequest(entity: API.entity(), dictionaryHandler: { dictionary in
+    let total = forecastHoursArray.count
+    let batchInsertRequest = NSBatchInsertRequest(entity: TGWForecastHour.entity(), dictionaryHandler: { dictionary in
       guard index < total else { return true }
-      dictionary.addEntries(from: apiList[index].dictionaryValue)
+      dictionary.addEntries(from: forecastHoursArray[index].dictionaryValue)
+      index += 1
+      return false
+    })
+    return batchInsertRequest
+  }
+  
+  private func importForecastDays(from forecastDaysArray: [TGW_ForecastDays]) async {
+    guard !forecastDaysArray.isEmpty else { return }
+    
+    let taskContext = newTaskContext()
+    taskContext.name = "importContext"
+    taskContext.transactionAuthor = "importForecastDays"
+    
+    await taskContext.perform {
+      let batchInsertRequest = self.newBatchInsertDaysRequest(with: forecastDaysArray)
+      if let fetchResult = try? taskContext.execute(batchInsertRequest),
+         let batchInsertResult = fetchResult as? NSBatchInsertResult,
+         let success = batchInsertResult.result as? Bool, success {
+        return
+      }
+      logger.debug("Failed to execute batch insert request of days. 😭")
+    }
+    logger.debug("Successfully inserted days. 🎉")
+  }
+  
+  private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {
+    var index = 0
+    let total = forecastDaysArray.count
+    let batchInsertRequest = NSBatchInsertRequest(entity: TGWForecastDay.entity(), dictionaryHandler: { dictionary in
+      guard index < total else { return true }
+      dictionary.addEntries(from: forecastDaysArray[index].dictionaryValue)
       index += 1
       return false
     })
@@ -86,6 +114,4 @@ struct TGW_ForecastProvider {
     taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy //adjust this to affect data overwriting, Object = API overwrites local storage, Store = API cannot overwrite local storage
     return taskContext
   }
-  
-  
 }

@@ -22,7 +22,7 @@ struct YourWeatherLifeApp: App {
     if UserDefaults.standard.bool(forKey: "apisFetched") {
       Task {
         await DataService().fetchAPIsFromCloud()
-        try await TGW_ForecastProvider.shared.fetchForecast()
+        await TGW_ForecastProvider.shared.fetchForecast()
       }
     }
   }
