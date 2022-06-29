@@ -39,7 +39,6 @@ class CloudPersistenceController {
     guard let description = container.persistentStoreDescriptions.first else {
       fatalError("Failed to retrieve a persistent store description.")
     }
-    logger.debug("Retrieved a persistent store description! 🎉")
     
     let storesURL = description.url?.deletingLastPathComponent()
     description.url = storesURL?.appendingPathComponent("cloud.sqlite")

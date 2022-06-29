@@ -18,7 +18,6 @@ struct TGW_ForecastProvider {
   func fetchForecast() async {
     let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
     let url = tgw.getWeatherForecastURL(api, days: "14")
-    logger.debug("forecast url: \(url)")
     guard !url.isEmpty else { return }
     let urlRequest = URLRequest(url: URL(string: url)!)
     
@@ -33,16 +32,12 @@ struct TGW_ForecastProvider {
       let jsonDecoder = JSONDecoder()
       let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: data)
       let forecastDaysArray = forecastDecoder.tgw_forecastDays
-      logger.debug("Received \(forecastDaysArray.count) days of forecast.")
       let forecastHoursArray = forecastDecoder.tgw_forecastHours
-      logger.debug("Received \(forecastHoursArray.count) hours of forecast.")
 
       await importForecastHours(from: forecastHoursArray)
       await importForecastDays(from: forecastDaysArray)
-      logger.debug("Forecast decode succeeded! 🎉")
     } catch {
-      logger.debug("Forecast decode failed 😭")
-      print("Forecast decode error: \(error)")
+      logger.debug("Forecast decode failed 😭 \(error.localizedDescription)")
     }
   }
   

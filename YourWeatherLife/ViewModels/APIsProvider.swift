@@ -15,7 +15,7 @@ struct APIsProvider {
   
   static let shared = APIsProvider()
   
-  func fetchAPIs() async throws {
+  func fetchAPIs() async {
     let apiKey = APISettings.fetchAPISettings().apiKey
     let secretKey = APISettings.fetchAPISettings().secretKey
     let urlBase = APISettings.fetchAPISettings().urlBase
@@ -30,32 +30,31 @@ struct APIsProvider {
     let session = URLSession.shared
     guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
-      logger.debug("Failed to received valid response and/or data.")
-      throw YWLError.missingData
+      logger.debug("Failed to received valid response and/or data when fetching APIs.")
+      return
     }
-    
+    await decodeAPIs(data: data)
+  }
+  
+  private func decodeAPIs(data: Data) async {
     do {
       let jsonDecoder = JSONDecoder()
       let apiDecoder = try jsonDecoder.decode(APIDecoder.self, from: data)
       let apiList = apiDecoder.apisList
-      logger.debug("Received \(apiList.count) records.")
-      
-      logger.debug("Start importing data to the store...")
-      try await importAPIs(from: apiList)
-      logger.debug("Finished importing data.")
+      await importAPIs(from: apiList)
     } catch {
-      throw YWLError.wrongDataFormat(error: error)
+      logger.debug("Failed to decode data when fetching APIs.")
     }
   }
   
-  private func importAPIs(from apisList: [APIProperties]) async throws {
+  private func importAPIs(from apisList: [APIProperties]) async {
     guard !apisList.isEmpty else { return }
     
     let taskContext = newTaskContext()
     taskContext.name = "importContext"
     taskContext.transactionAuthor = "importAPIs"
     
-    try await taskContext.perform {
+    await taskContext.perform {
       let batchInsertRequest = self.newBatchInsertRequest(with: apisList)
       if let fetchResult = try? taskContext.execute(batchInsertRequest),
          let batchInsertResult = fetchResult as? NSBatchInsertResult,
@@ -63,7 +62,6 @@ struct APIsProvider {
         return
       }
       logger.debug("Failed to execute batch insert request.")
-      throw YWLError.batchInsertError
     }
     logger.debug("Successfully inserted data.")
   }

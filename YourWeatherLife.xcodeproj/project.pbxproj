@@ -286,10 +286,10 @@
 		634BCC352860EBC60062E105 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */,
-				634BCC06286028A70062E105 /* LocalPersistenceController.swift */,
-				634BCC7B286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld */,
 				634BCC7E286122930062E105 /* CloudPersistenceController.swift */,
+				634BCC06286028A70062E105 /* LocalPersistenceController.swift */,
+				634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */,
+				634BCC7B286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld */,
 				634BCC80286123E00062E105 /* ContentView.swift */,
 			);
 			path = CoreData;

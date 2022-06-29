@@ -19,59 +19,47 @@ class CurrentConditionsViewModel: ObservableObject {
   @Published public var current: Current?
   
   func fetchCurrentWeather() async {
-    if UserDefaults.standard.bool(forKey: "apisFetched") {
-      let api = DataService().fetchPrimaryAPIFromLocal()
-      var url = ""
+    let api = await DataService().fetchPrimaryAPIFromLocal()
+    var url = ""
+    switch api.shortName {
+      case "tgw":
+        url = tgw.getCurrentWeatherURL(api)
+      case "aowm":
+        url = aowm.getCurrentWeatherURL(api)
+      default:
+        logger.error("Couldn't determine the API by shortname. 😭")
+    }
+    guard !url.isEmpty else { return }
+    let urlRequest = URLRequest(url: URL(string: url)!) //forced is ok since using guard right before to check for empty URL string
+    do {
+      guard let (data, response) = try? await URLSession.shared.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
+      else {
+        logger.debug("Failed to received valid response and/or data.")
+        throw YWLError.missingData
+      }
+      self.data = data
+    } catch {
+      logger.error("Could not fetch current conditions. ⛈")
+    }
+    
+    let jsonDecoder = JSONDecoder()
+    do {
       switch api.shortName {
         case "tgw":
-          logger.debug("Fetching from TGW")
-          url = tgw.getCurrentWeatherURL(api)
+          let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+          DispatchQueue.main.async {
+            self.current = tgwDecoder.current
+          }
         case "aowm":
-          logger.debug("Fetching from AOWM")
-          url = aowm.getCurrentWeatherURL(api)
+          let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
+          DispatchQueue.main.async {
+            self.current = aowmDecoder.current
+          }
         default:
-          logger.error("Couldn't determine the API by shortname. 😭")
+          self.logger.error("Couldn't determine the Decoder by shortname. 😭")
       }
-      guard !url.isEmpty else { return }
-      let urlRequest = URLRequest(url: URL(string: url)!) //forced is ok since using guard right before to check for empty URL string
-      do {
-        guard let (data, response) = try? await URLSession.shared.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
-        else {
-          logger.debug("Failed to received valid response and/or data.")
-          throw YWLError.missingData
-        }
-        self.data = data
-      } catch {
-        logger.error("Could not fetch current conditions. ⛈")
-      }
-      
-      let jsonDecoder = JSONDecoder()
-      do {
-        switch api.shortName {
-          case "tgw":
-            let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
-            DispatchQueue.main.async {
-              self.current = tgwDecoder.current
-            }
-          case "aowm":
-            let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
-            DispatchQueue.main.async {
-              self.current = aowmDecoder.current
-            }
-          default:
-            self.logger.error("Couldn't determine the Decoder by shortname. 😭")
-        }
-      } catch {
-        logger.error("Could not decode current conditions. 🌧")
-        print(error)
-      }
-      
-    } else {
-      Task {
-        await DataService().fetchAPIsFromCloud()
-        UserDefaults.standard.set(true, forKey: "apisFetched")
-        await fetchCurrentWeather()
-      }
+    } catch {
+      logger.error("Could not decode current conditions. 🌧 \(error.localizedDescription)")
     }
   }
 }

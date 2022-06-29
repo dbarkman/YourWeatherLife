@@ -15,23 +15,25 @@ struct DataService {
   var container = LocalPersistenceController.shared.container
 
   func fetchAPIsFromCloud() async {
-    do {
-      try await APIsProvider.shared.fetchAPIs()
-    } catch {
-      logger.error("Error loading APIs: \(error.localizedDescription)")
-    }
+    await APIsProvider.shared.fetchAPIs()
   }
   
-  func fetchPrimaryAPIFromLocal () -> API {
-    let request = API.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(keyPath: \API.priority, ascending: true)]
-    request.fetchLimit = 1
-    do {
-      if let api = try container.viewContext.fetch(request).first as? API {
-        return api
+  func fetchPrimaryAPIFromLocal () async -> API {
+    if !UserDefaults.standard.bool(forKey: "apisFetched") {
+      await DataService().fetchAPIsFromCloud()
+      UserDefaults.standard.set(true, forKey: "apisFetched")
+      return await fetchPrimaryAPIFromLocal()
+    } else {
+      let request = API.fetchRequest()
+      request.sortDescriptors = [NSSortDescriptor(keyPath: \API.priority, ascending: true)]
+      request.fetchLimit = 1
+      do {
+        if let api = try container.viewContext.fetch(request).first as? API {
+          return api
+        }
+      } catch {
+        logger.debug("Error loading APIs from local 😭")
       }
-    } catch {
-      logger.debug("Fetch failed 😭")
     }
     return API()
   }

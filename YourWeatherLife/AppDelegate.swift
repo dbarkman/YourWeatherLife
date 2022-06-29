@@ -17,12 +17,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     
 //    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
-//
-//    if UserDefaults.standard.bool(forKey: "apisFetched") {
-//      Task {
-//        await DataService().fetchAPIsFromCloud()
-//      }
-//    }
 
 //    NSUbiquitousKeyValueStore.default.set("Earth", forKey: "planet")
 //    if let planet = NSUbiquitousKeyValueStore.default.string(forKey: "planet") {

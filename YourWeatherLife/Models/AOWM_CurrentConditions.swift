@@ -10,7 +10,7 @@ import OSLog
 
 struct AOWM_CurrentConditionsDecoder: Decodable {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "AOWM_CurrentConditions")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "AOWM_CurrentConditionsDecoder")
 
   private enum RootCodingKeys: String, CodingKey {
     case weather, main, visibility, wind, rain, snow, clouds, dt, sys, timezone, id, name
