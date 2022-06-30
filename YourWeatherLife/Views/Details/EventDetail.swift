@@ -9,7 +9,6 @@ import SwiftUI
 import Mixpanel
 
 struct EventDetail: View {
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
   
   var hours: [Hour]
   var title: String

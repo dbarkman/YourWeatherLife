@@ -9,18 +9,18 @@ import SwiftUI
 
 struct EventListToday: View {
   
-  @State public var precipitation: Bool
-  @State public var precipitationType: String
-  @State public var precipitationTime: String
-  @State public var precipitationPercent: String
-  @State public var coldestTemp: String
-  @State public var coldestTime: String
-  @State public var warmestTemp: String
-  @State public var warmestTime: String
-  @State public var sunriseTemp: String
-  @State public var sunriseTime: String
-  @State public var sunsetTemp: String
-  @State public var sunsetTime: String
+  @State var precipitation: Bool
+  @State var precipitationType: String
+  @State var precipitationTime: String
+  @State var precipitationPercent: String
+  @State var coldestTemp: String
+  @State var coldestTime: String
+  @State var warmestTemp: String
+  @State var warmestTime: String
+  @State var sunriseTemp: String
+  @State var sunriseTime: String
+  @State var sunsetTemp: String
+  @State var sunsetTime: String
   
   private let todayViewFontSize = Font.callout
   

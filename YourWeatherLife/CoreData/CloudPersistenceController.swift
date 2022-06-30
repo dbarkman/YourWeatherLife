@@ -10,8 +10,6 @@ import OSLog
 
 class CloudPersistenceController {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "CloudPersistenceController")
-  
   static let shared = CloudPersistenceController()
   
   static let preview: CloudPersistenceController = {

@@ -9,12 +9,12 @@ import SwiftUI
 
 struct EventListWeekend: View {
   
-  @State public var saturdayHighTemp: String
-  @State public var saturdayLowTemp: String
-  @State public var saturdaySummary: String
-  @State public var sundayHighTemp: String
-  @State public var sundayLowTemp: String
-  @State public var sundaySummary: String
+  @State var saturdayHighTemp: String
+  @State var saturdayLowTemp: String
+  @State var saturdaySummary: String
+  @State var sundayHighTemp: String
+  @State var sundayLowTemp: String
+  @State var sundaySummary: String
   
   private let todayViewFontSize = Font.callout
   

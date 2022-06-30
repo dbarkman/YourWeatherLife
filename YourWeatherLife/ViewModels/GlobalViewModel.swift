@@ -11,11 +11,9 @@ import OSLog
 
 class GlobalViewModel: ObservableObject {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GlobalViewModel")
-  
   //MARK: EditEventPencil
   
-  @Published public var isShowingDailyEvents = false
+  @Published var isShowingDailyEvents = false
   
   func showDailyEvents() {
     Mixpanel.mainInstance().track(event: "Showing DailyEvents")

@@ -16,9 +16,10 @@ class CurrentConditionsViewModel: ObservableObject {
   
   //MARK: Home
   
-  @Published public var current: Current?
+  @Published var current: Current?
   
-  func fetchCurrentWeather() async {
+  func fetchCurrentWeather(override: Bool = false) async {
+    guard override || GetAllData.shared.fetchCurrentConditions() else { return }
     let api = await DataService().fetchPrimaryAPIFromLocal()
     var url = ""
     switch api.shortName {

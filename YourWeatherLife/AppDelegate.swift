@@ -12,8 +12,6 @@ import Mixpanel
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "AppDelegate")
-
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     
 //    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")

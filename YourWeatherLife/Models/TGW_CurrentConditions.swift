@@ -56,27 +56,27 @@ struct TGW_Location: Decodable, Hashable {
 }
 
 struct TGW_Current: Decodable, Hashable {
-  var temp_c = 0.0
-  var temp_f = 0.0
-  var is_day = 1
+  var temp_c: Double
+  var temp_f: Double
+  var is_day: Int
   var condition: TGW_Condition
-  var wind_mph = 0.0
-  var wind_kph = 0.0
-  var wind_degree = 0.0
-  var wind_dir = "WSW"
-  var pressure_mb = 0.0
-  var pressure_in = 0.0
-  var precip_mm = 0.0
-  var precip_in = 0.0
-  var humidity = 0.0
-  var cloud = 0.0
-  var feelslike_c = 0.0
-  var feelslike_f = 0.0
-  var vis_km = 0.0
-  var vis_miles = 0.0
-  var uv = 0.0
-  var gust_mph = 0.0
-  var gust_kph = 0.0
+  var wind_mph: Double
+  var wind_kph: Double
+  var wind_degree: Double
+  var wind_dir: String
+  var pressure_mb: Double
+  var pressure_in: Double
+  var precip_mm: Double
+  var precip_in: Double
+  var humidity: Double
+  var cloud: Double
+  var feelslike_c: Double
+  var feelslike_f: Double
+  var vis_km: Double
+  var vis_miles: Double
+  var uv: Double
+  var gust_mph: Double
+  var gust_kph: Double
   var displayTemp: String?
 }
 

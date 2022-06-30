@@ -10,9 +10,9 @@ import SwiftUI
 struct EventListItem: View {
   @EnvironmentObject private var globalViewModel: GlobalViewModel
   
-  @State public var event: String
-  @State public var times: String
-  @State public var summary: String
+  @State var event: String
+  @State var times: String
+  @State var summary: String
   
   var body: some View {
     VStack(alignment: .leading) {

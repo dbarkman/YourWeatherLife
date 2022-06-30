@@ -10,9 +10,9 @@ import Mixpanel
 
 struct EditDailyEvent: View {
   
-  @State public var eventName = ""
-  @State public var eventStartTime = ""
-  @State public var eventEndTime = ""
+  @State var eventName = ""
+  @State var eventStartTime = ""
+  @State var eventEndTime = ""
   
   var body: some View {
     ZStack {

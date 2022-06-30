@@ -11,10 +11,10 @@ import OSLog
 
 struct Home: View {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
-  
   @StateObject private var globalViewModel = GlobalViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
+  
+  @State var override = false
   
   var body: some View {
     
@@ -30,6 +30,8 @@ struct Home: View {
                 HStack {
                   Text(currentConditions.current?.temperature ?? "88°")
                     .font(.largeTitle)
+                    .minimumScaleFactor(0.1)
+                    .lineLimit(1)
                   Image(currentConditions.current?.icon ?? "day/113")
                     .padding(.vertical, -32)
                 } //end of HStack
@@ -63,7 +65,9 @@ struct Home: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             .task {
-              await currentConditions.fetchCurrentWeather()
+              await currentConditions.fetchCurrentWeather(override: override)
+              await GetAllData.shared.getAllData()
+              override = false
             }
             
             ZStack(alignment: .leading) {
@@ -125,7 +129,9 @@ struct Home: View {
           } //end of List
           .listStyle(.plain)
           .refreshable {
+            Mixpanel.mainInstance().track(event: "Refresh Pulled")
             await currentConditions.fetchCurrentWeather()
+            await GetAllData.shared.getAllData()
           }
         }
         .navigationBarHidden(true)

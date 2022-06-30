@@ -10,25 +10,7 @@ import OSLog
 
 class LocalPersistenceController {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "LocalPersistenceController")
-
   static let shared = LocalPersistenceController()
-  
-  static let preview: LocalPersistenceController = {
-    let result = LocalPersistenceController(inMemory: true)
-    let viewContext = result.container.viewContext
-//    for _ in 0..<10 {
-//      let newItem = Item(context: viewContext)
-//      newItem.timestamp = Date()
-//    }
-//    do {
-//      try viewContext.save()
-//    } catch {
-//      let nsError = error as NSError
-//      fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-//    }
-    return result
-  }()
   
   private let inMemory: Bool
   

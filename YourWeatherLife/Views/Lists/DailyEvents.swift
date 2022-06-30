@@ -9,8 +9,7 @@ import SwiftUI
 import Mixpanel
 
 struct DailyEvents: View {
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  
+
   var body: some View {
     ZStack {
       BackgroundColor()

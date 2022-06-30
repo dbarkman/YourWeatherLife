@@ -10,9 +10,6 @@ import OSLog
 
 struct TGW_ForecastDecoder: Decodable {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastDecoder")
-  var container = LocalPersistenceController.shared.container
-  
   private enum RootCodingKeys: String, CodingKey {
     case location, current, forecast
   }
