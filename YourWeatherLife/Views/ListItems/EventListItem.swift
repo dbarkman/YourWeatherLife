@@ -11,7 +11,8 @@ struct EventListItem: View {
   @EnvironmentObject private var globalViewModel: GlobalViewModel
   
   @State var event: String
-  @State var times: String
+  @State var startTime: String
+  @State var endTime: String
   @State var summary: String
   
   var body: some View {
@@ -22,7 +23,12 @@ struct EventListItem: View {
           .fontWeight(.semibold)
           .minimumScaleFactor(0.1)
         Spacer()
-        Text(times)
+        Text(Dates.makeDisplayTimeFromTime(time: startTime))
+          .font(.callout)
+        Text(" - ")
+          .font(.callout)
+          .padding(.horizontal, -5)
+        Text(Dates.makeDisplayTimeFromTime(time: endTime))
           .font(.callout)
         EditEventPencil()
       } //end of HStack
@@ -41,8 +47,8 @@ struct EventListItem: View {
   }
 }
 
-struct EventListItem_Previews: PreviewProvider {
-  static var previews: some View {
-    EventListItem(event: "Morning Commute:", times: "7a - 9a", summary: "75° Clear and dry")
-  }
-}
+//struct EventListItem_Previews: PreviewProvider {
+//  static var previews: some View {
+//    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry")
+//  }
+//}

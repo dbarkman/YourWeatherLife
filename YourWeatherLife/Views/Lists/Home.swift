@@ -6,15 +6,20 @@
 //
 
 import SwiftUI
+import CoreData
 import Mixpanel
 import OSLog
 
 struct Home: View {
   
-  @StateObject private var globalViewModel = GlobalViewModel()
+  @Environment(\.managedObjectContext) private var viewContext
+
+  @ObservedObject private var globalViewModel: GlobalViewModel
   @StateObject private var currentConditions = CurrentConditionsViewModel()
   
-  @State var override = false
+  init(viewContext: NSManagedObjectContext) {
+    globalViewModel = GlobalViewModel(viewContext: viewContext)
+  }
   
   var body: some View {
     
@@ -28,7 +33,7 @@ struct Home: View {
             HStack {
               VStack(alignment: .leading) {
                 HStack {
-                  Text(currentConditions.current?.temperature ?? "88°")
+                  Text(currentConditions.current?.temperature ?? "--")
                     .font(.largeTitle)
                     .minimumScaleFactor(0.1)
                     .lineLimit(1)
@@ -65,34 +70,20 @@ struct Home: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             .task {
-              await currentConditions.fetchCurrentWeather(override: override)
+              await currentConditions.fetchCurrentWeather()
               await GetAllData.shared.getAllData()
-              override = false
+              globalViewModel.createEventList()
             }
-            
-            ZStack(alignment: .leading) {
-              NavigationLink(destination: EventDetail(event: "Morning Commute")) { }
-                .opacity(0)
-              EventListItem(event: "Morning Commute:", times: "7a - 9a", summary: "75° Clear and dry")
+
+            ForEach(globalViewModel.events) { event in
+              ZStack(alignment: .leading) {
+                NavigationLink(destination: EventDetail(event: event.event)) { }
+                  .opacity(0)
+                EventListItem(event: event.event, startTime: event.startTime, endTime: event.endTime, summary: event.summary)
+              }
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
             }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.clear)
-            
-            ZStack(alignment: .leading) {
-              NavigationLink(destination: EventDetail(event: "Lunch")) { }
-                .opacity(0)
-              EventListItem(event: "Lunch:", times: "11a - 12p", summary: "85° Cloudy and 20% chance of rain")
-            }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.clear)
-            
-            ZStack(alignment: .leading) {
-              NavigationLink(destination: EventDetail(event: "Afternoon Commute")) { }
-                .opacity(0)
-              EventListItem(event: "Afternoon Commute:", times: "4p - 6p", summary: "82° Cloudy and 80% chance of rain")
-            }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.clear)
             
             ZStack(alignment: .leading) {
               NavigationLink(destination: DayDetail()) { }
@@ -139,6 +130,7 @@ struct Home: View {
         NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of VStack
       .onAppear() {
+        print("+++++ On Appear @@@@@")
         Mixpanel.mainInstance().track(event: "Home View")
       }
     } //end of NavigationView
@@ -146,8 +138,9 @@ struct Home: View {
   }
 }
 
-struct ListView_Previews: PreviewProvider {
-  static var previews: some View {
-    Home()
-  }
-}
+//struct ListView_Previews: PreviewProvider {
+//  @Environment(\.managedObjectContext) private var viewContext
+//  static var previews: some View {
+//    Home(viewContext: viewContext)
+//  }
+//}

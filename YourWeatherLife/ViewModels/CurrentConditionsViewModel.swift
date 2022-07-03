@@ -18,8 +18,11 @@ class CurrentConditionsViewModel: ObservableObject {
   
   @Published var current: Current?
   
-  func fetchCurrentWeather(override: Bool = false) async {
-    guard override || GetAllData.shared.fetchCurrentConditions() else { return }
+  func fetchCurrentWeather() async {
+    guard GetAllData.shared.fetchCurrentConditions() else {
+      current = UserDefaults.standard.object(forKey: "currentConditions") as? Current
+      return
+    }
     let api = await DataService().fetchPrimaryAPIFromLocal()
     var url = ""
     switch api.shortName {
@@ -55,6 +58,7 @@ class CurrentConditionsViewModel: ObservableObject {
           let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
           DispatchQueue.main.async {
             self.current = aowmDecoder.current
+            UserDefaults.standard.set(self.current, forKey: "currentConditions")
           }
         default:
           self.logger.error("Couldn't determine the Decoder by shortname. 😭")

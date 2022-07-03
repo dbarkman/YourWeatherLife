@@ -57,6 +57,8 @@
         <attribute name="condition_code" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="condition_icon" optional="YES" attributeType="String"/>
         <attribute name="condition_text" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="dateTime" optional="YES" attributeType="String"/>
         <attribute name="dewpoint_c" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="dewpoint_f" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="feelslike_c" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -88,13 +90,13 @@
         <attribute name="windchill_f" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
-                <constraint value="time"/>
+                <constraint value="dateTime"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <elements>
         <element name="API" positionX="-63" positionY="-18" width="128" height="134"/>
         <element name="TGWForecastDay" positionX="-54" positionY="45" width="128" height="464"/>
-        <element name="TGWForecastHour" positionX="-36" positionY="54" width="128" height="554"/>
+        <element name="TGWForecastHour" positionX="-36" positionY="54" width="128" height="584"/>
     </elements>
 </model>

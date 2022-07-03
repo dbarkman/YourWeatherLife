@@ -10,6 +10,8 @@ import OSLog
 
 struct TGW_ForecastDecoder: Decodable {
   
+//  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastDecoder")
+
   private enum RootCodingKeys: String, CodingKey {
     case location, current, forecast
   }
@@ -61,6 +63,9 @@ struct TGW_ForecastDecoder: Decodable {
       let hours = day.hour
       for var hour in hours {
         let fhc = hour.condition
+        hour.dateTime = hour.time
+        hour.date = hour.time.components(separatedBy: " ").first
+        hour.time = (hour.dateTime?.components(separatedBy: " ").last)!
         hour.condition_text = fhc.text
         hour.condition_icon = fhc.icon
         hour.condition_code = fhc.code
@@ -176,6 +181,8 @@ struct TGW_Astro: Decodable, Hashable {
 
 struct TGW_ForecastHours: Decodable, Hashable {
   var time_epoch: Double
+  var dateTime: String?
+  var date: String?
   var time: String
   var temp_c: Double
   var temp_f: Double
@@ -215,6 +222,8 @@ struct TGW_ForecastHours: Decodable, Hashable {
   var dictionaryValue: [String: Any] {
     [
       "time_epoch": time_epoch,
+      "dateTime": dateTime!,
+      "date": date!,
       "time": time,
       "temp_c": temp_c,
       "temp_f": temp_f,
