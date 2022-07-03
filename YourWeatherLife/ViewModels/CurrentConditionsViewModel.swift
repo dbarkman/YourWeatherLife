@@ -20,7 +20,13 @@ class CurrentConditionsViewModel: ObservableObject {
   
   func fetchCurrentWeather() async {
     guard GetAllData.shared.fetchCurrentConditions() else {
-      current = UserDefaults.standard.object(forKey: "currentConditions") as? Current
+//      print("temp: \(UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--")")
+      let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--"
+      let condition = UserDefaults.standard.string(forKey: "currentConditionsCondition") ?? "--"
+      let icon = UserDefaults.standard.string(forKey: "currentConditionsIcon") ?? "--"
+      let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "--"
+      let current = Current(temperature: temperature, condition: condition, icon: icon, location: location)
+      self.current = current
       return
     }
     let api = await DataService().fetchPrimaryAPIFromLocal()
@@ -58,7 +64,10 @@ class CurrentConditionsViewModel: ObservableObject {
           let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
           DispatchQueue.main.async {
             self.current = aowmDecoder.current
-            UserDefaults.standard.set(self.current, forKey: "currentConditions")
+            UserDefaults.standard.set(self.current?.temperature, forKey: "currentConditionsTemperature")
+            UserDefaults.standard.set(self.current?.condition, forKey: "currentConditionsCondition")
+            UserDefaults.standard.set(self.current?.icon, forKey: "currentConditionsIcon")
+            UserDefaults.standard.set(self.current?.location, forKey: "currentConditionsLocation")
           }
         default:
           self.logger.error("Couldn't determine the Decoder by shortname. 😭")

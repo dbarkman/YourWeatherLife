@@ -69,11 +69,6 @@ struct Home: View {
             .padding(.bottom, 20)
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
-            .task {
-              await currentConditions.fetchCurrentWeather()
-              await GetAllData.shared.getAllData()
-              globalViewModel.createEventList()
-            }
 
             ForEach(globalViewModel.events) { event in
               ZStack(alignment: .leading) {
@@ -121,20 +116,27 @@ struct Home: View {
           .listStyle(.plain)
           .refreshable {
             Mixpanel.mainInstance().track(event: "Refresh Pulled")
-            await currentConditions.fetchCurrentWeather()
-            await GetAllData.shared.getAllData()
+            await updateData()
           }
         }
         .navigationBarHidden(true)
         
         NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of VStack
+      .task {
+        await updateData()
+      }
       .onAppear() {
-        print("+++++ On Appear @@@@@")
         Mixpanel.mainInstance().track(event: "Home View")
       }
     } //end of NavigationView
     .environmentObject(globalViewModel)
+  }
+  
+  private func updateData() async {
+    await currentConditions.fetchCurrentWeather()
+    await GetAllData.shared.getAllData()
+    globalViewModel.createEventList()
   }
 }
 

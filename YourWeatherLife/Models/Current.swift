@@ -13,5 +13,4 @@ struct Current {
   var condition: String
   var icon: String
   var location: String
-  
 }
