@@ -20,7 +20,6 @@ class CurrentConditionsViewModel: ObservableObject {
   
   func fetchCurrentWeather() async {
     guard GetAllData.shared.fetchCurrentConditions() else {
-//      print("temp: \(UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--")")
       let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--"
       let condition = UserDefaults.standard.string(forKey: "currentConditionsCondition") ?? "--"
       let icon = UserDefaults.standard.string(forKey: "currentConditionsIcon") ?? "--"

@@ -14,13 +14,6 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="Events" representedClassName="Events" syncable="YES" codeGenerationType="class">
-        <attribute name="endtime" optional="YES" attributeType="String"/>
-        <attribute name="event" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="startTime" optional="YES" attributeType="String"/>
-        <attribute name="summary" optional="YES" attributeType="String"/>
-    </entity>
     <entity name="TGWForecastDay" representedClassName="TGWForecastDay" syncable="YES" codeGenerationType="class">
         <attribute name="avghumidity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="avgtemp_c" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -105,6 +98,5 @@
         <element name="API" positionX="-63" positionY="-18" width="128" height="134"/>
         <element name="TGWForecastDay" positionX="-54" positionY="45" width="128" height="464"/>
         <element name="TGWForecastHour" positionX="-36" positionY="54" width="128" height="584"/>
-        <element name="Events" positionX="-9" positionY="180" width="128" height="104"/>
     </elements>
 </model>

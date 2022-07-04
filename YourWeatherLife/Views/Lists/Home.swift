@@ -13,12 +13,17 @@ import OSLog
 struct Home: View {
   
   @Environment(\.managedObjectContext) private var viewContext
+  @Environment(\.managedObjectContext) private var viewCloudContext
 
   @ObservedObject private var globalViewModel: GlobalViewModel
+  @ObservedObject var observer = Observer()
+  
   @StateObject private var currentConditions = CurrentConditionsViewModel()
   
-  init(viewContext: NSManagedObjectContext) {
-    globalViewModel = GlobalViewModel(viewContext: viewContext)
+  @State private var fetchAllData = false
+  
+  init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
+    globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
   }
   
   var body: some View {
@@ -70,7 +75,7 @@ struct Home: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
 
-            ForEach(globalViewModel.events) { event in
+            ForEach(globalViewModel.events, id: \.self) { event in
               ZStack(alignment: .leading) {
                 NavigationLink(destination: EventDetail(event: event.event)) { }
                   .opacity(0)
@@ -124,10 +129,17 @@ struct Home: View {
         NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of VStack
       .task {
-        await updateData()
+        if fetchAllData {
+          await updateData()
+        }
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
+      }
+      .onReceive(self.observer.$enteredForeground) { _ in
+        Task {
+          await updateData()
+        }
       }
     } //end of NavigationView
     .environmentObject(globalViewModel)
@@ -136,7 +148,8 @@ struct Home: View {
   private func updateData() async {
     await currentConditions.fetchCurrentWeather()
     await GetAllData.shared.getAllData()
-    globalViewModel.createEventList()
+    await globalViewModel.createEventList()
+    fetchAllData = true
   }
 }
 
