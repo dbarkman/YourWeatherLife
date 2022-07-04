@@ -44,6 +44,7 @@ class GlobalViewModel: ObservableObject {
       eventsList.removeAll()
       let fetchRequest: NSFetchRequest<DailyEvent>
       fetchRequest = DailyEvent.fetchRequest()
+      fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DailyEvent.nextStartDate, ascending: true)]
       if let dailyEventList = try? viewCloudContext.fetch(fetchRequest) {
         for dailyEvent in dailyEventList {
           let eventName = dailyEvent.event ?? ""

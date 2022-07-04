@@ -86,7 +86,8 @@ struct Dates {
     let startTime = roundTimeDown(time: start)
     let startTimeDate = makeDateFromTime(time: startTime)
     let lastHour = getLastHour(time: end, startTimeDate: startTimeDate)
-    let endTimeDate = makeDateFromTime(time: end)
+    var endTimeDate = makeDateFromTime(time: end)
+    if startTimeDate > endTimeDate { endTimeDate = makeFutureDateFromTime(time: end) }
     let makeFuture = startTimeDate < Date() && endTimeDate > Date() ? false : true
     let startDateTime = makeFutureDateFromTime(time: startTime, makeFuture: makeFuture)
     if startOnly == true { return [makeStringFromDate(date: startDateTime)] }
