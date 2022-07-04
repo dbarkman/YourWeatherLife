@@ -81,7 +81,7 @@ struct Dates {
     return lastHour //returns HH:mm
   }
   
-  static func getEventHours(start: String, end: String) -> [String] {
+  static func getEventHours(start: String, end: String, startOnly: Bool = false) -> [String] {
     var timeArray: [String] = []
     let startTime = roundTimeDown(time: start)
     let startTimeDate = makeDateFromTime(time: startTime)
@@ -89,6 +89,7 @@ struct Dates {
     let endTimeDate = makeDateFromTime(time: end)
     let makeFuture = startTimeDate < Date() && endTimeDate > Date() ? false : true
     let startDateTime = makeFutureDateFromTime(time: startTime, makeFuture: makeFuture)
+    if startOnly == true { return [makeStringFromDate(date: startDateTime)] }
     let endDateTime = makeFutureDateFromTime(time: lastHour, makeFuture: makeFuture)
     timeArray.append(makeStringFromDate(date: startDateTime))
     var startDateTimeTemp = startDateTime

@@ -37,6 +37,7 @@ class GlobalViewModel: ObservableObject {
   func createEventList() async {
     if !UserDefaults.standard.bool(forKey: "defaultEventsLoaded") {
       await EventProvider.shared.importEventsFromSeed()
+      await DataService().updateNextStartDate()
       UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
       await createEventList()
     } else {
@@ -63,7 +64,7 @@ class GlobalViewModel: ObservableObject {
           if let forecastHours = try? viewContext.fetch(fetchRequest) {
             let summary = EventSummary()
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-            let event = Event(event: eventName, startTime: startTime, endTime: endTime, summary: eventSummary)
+            let event = Event(event: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "")
             eventsList.append(event)
           }
         }

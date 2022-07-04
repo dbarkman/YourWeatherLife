@@ -3,6 +3,7 @@
     <entity name="DailyEvent" representedClassName="DailyEvent" syncable="YES" codeGenerationType="class">
         <attribute name="endTime" optional="YES" attributeType="String"/>
         <attribute name="event" optional="YES" attributeType="String"/>
+        <attribute name="nextStartDate" optional="YES" attributeType="String"/>
         <attribute name="startTime" optional="YES" attributeType="String"/>
         <attribute name="summary" optional="YES" attributeType="String"/>
     </entity>
@@ -11,6 +12,6 @@
     </entity>
     <elements>
         <element name="Item" positionX="-54" positionY="-9" width="128" height="44"/>
-        <element name="DailyEvent" positionX="-9" positionY="45" width="128" height="89"/>
+        <element name="DailyEvent" positionX="-9" positionY="45" width="128" height="104"/>
     </elements>
 </model>

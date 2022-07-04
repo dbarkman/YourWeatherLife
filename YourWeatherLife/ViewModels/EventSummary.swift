@@ -70,7 +70,7 @@ class EventSummary {
     let wind = windAverage / countD
     
     let uv = Int(averageUV / countD)
-    if uv > 5 { uvDescription = ", with a UV index of \(uv)" }
+//    if uv > 5 { uvDescription = ", UV index: \(uv)" }
     
     setTempDescriptionSummary(temp: temp)
     setConditionDescription()

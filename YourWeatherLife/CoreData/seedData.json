@@ -4,19 +4,22 @@
       "event": "Morning Commute",
       "startTime": "07:00",
       "endTime": "09:00",
-      "summary": ""
+      "summary": "",
+      "nextStartDate": ""
     },
     {
       "event": "Lunch",
       "startTime": "11:00",
       "endTime": "12:00",
-      "summary": ""
+      "summary": "",
+      "nextStartDate": ""
     },
     {
       "event": "Afternoon Commute",
       "startTime": "16:00",
       "endTime": "18:00",
-      "summary": ""
+      "summary": "",
+      "nextStartDate": ""
     }
   ]
 }
