@@ -89,6 +89,7 @@ struct TGW_ForecastProvider {
       logger.debug("Failed to execute batch insert request of days. 😭")
     }
     logger.debug("Successfully inserted days. 🎉")
+    NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
   }
   
   private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {

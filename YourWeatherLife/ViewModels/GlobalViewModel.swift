@@ -19,6 +19,8 @@ class GlobalViewModel: ObservableObject {
 
   @Published var isShowingDailyEvents = false
   @Published var events = [Event]()
+  @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
+  @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
   private var eventsList = [Event]()
 
   
@@ -33,6 +35,8 @@ class GlobalViewModel: ObservableObject {
     Mixpanel.mainInstance().track(event: "Showing DailyEvents")
     isShowingDailyEvents.toggle()
   }
+  
+  //MARK: EventList
   
   func createEventList() async {
     if !UserDefaults.standard.bool(forKey: "defaultEventsLoaded") {
@@ -50,8 +54,9 @@ class GlobalViewModel: ObservableObject {
           let eventName = dailyEvent.event ?? ""
           let start = dailyEvent.startTime ?? "00:00"
           let end = dailyEvent.endTime ?? "00:00"
-          let startTime = Dates.makeDisplayTimeFromTime(time: start)
-          let endTime = Dates.makeDisplayTimeFromTime(time: end)
+          let tomorrow = dailyEvent.tomorrow ?? ""
+          let startTime = Dates.makeDisplayTimeFromTime(time: start, format: "HH:mm")
+          let endTime = Dates.makeDisplayTimeFromTime(time: end, format: "HH:mm")
           let eventArray = Dates.getEventHours(start: start, end: end)
           var predicate = ""
           for event in eventArray {
@@ -65,7 +70,7 @@ class GlobalViewModel: ObservableObject {
           if let forecastHours = try? viewContext.fetch(fetchRequest) {
             let summary = EventSummary()
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-            let event = Event(event: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "")
+            let event = Event(event: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow)
             eventsList.append(event)
           }
         }

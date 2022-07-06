@@ -10,48 +10,43 @@ import Mixpanel
 
 struct DayDetail: View {
   
+  @StateObject private var dayDetail = DayDetailViewModel()
+  @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
+  
   var body: some View {
     ZStack {
       BackgroundColor()
-      List {
-        Section(header: Text("Summary")) {
-          Text("Coldest: 68° at 4a°")
-          Text("Sunrise: 72° at 7:14a")
-          Text("Warmest: 83° at 3p")
-          Text("Rain: 80% at 4p")
-          Text("Sunset: 76° at 8:13p")
+      List (dayDetail.todayArray, id: \.self) { day in
+        Section (header: Text(day.dayOfWeek)) {
+          Text("Coldest: \(day.coldestTemp) at \(day.coldestTime)")
+          Text("Sunrise: \(day.sunriseTemp) at \(day.sunriseTime)")
+          Text("Warmest: \(day.warmestTemp) at \(day.warmestTime)")
+          Text("Sunset: \(day.sunsetTemp) at \(day.dayOfWeek)")
+          if day.precipitation {
+            Text("\(day.precipitationType): \(day.precipitationPercent) chance")
+          }
         }
         .listRowBackground(Color("ListBackground"))
         Section(header: Text("Details")) {
-          Group {
-            NavigationLink(destination: HourDetail()) {
-              Text("7a 🌗 72°")
+          if let dayHours = day.hours {
+            ForEach(dayHours, id: \.self) { hour in
+              NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(day.dayOfWeek) @ \(hour.timeFull)")) {
+                HStack {
+                  Text("\(hour.time)")
+                  AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
+                    image.resizable()
+                  } placeholder: {
+                    Image("day/113")
+                  }
+                  .frame(width: 45, height: 45)
+                  Text("\(hour.temperature) \(hour.condition)")
+                }
+              }
             }
-            Text("8a ☀️ 74°")
-            Text("9a ☀️ 75°")
-            Text("10a ☀️ 76°")
-            Text("11a ☀️ 77°")
-            Text("12p ☀️ 79°")
-            Text("1p ☀️ 80°")
-            Text("2p ☀️ 82°")
-            Text("3p ☀️ 83°")
-            Text("4p ☀️ 82°")
-          }
-          Group {
-            Text("5p ☀️ 80°")
-            NavigationLink(destination: HourDetail()) {
-              Text("6p ☀️ 78°")
-            }
-            Text("7p ☀️ 77°")
-            Text("8p ☀️ 76°")
-            Text("9p 🌗 74°")
-            Text("10p 🌗 72°")
-            Text("11p 🌗 70°")
           }
         } //end of Section
         .listRowBackground(Color("ListBackground"))
       } //end of List
-      .navigationTitle("Today")
       .listStyle(.plain)
     } //end of ZStack
     .onAppear() {
@@ -60,6 +55,7 @@ struct DayDetail: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "DayDetail View")
+      dayDetail.fetchDayDetail(dates: dates)
     }
   }
 }

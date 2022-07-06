@@ -9,12 +9,7 @@ import SwiftUI
 
 struct EventListWeekend: View {
   
-  @State var saturdayHighTemp: String
-  @State var saturdayLowTemp: String
-  @State var saturdaySummary: String
-  @State var sundayHighTemp: String
-  @State var sundayLowTemp: String
-  @State var sundaySummary: String
+  @StateObject private var weekend = WeekendSummaryViewModel()
   
   private let todayViewFontSize = Font.callout
   
@@ -29,38 +24,61 @@ struct EventListWeekend: View {
         Text("Saturday:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(saturdayHighTemp)
+        Text(weekend.summary.saturdayHigh)
           .font(todayViewFontSize)
         Text("/")
           .font(todayViewFontSize)
-        Text(saturdayLowTemp)
+        Text(weekend.summary.saturdayLow)
           .font(todayViewFontSize)
       } //end of HStack
       .padding(.bottom, 1)
       HStack {
-        Text(saturdaySummary)
+        Text(weekend.summary.saturdayCondition)
           .font(todayViewFontSize)
           .minimumScaleFactor(0.1)
       } //end of HStack
       .padding(.bottom, 1)
+      if weekend.summary.saturdayPrecipitation {
+        HStack {
+          Text("\(weekend.summary.saturdayPrecipitationType):")
+            .font(todayViewFontSize)
+            .fontWeight(.semibold)
+          Text("\(weekend.summary.saturdayPrecipitationPercent) chance")
+            .font(todayViewFontSize)
+        } //end of HStack
+        .padding(.bottom, 1)
+      }
+      Divider()
+        .background(.black)
+        .frame(width: 150)
       HStack {
         Text("Sunday:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(sundayHighTemp)
+        Text(weekend.summary.sundayHigh)
           .font(todayViewFontSize)
         Text("/")
           .font(todayViewFontSize)
-        Text(sundayLowTemp)
+        Text(weekend.summary.sundayLow)
           .font(todayViewFontSize)
       } //end of HStack
       .padding(.bottom, 1)
       HStack {
-        Text(sundaySummary)
+        Text(weekend.summary.sundayCondition)
           .font(todayViewFontSize)
           .minimumScaleFactor(0.1)
       } //end of HStack
       .padding(.bottom, 1)
+      if weekend.summary.sundayPrecipitation {
+        HStack {
+          Text("\(weekend.summary.sundayPrecipitationType):")
+            .font(todayViewFontSize)
+            .fontWeight(.semibold)
+          Text("\(weekend.summary.sundayPrecipitationPercent) chance")
+            .font(todayViewFontSize)
+        } //end of HStack
+        .padding(.bottom, 1)
+      }
     } //end of VStack
     .padding([.leading, .trailing, .top], 10)
     .padding(.bottom, 20)
@@ -69,11 +87,14 @@ struct EventListWeekend: View {
         .stroke(.gray, lineWidth: 2)
         .padding(.bottom, 10)
     }
+    .task() {
+      weekend.fetchWeekendSummary()
+    }
   }
 }
 
 struct EventListWeekend_Previews: PreviewProvider {
   static var previews: some View {
-    EventListWeekend(saturdayHighTemp: "88°", saturdayLowTemp: "65°", saturdaySummary: "Sunny all day", sundayHighTemp: "91°", sundayLowTemp: "68°", sundaySummary: "Sunny morning, cloudy afternoon")
+    EventListWeekend()
   }
 }

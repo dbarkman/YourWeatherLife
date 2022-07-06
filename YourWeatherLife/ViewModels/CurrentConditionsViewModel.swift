@@ -56,17 +56,15 @@ class CurrentConditionsViewModel: ObservableObject {
       switch api.shortName {
         case "tgw":
           let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+          saveCurrentConditions(current: tgwDecoder.current)
           DispatchQueue.main.async {
             self.current = tgwDecoder.current
           }
         case "aowm":
           let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
+          saveCurrentConditions(current: aowmDecoder.current)
           DispatchQueue.main.async {
             self.current = aowmDecoder.current
-            UserDefaults.standard.set(self.current?.temperature, forKey: "currentConditionsTemperature")
-            UserDefaults.standard.set(self.current?.condition, forKey: "currentConditionsCondition")
-            UserDefaults.standard.set(self.current?.icon, forKey: "currentConditionsIcon")
-            UserDefaults.standard.set(self.current?.location, forKey: "currentConditionsLocation")
           }
         default:
           self.logger.error("Couldn't determine the Decoder by shortname. 😭")
@@ -74,5 +72,12 @@ class CurrentConditionsViewModel: ObservableObject {
     } catch {
       logger.error("Could not decode current conditions. 🌧 \(error.localizedDescription)")
     }
+  }
+  
+  func saveCurrentConditions(current: Current) {
+    UserDefaults.standard.set(current.temperature, forKey: "currentConditionsTemperature")
+    UserDefaults.standard.set(current.condition, forKey: "currentConditionsCondition")
+    UserDefaults.standard.set(current.icon, forKey: "currentConditionsIcon")
+    UserDefaults.standard.set(current.location, forKey: "currentConditionsLocation")
   }
 }

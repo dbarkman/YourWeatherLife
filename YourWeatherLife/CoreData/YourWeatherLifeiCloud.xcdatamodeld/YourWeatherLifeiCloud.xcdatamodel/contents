@@ -6,12 +6,13 @@
         <attribute name="nextStartDate" optional="YES" attributeType="String"/>
         <attribute name="startTime" optional="YES" attributeType="String"/>
         <attribute name="summary" optional="YES" attributeType="String"/>
+        <attribute name="tomorrow" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
         <element name="Item" positionX="-54" positionY="-9" width="128" height="44"/>
-        <element name="DailyEvent" positionX="-9" positionY="45" width="128" height="104"/>
+        <element name="DailyEvent" positionX="-9" positionY="45" width="128" height="119"/>
     </elements>
 </model>

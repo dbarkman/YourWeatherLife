@@ -12,14 +12,16 @@ import OSLog
 
 struct Home: View {
   
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
+  
   @Environment(\.managedObjectContext) private var viewContext
   @Environment(\.managedObjectContext) private var viewCloudContext
 
-  @ObservedObject private var globalViewModel: GlobalViewModel
   @ObservedObject var observer = Observer()
+  @ObservedObject private var globalViewModel: GlobalViewModel
   
   @StateObject private var currentConditions = CurrentConditionsViewModel()
-  
+
   @State private var fetchAllData = false
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
@@ -79,24 +81,24 @@ struct Home: View {
               ZStack(alignment: .leading) {
                 NavigationLink(destination: EventDetail(event: event.event)) { }
                   .opacity(0)
-                EventListItem(event: event.event, startTime: event.startTime, endTime: event.endTime, summary: event.summary)
+                EventListItem(event: event.event, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             }
             
             ZStack(alignment: .leading) {
-              NavigationLink(destination: DayDetail()) { }
+              NavigationLink(destination: DayDetail(dates: [globalViewModel.today]).navigationTitle("Today")) { }
                 .opacity(0)
-              EventListToday(precipitation: true, precipitationType: "Rain", precipitationTime: "4p", precipitationPercent: "80%", coldestTemp: "68°", coldestTime: "4a", warmestTemp: "83°", warmestTime: "3p", sunriseTemp: "72°", sunriseTime: "7:14a", sunsetTemp: "76°", sunsetTime: "8:13p")
+              EventListToday()
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             
             ZStack(alignment: .leading) {
-              NavigationLink(destination: WeekendDetail()) { }
+              NavigationLink(destination: DayDetail(dates: globalViewModel.weekend).navigationTitle("Weekend")) { }
                 .opacity(0)
-              EventListWeekend(saturdayHighTemp: "88°", saturdayLowTemp: "75°", saturdaySummary: "Sunny all day", sundayHighTemp: "91°", sundayLowTemp: "79°", sundaySummary: "Sunny morning, cloudy afternoon")
+              EventListWeekend()
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)

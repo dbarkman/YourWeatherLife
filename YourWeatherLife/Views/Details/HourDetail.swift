@@ -9,30 +9,38 @@ import SwiftUI
 import Mixpanel
 
 struct HourDetail: View {
+
+  @State var hour = HourForecast()
+  
   var body: some View {
     ZStack {
       BackgroundColor()
       List {
         Group {
-          Text("Temp: 85°")
-          Text("Feels like: 84°")
-          Text("Humidity: 60%")
-          Text("Dewpoint: 68°")
-          Text("Chance of rain: 60%")
-          Text("Precipitation Amount: 1/2 in")
+          Text("Temp: \(hour.temperature)")
+          Text("Feels like: \(hour.feelsLike)")
+          Text("Humidity: \(hour.humidity)%")
+          Text("Dewpoint: \(hour.dewPoint)")
+          if hour.willItRain {
+            Text("Chance of rain: \(hour.rainChance)")
+            Text("Expectd Rain Amount: \(hour.precipAmount)")
+          }
+          if hour.willItSnow {
+            Text("Chance of snow: \(hour.snowChance)")
+            Text("Expected Snow Amount: \(hour.precipAmount)")
+          }
         }
         .listRowBackground(Color("ListBackground"))
         Group {
-          Text("Winds: 5 mph")
-          Text("Gusting to: 6 mph")
-          Text("From the: west")
-          Text("Pressure: 30.01 in")
-          Text("Visibility: 10 mi")
-          Text("UV Index: 2")
+          Text("Winds: \(hour.wind)")
+          Text("Gusting to: \(hour.windGust)")
+          Text("From the: \(hour.windDirection)")
+          Text("Pressure: \(hour.pressure)")
+          Text("Visibility: \(hour.visibility)")
+          Text("UV Index: \(hour.uv)")
         }
         .listRowBackground(Color("ListBackground"))
       } //end of List
-      .navigationTitle("Today at 6p")
       .listStyle(.plain)
     } //end of ZStack
     .onAppear() {

@@ -14,6 +14,7 @@ struct EventListItem: View {
   @State var startTime: String
   @State var endTime: String
   @State var summary: String
+  @State var tomorrow: String
   
   var body: some View {
     VStack(alignment: .leading) {
@@ -23,6 +24,8 @@ struct EventListItem: View {
           .fontWeight(.semibold)
           .minimumScaleFactor(0.1)
         Spacer()
+        Text(tomorrow)
+          .font(.caption2)
         Text(startTime)
           .font(.callout)
         Text(" - ")
@@ -47,8 +50,8 @@ struct EventListItem: View {
   }
 }
 
-//struct EventListItem_Previews: PreviewProvider {
-//  static var previews: some View {
-//    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry")
-//  }
-//}
+struct EventListItem_Previews: PreviewProvider {
+  static var previews: some View {
+    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry", tomorrow: "Tomorrow")
+  }
+}

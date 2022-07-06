@@ -31,6 +31,7 @@ class EventSummary {
   var snowArray = [Int]()
 
   func creatSummary(hoursForecast: [TGWForecastHour]) -> String {
+    print("dbark - hours: \(hoursForecast.count)")
     
     //data
     var countI = 0
@@ -61,15 +62,15 @@ class EventSummary {
       countI += 1
     }
     
-    let temp = averageTemp / countD
+    let temp = countD > 0 ? averageTemp / countD : 0
     tempActual = String(Formatters.format(temp: temp, from: .celsius))
     let tempChange = firstTemp - lastTemp
     if tempChange >= 10 { tempChangeDescription = "temps falling" }
     if tempChange <= -10 { tempChangeDescription = "temps rising" }
-    let heatIndex = heatIndexAverage / countD
-    let wind = windAverage / countD
+    let heatIndex = countD > 0 ? heatIndexAverage / countD : 0
+    let wind = countD > 0 ? windAverage / countD : 0
     
-//    let uv = Int(averageUV / countD)
+//    let uv = countD > 0 ? Int(averageUV / countD) : 0
 //    if uv > 5 { uvDescription = ", UV index: \(uv)" }
     
     setTempDescriptionSummary(temp: temp)
@@ -129,7 +130,7 @@ class EventSummary {
         count += 1
         averageCloud += cloud
       }
-      let cloud = averageCloud / count
+      let cloud = count > 0 ? averageCloud / count : 0
       switch true {
         case cloud >= 75:
           description = "cloudy"
@@ -197,7 +198,7 @@ class EventSummary {
       rainAverage += rain
       count += 1
     }
-    let rain = rainAverage / count
+    let rain = count > 0 ? rainAverage / count : 0
     count = 0
     for snow in snowArray {
       if count == 0 { firstSnow = snow }
@@ -205,7 +206,7 @@ class EventSummary {
       snowAverage += snow
       count += 1
     }
-    let snow = snowAverage / count
+    let snow = count > 0 ? snowAverage / count : 0
 
     if rain < 25 && snow < 25 {
       rainDescription = ""

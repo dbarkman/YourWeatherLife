@@ -60,8 +60,11 @@ struct DataService {
       for dailyEvent in dailyEventList {
         let start = dailyEvent.startTime ?? "00:00"
         let end = dailyEvent.endTime ?? "00:00"
-        let nextStartDate = Dates.getEventHours(start: start, end: end, startOnly: true)[0]
-        dailyEvent.setValue(nextStartDate, forKey: "nextStartDate")
+        let result = Dates.getEventDateTimeAndIsToday(start: start, end: end)
+        dailyEvent.setValue(result.0, forKey: "nextStartDate")
+        if !result.1 {
+          dailyEvent.setValue("Tomorrow", forKey: "tomorrow")
+        }
         do {
           try cloudContainer.viewContext.save()
         } catch {

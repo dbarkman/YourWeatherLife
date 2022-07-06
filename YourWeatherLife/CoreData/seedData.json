@@ -5,21 +5,32 @@
       "startTime": "07:00",
       "endTime": "09:00",
       "summary": "",
-      "nextStartDate": ""
+      "nextStartDate": "",
+      "tomorrow": ""
     },
     {
       "event": "Lunch",
       "startTime": "11:00",
       "endTime": "12:00",
       "summary": "",
-      "nextStartDate": ""
+      "nextStartDate": "",
+      "tomorrow": ""
     },
     {
       "event": "Afternoon Commute",
       "startTime": "16:00",
       "endTime": "18:00",
       "summary": "",
-      "nextStartDate": ""
+      "nextStartDate": "",
+      "tomorrow": ""
+    },
+    {
+      "event": "Dinner",
+      "startTime": "19:00",
+      "endTime": "20:30",
+      "summary": "",
+      "nextStartDate": "",
+      "tomorrow": ""
     }
   ]
 }
