@@ -18,10 +18,12 @@ class GlobalViewModel: ObservableObject {
   var viewCloudContext: NSManagedObjectContext
 
   @Published var isShowingDailyEvents = false
-  @Published var events = [Event]()
+  @Published var events = [EventForecast]()
+  @Published var eventForecastHours = [String: [TGWForecastHour]]()
   @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
   @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
-  private var eventsList = [Event]()
+  private var eventsList = [EventForecast]()
+  
 
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
@@ -68,10 +70,15 @@ class GlobalViewModel: ObservableObject {
           fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
           fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)}")
           if let forecastHours = try? viewContext.fetch(fetchRequest) {
+            var hours = [HourForecast]()
+            for hour in forecastHours {
+              hours.append(DayDetailViewModel().configureHour(hour: hour))
+            }
             let summary = EventSummary()
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-            let event = Event(event: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow)
+            let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
             eventsList.append(event)
+            eventForecastHours[eventName] = forecastHours
           }
         }
       }

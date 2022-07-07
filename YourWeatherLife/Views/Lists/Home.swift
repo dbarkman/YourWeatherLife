@@ -79,9 +79,9 @@ struct Home: View {
 
             ForEach(globalViewModel.events, id: \.self) { event in
               ZStack(alignment: .leading) {
-                NavigationLink(destination: EventDetail(event: event.event)) { }
+                NavigationLink(destination: EventDetail(eventForecast: event)) { }
                   .opacity(0)
-                EventListItem(event: event.event, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
+                EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
@@ -103,17 +103,22 @@ struct Home: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             
+            VStack(alignment: .leading) {
+              Divider()
+                .background(.black)
+//                .frame(width: 150)
+              Text("Fictional Events from Your Calendar")
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+
             ZStack(alignment: .leading) {
-              NavigationLink(destination: EventDetail(event: "Taco Tuesday")) { }
-                .opacity(0)
               EventListCalendarItem(title: "Taco Tuesday Happy Hour on June 21", startTemp: "83°", startTime: "6p", endTemp: "75°", endTime: "9p", aroundSunrise: false, sunriseTemp: "", sunriseTime: "", aroundSunset: true, sunsetTemp: "76°", sunsetTime: "8:15p", precipitation: false, precipitationType: "", precipitationTime: "", precipitationPercent: "", eventWeatherSummary: "Cool and clear with no chance for rain")
             }
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
             
             ZStack(alignment: .leading) {
-              NavigationLink(destination: EventDetail(event: "Group Hike")) { }
-                .opacity(0)
               EventListCalendarItem(title: "Group hike on June 25", startTemp: "65°", startTime: "6:30a", endTemp: "72°", endTime: "9a", aroundSunrise: true, sunriseTemp: "67°", sunriseTime: "7:10a", aroundSunset: false, sunsetTemp: "", sunsetTime: "", precipitation: true, precipitationType: "rain", precipitationTime: "8a", precipitationPercent: "65%", eventWeatherSummary: "Cold and cloudy with a good chance of rain")
             }
             .listRowSeparator(.hidden)
