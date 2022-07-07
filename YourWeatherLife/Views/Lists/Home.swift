@@ -190,18 +190,22 @@ struct Home: View {
       .task {
         if fetchAllData {
           await updateData()
+          print("dbark - task")
         }
       }
       .onAppear() {
         locationViewModel.requestPermission()
         Mixpanel.mainInstance().track(event: "Home View")
+        print("dbark - onAppear")
       }
       .onReceive(self.observer.$enteredForeground) { _ in
+        print("dbark - onReceive")
         Task {
           await updateData()
         }
       }
       .onChange(of: scenePhase) { newPhase in
+        print("dbark - onChange")
         if newPhase == .active {
         } else if newPhase == .inactive {
         } else if newPhase == .background {
