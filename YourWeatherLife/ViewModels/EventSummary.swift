@@ -31,9 +31,6 @@ class EventSummary {
   var snowArray = [Int]()
 
   func creatSummary(hoursForecast: [TGWForecastHour]) -> String {
-    print("dbark - hours: \(hoursForecast.count)")
-    
-    //data
     var countI = 0
     var countD = 0.0
     var averageTemp = 0.0

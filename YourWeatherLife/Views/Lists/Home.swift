@@ -16,10 +16,12 @@ struct Home: View {
   
   @Environment(\.managedObjectContext) private var viewContext
   @Environment(\.managedObjectContext) private var viewCloudContext
+  @Environment(\.scenePhase) var scenePhase
 
   @ObservedObject var observer = Observer()
   @ObservedObject private var globalViewModel: GlobalViewModel
   
+  @StateObject var locationViewModel = LocationViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
 
   @State private var fetchAllData = false
@@ -191,11 +193,19 @@ struct Home: View {
         }
       }
       .onAppear() {
+        locationViewModel.requestPermission()
         Mixpanel.mainInstance().track(event: "Home View")
       }
       .onReceive(self.observer.$enteredForeground) { _ in
         Task {
           await updateData()
+        }
+      }
+      .onChange(of: scenePhase) { newPhase in
+        if newPhase == .active {
+        } else if newPhase == .inactive {
+        } else if newPhase == .background {
+          UserDefaults.standard.set(true, forKey: "watchForEnteredForeground")
         }
       }
     } //end of NavigationView
@@ -205,7 +215,6 @@ struct Home: View {
   private func updateData() async {
     await currentConditions.fetchCurrentWeather()
     await GetAllData.shared.getAllData()
-    await globalViewModel.createEventList()
     fetchAllData = true
   }
 }

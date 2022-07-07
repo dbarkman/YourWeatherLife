@@ -22,7 +22,6 @@ class WeekendSummaryViewModel: ObservableObject {
   }
   
   @objc func fetchWeekendSummary() {
-    print("dbark - fetching the weekend!")
     let saturdayDate = Calendar.current.nextWeekend(startingAfter: Date())?.start ?? Date()
     let sundayDate = Calendar.current.date(byAdding: .day, value: 1, to: saturdayDate) ?? Date()
     let saturday = Dates.makeStringFromDate(date: saturdayDate, format: "yyyy-MM-dd")

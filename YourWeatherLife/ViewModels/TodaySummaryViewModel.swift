@@ -45,7 +45,6 @@ class TodaySummaryViewModel: ObservableObject {
   func configureDay(todayForecast: TGWForecastDay) -> (Today, [TGWForecastHour]) {
 //    let todayForecast = forecastDay[0]
     let dayDate = todayForecast.date! + " 00:00"
-    print("dbark - \(dayDate)")
     let dayOfWeekDate = Dates.makeDateFromTime(time: dayDate, format: "yyyy-MM-dd HH:mm")
     var precipitation = false
     var precipitationType = ""

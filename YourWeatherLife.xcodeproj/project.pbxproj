@@ -30,6 +30,8 @@
 		63481B07287699BA00478C11 /* DayForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481B06287699BA00478C11 /* DayForecast.swift */; };
 		63481B092876A24000478C11 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481B082876A24000478C11 /* HomeViewModel.swift */; };
 		63481B0B2876AA6300478C11 /* HourlyForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481B0A2876AA6300478C11 /* HourlyForecast.swift */; };
+		63481B152877589F00478C11 /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481B142877589F00478C11 /* LocationViewModel.swift */; };
+		63481B172877616E00478C11 /* LocationUpdatedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481B162877616E00478C11 /* LocationUpdatedEvent.swift */; };
 		634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */; };
 		634BCC02286028A70062E105 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC01286028A70062E105 /* Assets.xcassets */; };
 		634BCC05286028A70062E105 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 634BCC04286028A70062E105 /* Preview Assets.xcassets */; };
@@ -117,6 +119,8 @@
 		63481B06287699BA00478C11 /* DayForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayForecast.swift; sourceTree = "<group>"; };
 		63481B082876A24000478C11 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		63481B0A2876AA6300478C11 /* HourlyForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecast.swift; sourceTree = "<group>"; };
+		63481B142877589F00478C11 /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
+		63481B162877616E00478C11 /* LocationUpdatedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdatedEvent.swift; sourceTree = "<group>"; };
 		634BCBFA286028A50062E105 /* YourWeatherLife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YourWeatherLife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourWeatherLifeApp.swift; sourceTree = "<group>"; };
 		634BCC01286028A70062E105 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -198,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				63481ADD2875084200478C11 /* ForecastInsertedEvent.swift */,
+				63481B162877616E00478C11 /* LocationUpdatedEvent.swift */,
 			);
 			path = Messaging;
 			sourceTree = "<group>";
@@ -331,6 +336,7 @@
 				63481AF9287529D900478C11 /* WeekendSummaryViewModel.swift */,
 				63481AFD28753B1200478C11 /* DayDetailViewModel.swift */,
 				63481B082876A24000478C11 /* HomeViewModel.swift */,
+				63481B142877589F00478C11 /* LocationViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -612,6 +618,7 @@
 				634BCCA528628C840062E105 /* Formatters.swift in Sources */,
 				63481ADB2873450700478C11 /* TodaySummaryViewModel.swift in Sources */,
 				634BCCAD28629EA70062E105 /* TGW_CurrentConditions.swift in Sources */,
+				63481B172877616E00478C11 /* LocationUpdatedEvent.swift in Sources */,
 				634BCC7D286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld in Sources */,
 				634BCC392860ECBB0062E105 /* WeatherSolutions.swift in Sources */,
 				634BCC752860EE5D0062E105 /* Home.swift in Sources */,
@@ -626,6 +633,7 @@
 				63481AC2286A075600478C11 /* Current.swift in Sources */,
 				634BCC0A286028A70062E105 /* YourWeatherLife.xcdatamodeld in Sources */,
 				63481ACD286D630700478C11 /* Event.swift in Sources */,
+				63481B152877589F00478C11 /* LocationViewModel.swift in Sources */,
 				634BCC3E2860ECDE0062E105 /* APISettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

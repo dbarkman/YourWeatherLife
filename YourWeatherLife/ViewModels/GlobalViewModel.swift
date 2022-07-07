@@ -22,15 +22,39 @@ class GlobalViewModel: ObservableObject {
   @Published var eventForecastHours = [String: [TGWForecastHour]]()
   @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
   @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
-  private var eventsList = [EventForecast]()
   
-
+  private var eventsList = [EventForecast]()
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     self.viewContext = viewContext
     self.viewCloudContext = viewCloudContext
+    NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcastAndUpdateEventList), name: .locationUpdatedEvent, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateEventList), name: .forecastInsertedEvent, object: nil)
   }
 
+  @objc func overrideFetchForcastAndUpdateEventList() {
+    let nextUpdate = Date(timeIntervalSince1970: 0)
+    UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
+    fetchForecastAndUpdateEventList()
+  }
+  
+  @objc func overrideUpdateEventList() {
+    updateEventList()
+  }
+  
+  func fetchForecastAndUpdateEventList() {
+    Task {
+      await GetAllData.shared.getAllData()
+//      await createEventList(from: "gvm.fetchForecastAndUpdateEventList")
+    }
+  }
+  
+  func updateEventList() {
+    Task {
+      await createEventList()
+    }
+  }
+  
   //MARK: EditEventPencil
   
   func showDailyEvents() {
@@ -69,6 +93,7 @@ class GlobalViewModel: ObservableObject {
           fetchRequest = TGWForecastHour.fetchRequest()
           fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
           fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)}")
+          viewContext.refreshAllObjects()
           if let forecastHours = try? viewContext.fetch(fetchRequest) {
             var hours = [HourForecast]()
             for hour in forecastHours {
@@ -77,8 +102,12 @@ class GlobalViewModel: ObservableObject {
             let summary = EventSummary()
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
             let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
+//            return
             eventsList.append(event)
-            eventForecastHours[eventName] = forecastHours
+            DispatchQueue.main.async {
+              self.eventForecastHours[eventName] = forecastHours
+//              print(self.eventForecastHours["Afternoon Commute"])
+            }
           }
         }
       }

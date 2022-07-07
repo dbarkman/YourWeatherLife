@@ -13,11 +13,25 @@ class CurrentConditionsViewModel: ObservableObject {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "CurrentConditionsViewModel")
   
   var data = Data()
-  
-  //MARK: Home
-  
+
   @Published var current: Current?
   
+  init() {
+    NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateCurrent), name: .locationUpdatedEvent, object: nil)
+  }
+
+  @objc func overrideUpdateCurrent() {
+    let nextUpdate = Date(timeIntervalSince1970: 0)
+    UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
+    updateCurrent()
+  }
+
+  func updateCurrent() {
+    Task {
+      await fetchCurrentWeather()
+    }
+  }
+
   func fetchCurrentWeather() async {
     guard GetAllData.shared.fetchCurrentConditions() else {
       let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--"
@@ -32,7 +46,7 @@ class CurrentConditionsViewModel: ObservableObject {
     var url = ""
     switch api.shortName {
       case "tgw":
-        url = tgw.getCurrentWeatherURL(api)
+        url = await tgw.getCurrentWeatherURL(api)
       case "aowm":
         url = aowm.getCurrentWeatherURL(api)
       default:

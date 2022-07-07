@@ -17,7 +17,7 @@ struct TGW_ForecastProvider {
   
   func fetchForecast() async {
     let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
-    let url = tgw.getWeatherForecastURL(api, days: "14")
+    let url = await tgw.getWeatherForecastURL(api, days: "14")
     guard !url.isEmpty else { return }
     let urlRequest = URLRequest(url: URL(string: url)!)
     
@@ -36,6 +36,7 @@ struct TGW_ForecastProvider {
 
       await importForecastHours(from: forecastHoursArray)
       await importForecastDays(from: forecastDaysArray)
+      NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
     } catch {
       logger.debug("Forecast decode failed 😭 \(error.localizedDescription)")
     }
@@ -89,7 +90,6 @@ struct TGW_ForecastProvider {
       logger.debug("Failed to execute batch insert request of days. 😭")
     }
     logger.debug("Successfully inserted days. 🎉")
-    NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
   }
   
   private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {

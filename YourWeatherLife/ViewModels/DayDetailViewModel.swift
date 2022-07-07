@@ -18,7 +18,6 @@ class DayDetailViewModel: ObservableObject {
   var viewContext = LocalPersistenceController.shared.container.viewContext
   
   @objc func fetchDayDetail(dates: [String]) {
-    print("dbark - fetching for: \(dates)")
     var predicate = ""
     for date in dates {
       predicate.append("'\(date)',")
