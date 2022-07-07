@@ -18,6 +18,10 @@ struct EventListWeekend: View {
       HStack {
         Text("This Weekend")
           .font(.title2)
+        Image(systemName: "chevron.right")
+          .symbolRenderingMode(.monochrome)
+          .foregroundColor(Color.accentColor)
+          .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)
       HStack {

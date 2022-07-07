@@ -35,9 +35,16 @@ struct EventListItem: View {
           .font(.callout)
         EditEventPencil()
       } //end of HStack
-      Text(summary)
-        .font(.title2)
-        .minimumScaleFactor(0.1)
+      HStack {
+        Text(summary)
+          .font(.title2)
+          .minimumScaleFactor(0.1)
+        Spacer()
+        Image(systemName: "chevron.right")
+          .symbolRenderingMode(.monochrome)
+          .foregroundColor(Color.accentColor)
+          .padding(.horizontal, 5)
+      }
     } //end of VStack
     .padding([.leading, .trailing, .top], 10)
     .padding(.bottom, 20)

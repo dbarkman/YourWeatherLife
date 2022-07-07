@@ -88,4 +88,5 @@ class GlobalViewModel: ObservableObject {
       self.events = self.eventsList
     }
   }
+  
 }

@@ -39,7 +39,7 @@
       ],
       "color" : {
         "platform" : "universal",
-        "reference" : "systemCyanColor"
+        "reference" : "systemMintColor"
       },
       "idiom" : "universal"
     }

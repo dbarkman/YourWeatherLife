@@ -30,7 +30,7 @@ struct DayDetail: View {
         Section(header: Text("Details")) {
           if let dayHours = day.hours {
             ForEach(dayHours, id: \.self) { hour in
-              NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(day.dayOfWeek) @ \(hour.timeFull)")) {
+              NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(day.dayOfWeek), \(hour.timeFull)")) {
                 HStack {
                   Text("\(hour.time)")
                   AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in

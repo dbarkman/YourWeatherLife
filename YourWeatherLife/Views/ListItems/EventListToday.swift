@@ -21,6 +21,10 @@ struct EventListToday: View {
       HStack {
         Text("Today")
           .font(.title2)
+        Image(systemName: "chevron.right")
+          .symbolRenderingMode(.monochrome)
+          .foregroundColor(Color.accentColor)
+          .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)
       if today.summary.precipitation {
