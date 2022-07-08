@@ -45,6 +45,7 @@ class GlobalViewModel: ObservableObject {
   func fetchForecastAndUpdateEventList() {
     Task {
       await GetAllData.shared.getAllData()
+      await DataService().updateNextStartDate()
     }
   }
   

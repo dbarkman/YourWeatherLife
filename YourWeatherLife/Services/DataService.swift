@@ -64,6 +64,8 @@ struct DataService {
         dailyEvent.setValue(result.0, forKey: "nextStartDate")
         if !result.1 {
           dailyEvent.setValue("Tomorrow", forKey: "tomorrow")
+        } else {
+          dailyEvent.setValue("", forKey: "tomorrow")
         }
         do {
           try cloudContainer.viewContext.save()
