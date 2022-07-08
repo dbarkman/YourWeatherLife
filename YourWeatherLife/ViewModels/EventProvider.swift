@@ -16,31 +16,27 @@ struct EventProvider {
   static let shared = EventProvider()
   
   func importEventsFromSeed() async {
-    logger.debug("Importing events from seed.")
     do {
       let url = Bundle.main.url(forResource: "seedData", withExtension: "json")!
       let data = try Data(contentsOf: url)
       await decodeEvents(data: data)
     } catch {
-      logger.debug("Could not extract data from seedData.json")
+      logger.error("Could not extract data from seedData.json. 😭 \(error.localizedDescription)")
     }
   }
   
   private func decodeEvents(data: Data) async {
-    logger.debug("Decoding events.")
     do {
       let jsonDecoder = JSONDecoder()
       let eventDecoder = try jsonDecoder.decode(EventDecoder.self, from: data)
       let eventList = eventDecoder.eventList
-      logger.debug("Sending eventList to CD import.")
       await importEvents(from: eventList)
     } catch {
-      logger.debug("Failed to decode data when fetching Events.")
+      logger.error("Failed to decode data when fetching Events. 😭 \(error.localizedDescription)")
     }
   }
   
   private func importEvents(from eventList: [Event]) async {
-    logger.debug("Importing events.")
     guard !eventList.isEmpty else { return }
     
     let taskContext = newTaskContext()
@@ -54,9 +50,8 @@ struct EventProvider {
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      logger.debug("Failed to execute batch insert request.")
+      logger.error("Failed to execute batch insert request. 😭")
     }
-    logger.debug("Successfully inserted events. 🎉")
   }
   
   private func newBatchInsertRequest(with eventList: [Event]) -> NSBatchInsertRequest {

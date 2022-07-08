@@ -34,12 +34,14 @@ class CurrentConditionsViewModel: ObservableObject {
 
   func fetchCurrentWeather() async {
     guard GetAllData.shared.fetchCurrentConditions() else {
-      let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "--"
-      let condition = UserDefaults.standard.string(forKey: "currentConditionsCondition") ?? "--"
-      let icon = UserDefaults.standard.string(forKey: "currentConditionsIcon") ?? "--"
-      let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "--"
+      let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "88"
+      let condition = UserDefaults.standard.string(forKey: "currentConditionsCondition") ?? "Sunny"
+      let icon = UserDefaults.standard.string(forKey: "currentConditionsIcon") ?? "day/113"
+      let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Mesa"
       let current = Current(temperature: temperature, condition: condition, icon: icon, location: location)
-      self.current = current
+      DispatchQueue.main.async {
+        self.current = current
+      }
       return
     }
     let api = await DataService().fetchPrimaryAPIFromLocal()
@@ -57,12 +59,12 @@ class CurrentConditionsViewModel: ObservableObject {
     do {
       guard let (data, response) = try? await URLSession.shared.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
       else {
-        logger.debug("Failed to received valid response and/or data.")
+        logger.error("Failed to received valid response and/or data. 😭")
         throw YWLError.missingData
       }
       self.data = data
     } catch {
-      logger.error("Could not fetch current conditions. ⛈")
+      logger.error("Could not fetch current conditions. 😭 \(error.localizedDescription)")
     }
     
     let jsonDecoder = JSONDecoder()
@@ -84,7 +86,7 @@ class CurrentConditionsViewModel: ObservableObject {
           self.logger.error("Couldn't determine the Decoder by shortname. 😭")
       }
     } catch {
-      logger.error("Could not decode current conditions. 🌧 \(error.localizedDescription)")
+      logger.error("Could not decode current conditions. 😭 \(error.localizedDescription)")
     }
   }
   

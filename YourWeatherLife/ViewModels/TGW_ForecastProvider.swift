@@ -24,7 +24,7 @@ struct TGW_ForecastProvider {
     let session = URLSession.shared
     guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
-      logger.debug("Failed to received valid response and/or data.")
+      logger.error("Failed to received valid response and/or data. 😭")
       return
     }
     
@@ -38,7 +38,7 @@ struct TGW_ForecastProvider {
       await importForecastDays(from: forecastDaysArray)
       NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
     } catch {
-      logger.debug("Forecast decode failed 😭 \(error.localizedDescription)")
+      logger.error("Forecast decode failed. 😭 \(error.localizedDescription)")
     }
   }
   
@@ -56,9 +56,8 @@ struct TGW_ForecastProvider {
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      logger.debug("Failed to execute batch insert request of hours. 😭")
+      logger.error("Failed to execute batch insert request of hours. 😭")
     }
-    logger.debug("Successfully inserted hours. 🎉")
   }
   
   private func newBatchInsertHoursRequest(with forecastHoursArray: [TGW_ForecastHours]) -> NSBatchInsertRequest {
@@ -87,9 +86,8 @@ struct TGW_ForecastProvider {
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      logger.debug("Failed to execute batch insert request of days. 😭")
+      logger.error("Failed to execute batch insert request of days. 😭")
     }
-    logger.debug("Successfully inserted days. 🎉")
   }
   
   private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {

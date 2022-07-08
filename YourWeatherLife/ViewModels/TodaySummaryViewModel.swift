@@ -38,12 +38,11 @@ class TodaySummaryViewModel: ObservableObject {
         }
       } //end of forecastDay
     } catch {
-      logger.debug("Could not fetch forecast for today.")
+      logger.error("Could not fetch forecast for today. 😭 \(error.localizedDescription)")
     }
   }
   
   func configureDay(todayForecast: TGWForecastDay) -> (Today, [TGWForecastHour]) {
-//    let todayForecast = forecastDay[0]
     let dayDate = todayForecast.date! + " 00:00"
     let dayOfWeekDate = Dates.makeDateFromTime(time: dayDate, format: "yyyy-MM-dd HH:mm")
     var precipitation = false

@@ -33,7 +33,7 @@ struct DataService {
           return api
         }
       } catch {
-        logger.debug("Error loading APIs from local 😭")
+        logger.error("Error loading APIs from local. 😭 \(error.localizedDescription)")
       }
     }
     return API()
@@ -48,7 +48,7 @@ struct DataService {
         return api
       }
     } catch {
-      logger.debug("Fetch API from local by name failed 😭")
+      logger.error("Fetch API from local by name failed. 😭 \(error.localizedDescription)")
     }
     return API()
   }
@@ -68,7 +68,7 @@ struct DataService {
         do {
           try cloudContainer.viewContext.save()
         } catch {
-          logger.debug("Could not save nextStartDate. 😭")
+          logger.error("Could not save nextStartDate. 😭 \(error.localizedDescription)")
         }
       }
     }

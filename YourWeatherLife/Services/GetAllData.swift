@@ -33,12 +33,9 @@ struct GetAllData {
       nextUpdate = Date(timeIntervalSince1970: 0)
     }
     if now > nextUpdate {
-      logger.debug("Current conditions expired at \(nextUpdate), getting new conditions")
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
       return true
-    } else {
-      logger.debug("Current conditions still current, not fetching till: \(nextUpdate)")
     }
     return false
   }
@@ -52,12 +49,9 @@ struct GetAllData {
       nextUpdate = Date(timeIntervalSince1970: 0)
     }
     if now > nextUpdate {
-      logger.debug("Forecast expired at \(nextUpdate), getting new forecast")
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
       await TGW_ForecastProvider.shared.fetchForecast()
-    } else {
-      logger.debug("Forecast still current, not fetching till: \(nextUpdate)")
     }
   }
 }

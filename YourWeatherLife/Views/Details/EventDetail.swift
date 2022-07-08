@@ -11,6 +11,7 @@ import Mixpanel
 struct EventDetail: View {
   
   @State var eventForecast = EventForecast()
+  @State var showingFeedback = false
   
 //    if event == "Taco Tuesday" {
 //      let hourDetails1 = HourDetails(id: UUID(), current: "83° and Sunny", winds: "Winds 2 mph from the southwest", precip: "15% humidity, no chance of rain")
@@ -59,6 +60,18 @@ struct EventDetail: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "EventDetail View")
+    }
+    .toolbar {
+      ToolbarItem {
+        Button(action: {
+          showingFeedback.toggle()
+        }) {
+          Label("Feedback", systemImage: "star")
+        }
+        .sheet(isPresented: $showingFeedback) {
+          FeedbackModal()
+        }
+      }
     }
   }
 }

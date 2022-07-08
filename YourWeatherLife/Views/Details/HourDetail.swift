@@ -11,7 +11,8 @@ import Mixpanel
 struct HourDetail: View {
 
   @State var hour = HourForecast()
-  
+  @State var showingFeedback = false
+
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -49,6 +50,18 @@ struct HourDetail: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "HourDetail View")
+    }
+    .toolbar {
+      ToolbarItem {
+        Button(action: {
+          showingFeedback.toggle()
+        }) {
+          Label("Feedback", systemImage: "star")
+        }
+        .sheet(isPresented: $showingFeedback) {
+          FeedbackModal()
+        }
+      }
     }
   }
 }

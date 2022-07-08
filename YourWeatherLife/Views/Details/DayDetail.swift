@@ -11,8 +11,10 @@ import Mixpanel
 struct DayDetail: View {
   
   @StateObject private var dayDetail = DayDetailViewModel()
-  @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
   
+  @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
+  @State var showingFeedback = false
+
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -56,6 +58,18 @@ struct DayDetail: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "DayDetail View")
       dayDetail.fetchDayDetail(dates: dates)
+    }
+    .toolbar {
+      ToolbarItem {
+        Button(action: {
+          showingFeedback.toggle()
+        }) {
+          Label("Feedback", systemImage: "star")
+        }
+        .sheet(isPresented: $showingFeedback) {
+          FeedbackModal()
+        }
+      }
     }
   }
 }

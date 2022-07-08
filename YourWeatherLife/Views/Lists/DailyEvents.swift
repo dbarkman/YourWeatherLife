@@ -10,6 +10,8 @@ import Mixpanel
 
 struct DailyEvents: View {
 
+  @State var showingFeedback = false
+
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -36,6 +38,13 @@ struct DailyEvents: View {
               Text("4p - 6p")
             }
           }
+          NavigationLink(destination: EditDailyEvent(eventName: "Dinner", eventStartTime: "7p", eventEndTime: "8:30p")) {
+            HStack {
+              Text("Dinner")
+              Spacer()
+              Text("7p - 8:30p")
+            }
+          }
         }
         .listRowBackground(Color("ListBackground"))
         Section(header: Text("Repeating Weekend Events")) {
@@ -58,6 +67,18 @@ struct DailyEvents: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "DailyEvents View")
+    }
+    .toolbar {
+      ToolbarItem {
+        Button(action: {
+          showingFeedback.toggle()
+        }) {
+          Label("Feedback", systemImage: "star")
+        }
+        .sheet(isPresented: $showingFeedback) {
+          FeedbackModal()
+        }
+      }
     }
   }
 }

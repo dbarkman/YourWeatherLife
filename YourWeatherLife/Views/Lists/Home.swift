@@ -25,6 +25,8 @@ struct Home: View {
   @StateObject private var currentConditions = CurrentConditionsViewModel()
 
   @State private var fetchAllData = false
+  @State var showingFeedback = false
+
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
@@ -42,7 +44,7 @@ struct Home: View {
             HStack {
               VStack(alignment: .leading) {
                 HStack {
-                  Text(currentConditions.current?.temperature ?? "--")
+                  Text(currentConditions.current?.temperature ?? "88")
                     .font(.largeTitle)
                     .minimumScaleFactor(0.1)
                     .lineLimit(1)
@@ -57,10 +59,22 @@ struct Home: View {
               .padding(.horizontal, 10)
               Spacer()
               VStack(alignment: .trailing) {
-                Text("Your Weather")
-                  .font(.largeTitle)
-                  .lineLimit(1)
+                HStack {
+                  Text("Your Weather")
+                    .font(.largeTitle)
+                    .lineLimit(1)
                   .minimumScaleFactor(0.1)
+                  Button(action: {
+                    showingFeedback.toggle()
+                  }) {
+                    Label("", systemImage: "star")
+                  }
+                  .sheet(isPresented: $showingFeedback) {
+                    FeedbackModal()
+                  }
+                  .padding(.leading, -5)
+                  .padding(.trailing, -15)
+                }
                 HStack {
                   Image(systemName: "location.fill")
                     .symbolRenderingMode(.monochrome)
@@ -71,6 +85,7 @@ struct Home: View {
                   Image(systemName: "chevron.down")
                     .symbolRenderingMode(.monochrome)
                     .foregroundColor(Color.accentColor)
+
                 } //end of HStack
               } //end of VStack
               .padding(.horizontal, 10)
@@ -158,7 +173,6 @@ struct Home: View {
             VStack(alignment: .leading) {
               Divider()
                 .background(.black)
-//                .frame(width: 150)
               Text("Fictional Events from Your Calendar")
             }
             .listRowSeparator(.hidden)
@@ -190,22 +204,18 @@ struct Home: View {
       .task {
         if fetchAllData {
           await updateData()
-          print("dbark - task")
         }
       }
       .onAppear() {
         locationViewModel.requestPermission()
         Mixpanel.mainInstance().track(event: "Home View")
-        print("dbark - onAppear")
       }
       .onReceive(self.observer.$enteredForeground) { _ in
-        print("dbark - onReceive")
         Task {
           await updateData()
         }
       }
       .onChange(of: scenePhase) { newPhase in
-        print("dbark - onChange")
         if newPhase == .active {
         } else if newPhase == .inactive {
         } else if newPhase == .background {

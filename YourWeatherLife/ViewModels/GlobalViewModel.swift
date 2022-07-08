@@ -45,7 +45,6 @@ class GlobalViewModel: ObservableObject {
   func fetchForecastAndUpdateEventList() {
     Task {
       await GetAllData.shared.getAllData()
-//      await createEventList(from: "gvm.fetchForecastAndUpdateEventList")
     }
   }
   
@@ -102,11 +101,9 @@ class GlobalViewModel: ObservableObject {
             let summary = EventSummary()
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
             let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
-//            return
             eventsList.append(event)
             DispatchQueue.main.async {
               self.eventForecastHours[eventName] = forecastHours
-//              print(self.eventForecastHours["Afternoon Commute"])
             }
           }
         }
@@ -117,5 +114,4 @@ class GlobalViewModel: ObservableObject {
       self.events = self.eventsList
     }
   }
-  
 }

@@ -57,7 +57,6 @@
 		634BCC662860EE440062E105 /* EventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC622860EE440062E105 /* EventDetail.swift */; };
 		634BCC672860EE440062E105 /* HourDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC632860EE440062E105 /* HourDetail.swift */; };
 		634BCC682860EE440062E105 /* DayDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC642860EE440062E105 /* DayDetail.swift */; };
-		634BCC692860EE440062E105 /* WeekendDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC652860EE440062E105 /* WeekendDetail.swift */; };
 		634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6A2860EE500062E105 /* EventListToday.swift */; };
 		634BCC6F2860EE500062E105 /* EventListCalendarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6B2860EE500062E105 /* EventListCalendarItem.swift */; };
 		634BCC702860EE500062E105 /* EventListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6C2860EE500062E105 /* EventListItem.swift */; };
@@ -76,6 +75,7 @@
 		634BCCB02866D96F0062E105 /* tgw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAF2866D96F0062E105 /* tgw.swift */; };
 		634BCCB22866DF090062E105 /* aowm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCB12866DF090062E105 /* aowm.swift */; };
 		634BCCB428681C860062E105 /* AOWM_CurrentConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCB328681C860062E105 /* AOWM_CurrentConditions.swift */; };
+		63F029622877EDB700CD1553 /* FeedbackModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F029612877EDB700CD1553 /* FeedbackModal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,7 +151,6 @@
 		634BCC622860EE440062E105 /* EventDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetail.swift; sourceTree = "<group>"; };
 		634BCC632860EE440062E105 /* HourDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourDetail.swift; sourceTree = "<group>"; };
 		634BCC642860EE440062E105 /* DayDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayDetail.swift; sourceTree = "<group>"; };
-		634BCC652860EE440062E105 /* WeekendDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekendDetail.swift; sourceTree = "<group>"; };
 		634BCC6A2860EE500062E105 /* EventListToday.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListToday.swift; sourceTree = "<group>"; };
 		634BCC6B2860EE500062E105 /* EventListCalendarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListCalendarItem.swift; sourceTree = "<group>"; };
 		634BCC6C2860EE500062E105 /* EventListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListItem.swift; sourceTree = "<group>"; };
@@ -169,6 +168,7 @@
 		634BCCAF2866D96F0062E105 /* tgw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tgw.swift; sourceTree = "<group>"; };
 		634BCCB12866DF090062E105 /* aowm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aowm.swift; sourceTree = "<group>"; };
 		634BCCB328681C860062E105 /* AOWM_CurrentConditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_CurrentConditions.swift; sourceTree = "<group>"; };
+		63F029612877EDB700CD1553 /* FeedbackModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackModal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +299,7 @@
 				634BCC592860EDA50062E105 /* Details */,
 				634BCC582860ED9C0062E105 /* CRUD */,
 				634BCC572860ED930062E105 /* Components */,
+				63F029602877ED9300CD1553 /* Feedback */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -401,7 +402,6 @@
 				634BCC642860EE440062E105 /* DayDetail.swift */,
 				634BCC622860EE440062E105 /* EventDetail.swift */,
 				634BCC632860EE440062E105 /* HourDetail.swift */,
-				634BCC652860EE440062E105 /* WeekendDetail.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -435,6 +435,14 @@
 				634BCCAF2866D96F0062E105 /* tgw.swift */,
 			);
 			path = APIs;
+			sourceTree = "<group>";
+		};
+		63F029602877ED9300CD1553 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				63F029612877EDB700CD1553 /* FeedbackModal.swift */,
+			);
+			path = Feedback;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -597,7 +605,6 @@
 				63481ADE2875084200478C11 /* ForecastInsertedEvent.swift in Sources */,
 				63481B092876A24000478C11 /* HomeViewModel.swift in Sources */,
 				63481AD12870AAA800478C11 /* EventSummary.swift in Sources */,
-				634BCC692860EE440062E105 /* WeekendDetail.swift in Sources */,
 				63481B0028754A2A00478C11 /* HourForecast.swift in Sources */,
 				634BCC6F2860EE500062E105 /* EventListCalendarItem.swift in Sources */,
 				634BCC4A2860ED220062E105 /* Hour.swift in Sources */,
@@ -616,6 +623,7 @@
 				634BCC4B2860ED220062E105 /* YWLError.swift in Sources */,
 				63481AFC28752F4800478C11 /* Weekend.swift in Sources */,
 				634BCCA528628C840062E105 /* Formatters.swift in Sources */,
+				63F029622877EDB700CD1553 /* FeedbackModal.swift in Sources */,
 				63481ADB2873450700478C11 /* TodaySummaryViewModel.swift in Sources */,
 				634BCCAD28629EA70062E105 /* TGW_CurrentConditions.swift in Sources */,
 				63481B172877616E00478C11 /* LocationUpdatedEvent.swift in Sources */,
@@ -792,16 +800,19 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022062001;
+				CURRENT_PROJECT_VERSION = 2022070701;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YourWeatherLife/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -824,16 +835,19 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022062001;
+				CURRENT_PROJECT_VERSION = 2022070701;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YourWeatherLife/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -11,7 +11,9 @@ import Mixpanel
 struct HourlyForecast: View {
   
   @StateObject private var homeViewModel = HomeViewModel()
-  
+
+  @State var showingFeedback = false
+
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -38,6 +40,18 @@ struct HourlyForecast: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         Mixpanel.mainInstance().track(event: "336HourForecast View")
         homeViewModel.create336HourForecast()
+      }
+      .toolbar {
+        ToolbarItem {
+          Button(action: {
+            showingFeedback.toggle()
+          }) {
+            Label("Feedback", systemImage: "star")
+          }
+          .sheet(isPresented: $showingFeedback) {
+            FeedbackModal()
+          }
+        }
       }
       .navigationTitle("336 Hour Forecast")
     }

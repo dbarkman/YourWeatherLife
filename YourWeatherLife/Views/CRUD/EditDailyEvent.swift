@@ -13,7 +13,8 @@ struct EditDailyEvent: View {
   @State var eventName = ""
   @State var eventStartTime = ""
   @State var eventEndTime = ""
-  
+  @State var showingFeedback = false
+
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -46,6 +47,18 @@ struct EditDailyEvent: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
+    }
+    .toolbar {
+      ToolbarItem {
+        Button(action: {
+          showingFeedback.toggle()
+        }) {
+          Label("Feedback", systemImage: "star")
+        }
+        .sheet(isPresented: $showingFeedback) {
+          FeedbackModal()
+        }
+      }
     }
   }
 }

@@ -6,13 +6,13 @@
 //
 
 import Foundation
+import Mixpanel
 
 class EventSummary {
   
   //todos
   //sleet, hurricanes, tornados, dust, windchill
 
-  //summaries
   var tempDescription = ""
   var tempConjunction = ""
   var tempChangeDescription = ""
@@ -238,27 +238,9 @@ class EventSummary {
     tempConjunction = tempChangeDescription.isEmpty ? "" : tempConjunction
     
     let finalSummary = tempActual + " " + tempDescription + tempConjunction + tempChangeDescription + ", " + conditionDescription + windConjunction + windDescription + humidityDescription + rainDescription + snowDescription + thunderstormDescription + uvDescription
+    Mixpanel.mainInstance().track(event: "EventSummary", properties: [
+      "summary": finalSummary
+    ])
     return finalSummary
   }
 }
-
-//Formatters.format(temp: hour.temp_c, from: .celsius)
-//tempDesc and tempChangeDesc at temp, condition, windDesc, humidityDesc, precip
-// - if tempDesc and tempChangeDesc opposite, use "but", otherwise use "and"
-//Hot at 102°, mostly sunny
-//Hot at 102°, partly cloudy, breezy
-//Warm at 85°, sunny and breezy, humid with a 40% chance of rain
-//Hot "but" cooling at 100°, clear and breezy, dry with 40% chance of "rain", and a UV index of 5
-//tempDescription = Hot
-//conjunction = but
-//tempChangeDescription = cooling
-//tempActual = at 100°,
-//conditionDescription = clear
-//windDescription = and breezy
-//humidityDescription = , dry
-//precipDescription = with 40% chance of
-//precipTypeDescription = rain
-//thunderstormDescription = with thunderstorms possible
-//clear and breezy
-//clear, breezy and dry
-//clear and dry

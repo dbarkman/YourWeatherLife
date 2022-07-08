@@ -43,7 +43,7 @@ class HomeViewModel: ObservableObject {
         self.forecastDays = forecastDays
       }
     } catch {
-      logger.debug("Couldn't fetch 14 day forecast. 😭")
+      logger.error("Couldn't fetch 14 day forecast. 😭 \(error.localizedDescription)")
     }
   }
   
@@ -65,7 +65,7 @@ class HomeViewModel: ObservableObject {
         self.forecastHours = hours
       }
     } catch {
-      logger.debug("Couldn't fetch 336 hour forecast. 😭")
+      logger.error("Couldn't fetch 336 hour forecast. 😭 \(error.localizedDescription)")
     }
   }
 

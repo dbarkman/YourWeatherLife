@@ -17,7 +17,7 @@ struct APISettings {
         let api = try PropertyListDecoder().decode(WeatherSolutions.self, from: xml)
         apiSettings = api
       } catch {
-        print("API settings decoding problem: \(error)")
+        print("API settings decoding problem. 😭 \(error.localizedDescription)")
       }
     }
     return apiSettings

@@ -30,7 +30,7 @@ struct APIsProvider {
     let session = URLSession.shared
     guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
-      logger.debug("Failed to received valid response and/or data when fetching APIs.")
+      logger.error("Failed to received valid response and/or data when fetching APIs. 😭")
       return
     }
     await decodeAPIs(data: data)
@@ -43,7 +43,7 @@ struct APIsProvider {
       let apiList = apiDecoder.apisList
       await importAPIs(from: apiList)
     } catch {
-      logger.debug("Failed to decode data when fetching APIs.")
+      logger.error("Failed to decode data when fetching APIs. 😭 \(error.localizedDescription)")
     }
   }
   
@@ -61,9 +61,8 @@ struct APIsProvider {
          let success = batchInsertResult.result as? Bool, success {
         return
       }
-      logger.debug("Failed to execute batch insert request.")
+      logger.error("Failed to execute batch insert request. 😭")
     }
-    logger.debug("Successfully inserted data.")
   }
   
   private func newBatchInsertRequest(with apiList: [APIProperties]) -> NSBatchInsertRequest {
