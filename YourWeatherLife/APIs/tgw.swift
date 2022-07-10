@@ -11,20 +11,24 @@ import OSLog
 
 struct tgw {
   
-  static func getCurrentWeatherURL(_ api: API) async -> String {
+  static func getCurrentWeatherURL() async -> String {
+    let apiKey = APISettings.fetchAPISettings().tgwApiKey
+    let urlBase = APISettings.fetchAPISettings().tgwUrlBase
     var url = ""
     let location = await getLocation()
-    if !api.urlBase.isEmpty && !api.apiKey.isEmpty {
-      url = api.urlBase + "/current.json" + "?key=" + api.apiKey + "&q=" + location
+    if !urlBase.isEmpty && !apiKey.isEmpty {
+      url = urlBase + "/current.json" + "?key=" + apiKey + "&q=" + location
     }
     return url
   }
   
-  static func getWeatherForecastURL(_ api: API, days: String) async -> String {
+  static func getWeatherForecastURL(days: String) async -> String {
+    let apiKey = APISettings.fetchAPISettings().tgwApiKey
+    let urlBase = APISettings.fetchAPISettings().tgwUrlBase
     var url = ""
     let location = await getLocation()
-    if !api.urlBase.isEmpty && !api.apiKey.isEmpty {
-      url = api.urlBase + "/forecast.json" + "?key=" + api.apiKey + "&q=" + location + "&days=" + days
+    if !urlBase.isEmpty && !apiKey.isEmpty {
+      url = urlBase + "/forecast.json" + "?key=" + apiKey + "&q=" + location + "&days=" + days
     }
     return url
   }

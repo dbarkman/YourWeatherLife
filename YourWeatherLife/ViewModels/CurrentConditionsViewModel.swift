@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Mixpanel
 import OSLog
 
 class CurrentConditionsViewModel: ObservableObject {
@@ -44,47 +45,51 @@ class CurrentConditionsViewModel: ObservableObject {
       }
       return
     }
-    let api = await DataService().fetchPrimaryAPIFromLocal()
-    var url = ""
-    switch api.shortName {
-      case "tgw":
-        url = await tgw.getCurrentWeatherURL(api)
-      case "aowm":
-        url = aowm.getCurrentWeatherURL(api)
-      default:
-        logger.error("Couldn't determine the API by shortname. 😭")
-    }
+//    let api = await DataService().fetchPrimaryAPIFromLocal()
+    let url = await tgw.getCurrentWeatherURL()
+//    switch api.shortName {
+//      case "tgw":
+//        url = await tgw.getCurrentWeatherURL(api)
+//      case "aowm":
+//        url = aowm.getCurrentWeatherURL(api)
+//      default:
+//        logger.error("Couldn't determine the API by shortname. 😭")
+//    }
+    
     guard !url.isEmpty else { return }
-    let urlRequest = URLRequest(url: URL(string: url)!) //forced is ok since using guard right before to check for empty URL string
-    do {
-      guard let (data, response) = try? await URLSession.shared.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
-      else {
-        logger.error("Failed to received valid response and/or data. 😭")
-        throw YWLError.missingData
-      }
-      self.data = data
-    } catch {
-      logger.error("Could not fetch current conditions. 😭 \(error.localizedDescription)")
+    let urlRequest = URLRequest(url: URL(string: url)!)
+    let session = URLSession.shared
+    guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
+    else {
+      logger.error("Failed to received valid response and/or data. 😭")
+      return
     }
+    Mixpanel.mainInstance().track(event: "Fetched Current Conditions")
+    self.data = data
     
     let jsonDecoder = JSONDecoder()
     do {
-      switch api.shortName {
-        case "tgw":
-          let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
-          saveCurrentConditions(current: tgwDecoder.current)
-          DispatchQueue.main.async {
-            self.current = tgwDecoder.current
-          }
-        case "aowm":
-          let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
-          saveCurrentConditions(current: aowmDecoder.current)
-          DispatchQueue.main.async {
-            self.current = aowmDecoder.current
-          }
-        default:
-          self.logger.error("Couldn't determine the Decoder by shortname. 😭")
+      let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+      saveCurrentConditions(current: tgwDecoder.current)
+      DispatchQueue.main.async {
+        self.current = tgwDecoder.current
       }
+//      switch api.shortName {
+//        case "tgw":
+//          let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
+//          saveCurrentConditions(current: tgwDecoder.current)
+//          DispatchQueue.main.async {
+//            self.current = tgwDecoder.current
+//          }
+//        case "aowm":
+//          let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
+//          saveCurrentConditions(current: aowmDecoder.current)
+//          DispatchQueue.main.async {
+//            self.current = aowmDecoder.current
+//          }
+//        default:
+//          self.logger.error("Couldn't determine the Decoder by shortname. 😭")
+//      }
     } catch {
       logger.error("Could not decode current conditions. 😭 \(error.localizedDescription)")
     }

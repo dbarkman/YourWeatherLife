@@ -15,13 +15,13 @@ struct GetAllData {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GetAllData")
 
   func getAllData() async {
-    if !UserDefaults.standard.bool(forKey: "apisFetched") {
-      await DataService().fetchAPIsFromCloud()
-      UserDefaults.standard.set(true, forKey: "apisFetched")
-      await getAllData()
-    } else {
+//    if !UserDefaults.standard.bool(forKey: "apisFetched") {
+//      await DataService().fetchAPIsFromCloud()
+//      UserDefaults.standard.set(true, forKey: "apisFetched")
+//      await getAllData()
+//    } else {
       await updateForecasts()
-    }
+//    }
   }
   
   func fetchCurrentConditions() -> Bool {

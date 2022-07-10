@@ -20,37 +20,45 @@ struct DataService {
   }
   
   func fetchPrimaryAPIFromLocal () async -> API {
-    if !UserDefaults.standard.bool(forKey: "apisFetched") {
-      await DataService().fetchAPIsFromCloud()
-      UserDefaults.standard.set(true, forKey: "apisFetched")
-      return await fetchPrimaryAPIFromLocal()
-    } else {
-      let request = API.fetchRequest()
-      request.sortDescriptors = [NSSortDescriptor(keyPath: \API.priority, ascending: true)]
-      request.fetchLimit = 1
-      do {
-        if let api = try localContainer.viewContext.fetch(request).first as? API {
-          return api
-        }
-      } catch {
-        logger.error("Error loading APIs from local. 😭 \(error.localizedDescription)")
-      }
-    }
-    return API()
+//    if !UserDefaults.standard.bool(forKey: "apisFetched") {
+//      await DataService().fetchAPIsFromCloud()
+//      UserDefaults.standard.set(true, forKey: "apisFetched")
+//      return await fetchPrimaryAPIFromLocal()
+//    } else {
+//      let request = API.fetchRequest()
+//      request.sortDescriptors = [NSSortDescriptor(keyPath: \API.priority, ascending: true)]
+//      request.fetchLimit = 1
+//      do {
+//        if let api = try localContainer.viewContext.fetch(request).first as? API {
+//          return api
+//        }
+//      } catch {
+//        logger.error("Error loading APIs from local. 😭 \(error.localizedDescription)")
+//      }
+//    }
+    let api = API()
+//    api.shortName = "tgw"
+    api.apiKey = APISettings.fetchAPISettings().tgwApiKey
+    api.urlBase = APISettings.fetchAPISettings().tgwUrlBase
+    return api
   }
   
   func fetchAPIFromLocalBy(shortName: String) -> API {
-    let request = API.fetchRequest()
-    request.predicate = NSPredicate(format: "shortName = %@", shortName)
-    request.fetchLimit = 1
-    do {
-      if let api = try localContainer.viewContext.fetch(request).first as? API {
-        return api
-      }
-    } catch {
-      logger.error("Fetch API from local by name failed. 😭 \(error.localizedDescription)")
-    }
-    return API()
+//    let request = API.fetchRequest()
+//    request.predicate = NSPredicate(format: "shortName = %@", shortName)
+//    request.fetchLimit = 1
+//    do {
+//      if let api = try localContainer.viewContext.fetch(request).first as? API {
+//        return api
+//      }
+//    } catch {
+//      logger.error("Fetch API from local by name failed. 😭 \(error.localizedDescription)")
+//    }
+    let api = API()
+//    api.shortName = "tgw"
+    api.apiKey = APISettings.fetchAPISettings().tgwApiKey
+    api.urlBase = APISettings.fetchAPISettings().tgwUrlBase
+    return api
   }
   
   func updateNextStartDate() async {

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Mixpanel
 import OSLog
 
 struct TGW_ForecastProvider {
@@ -16,18 +17,19 @@ struct TGW_ForecastProvider {
   static let shared = TGW_ForecastProvider()
   
   func fetchForecast() async {
-    let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
-    let url = await tgw.getWeatherForecastURL(api, days: "14")
+//    let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
+    let url = await tgw.getWeatherForecastURL(days: "14")
+    
     guard !url.isEmpty else { return }
     let urlRequest = URLRequest(url: URL(string: url)!)
-    
     let session = URLSession.shared
     guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
     else {
       logger.error("Failed to received valid response and/or data. 😭")
       return
     }
-    
+    Mixpanel.mainInstance().track(event: "Fetched Forecast")
+
     do {
       let jsonDecoder = JSONDecoder()
       let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: data)
