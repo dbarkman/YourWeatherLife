@@ -229,6 +229,7 @@ struct Home: View {
   private func updateData() async {
     await currentConditions.fetchCurrentWeather()
     await GetAllData.shared.getAllData()
+    await DataService().updateNextStartDate()
     fetchAllData = true
   }
 }

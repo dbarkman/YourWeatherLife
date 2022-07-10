@@ -30,6 +30,7 @@ class GlobalViewModel: ObservableObject {
     self.viewCloudContext = viewCloudContext
     NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcastAndUpdateEventList), name: .locationUpdatedEvent, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateEventList), name: .forecastInsertedEvent, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateEventList), name: .nextStartDateUpdated, object: nil)
   }
 
   @objc func overrideFetchForcastAndUpdateEventList() {
@@ -72,6 +73,8 @@ class GlobalViewModel: ObservableObject {
       await createEventList()
     } else {
       eventsList.removeAll()
+      viewContext.refreshAllObjects()
+      viewCloudContext.refreshAllObjects()
       let fetchRequest: NSFetchRequest<DailyEvent>
       fetchRequest = DailyEvent.fetchRequest()
       fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DailyEvent.nextStartDate, ascending: true)]
@@ -93,7 +96,6 @@ class GlobalViewModel: ObservableObject {
           fetchRequest = TGWForecastHour.fetchRequest()
           fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
           fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)}")
-          viewContext.refreshAllObjects()
           if let forecastHours = try? viewContext.fetch(fetchRequest) {
             var hours = [HourForecast]()
             for hour in forecastHours {

@@ -69,6 +69,7 @@ struct DataService {
         }
         do {
           try cloudContainer.viewContext.save()
+          NotificationCenter.default.post(name: .nextStartDateUpdated, object: nil)
         } catch {
           logger.error("Could not save nextStartDate. 😭 \(error.localizedDescription)")
         }
