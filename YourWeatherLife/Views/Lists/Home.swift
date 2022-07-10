@@ -21,12 +21,11 @@ struct Home: View {
   @ObservedObject var observer = Observer()
   @ObservedObject private var globalViewModel: GlobalViewModel
   
-  @StateObject var locationViewModel = LocationViewModel()
+  @StateObject private var homeViewModel = HomeViewModel()
+  @StateObject private var locationViewModel = LocationViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
 
-  @State private var fetchAllData = false
   @State var showingFeedback = false
-
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
@@ -94,7 +93,7 @@ struct Home: View {
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
 
-            ForEach(globalViewModel.events, id: \.self) { event in
+            ForEach(homeViewModel.events, id: \.self) { event in
               ZStack(alignment: .leading) {
                 NavigationLink(destination: EventDetail(eventForecast: event)) { }
                   .opacity(0)
@@ -194,43 +193,30 @@ struct Home: View {
           .listStyle(.plain)
           .refreshable {
             Mixpanel.mainInstance().track(event: "Refresh Pulled")
-            await updateData()
+            homeViewModel.fetchForecast()
+            currentConditions.updateCurrent()
           }
         }
         .navigationBarHidden(true)
         
         NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of VStack
-      .task {
-        if fetchAllData {
-          await updateData()
-        }
-      }
       .onAppear() {
-        locationViewModel.requestPermission()
         Mixpanel.mainInstance().track(event: "Home View")
       }
       .onReceive(self.observer.$enteredForeground) { _ in
-        Task {
-          await updateData()
-        }
+        locationViewModel.requestPermission()
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {
+          homeViewModel.fetchForecast()
+          currentConditions.updateCurrent()
         } else if newPhase == .inactive {
         } else if newPhase == .background {
-          UserDefaults.standard.set(true, forKey: "watchForEnteredForeground")
         }
       }
     } //end of NavigationView
     .environmentObject(globalViewModel)
-  }
-  
-  private func updateData() async {
-    await currentConditions.fetchCurrentWeather()
-    await GetAllData.shared.getAllData()
-    await DataService().updateNextStartDate()
-    fetchAllData = true
   }
 }
 

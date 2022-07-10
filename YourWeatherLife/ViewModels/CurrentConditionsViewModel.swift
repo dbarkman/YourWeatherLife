@@ -26,7 +26,6 @@ class CurrentConditionsViewModel: ObservableObject {
     UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
     updateCurrent()
   }
-
   func updateCurrent() {
     Task {
       await fetchCurrentWeather()
@@ -45,27 +44,22 @@ class CurrentConditionsViewModel: ObservableObject {
       }
       return
     }
-//    let api = await DataService().fetchPrimaryAPIFromLocal()
     let url = await tgw.getCurrentWeatherURL()
-//    switch api.shortName {
-//      case "tgw":
-//        url = await tgw.getCurrentWeatherURL(api)
-//      case "aowm":
-//        url = aowm.getCurrentWeatherURL(api)
-//      default:
-//        logger.error("Couldn't determine the API by shortname. 😭")
-//    }
-    
-    guard !url.isEmpty else { return }
-    let urlRequest = URLRequest(url: URL(string: url)!)
-    let session = URLSession.shared
-    guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
-    else {
-      logger.error("Failed to received valid response and/or data. 😭")
-      return
+    if let url = URL(string: url) {
+      let urlRequest = URLRequest(url: url)
+      let session = URLSession.shared
+      do {
+        let (data, response) = try await session.data(for: urlRequest)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+          Mixpanel.mainInstance().track(event: "Fetched Current Conditions")
+          self.data = data
+        } else {
+          return
+        }
+      } catch {
+        logger.error("Failed to received valid response and/or data. 😭 \(error.localizedDescription)")
+      }
     }
-    Mixpanel.mainInstance().track(event: "Fetched Current Conditions")
-    self.data = data
     
     let jsonDecoder = JSONDecoder()
     do {
@@ -74,22 +68,6 @@ class CurrentConditionsViewModel: ObservableObject {
       DispatchQueue.main.async {
         self.current = tgwDecoder.current
       }
-//      switch api.shortName {
-//        case "tgw":
-//          let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
-//          saveCurrentConditions(current: tgwDecoder.current)
-//          DispatchQueue.main.async {
-//            self.current = tgwDecoder.current
-//          }
-//        case "aowm":
-//          let aowmDecoder = try jsonDecoder.decode(AOWM_CurrentConditionsDecoder.self, from: data)
-//          saveCurrentConditions(current: aowmDecoder.current)
-//          DispatchQueue.main.async {
-//            self.current = aowmDecoder.current
-//          }
-//        default:
-//          self.logger.error("Couldn't determine the Decoder by shortname. 😭")
-//      }
     } catch {
       logger.error("Could not decode current conditions. 😭 \(error.localizedDescription)")
     }

@@ -27,21 +27,25 @@ class DayDetailViewModel: ObservableObject {
     fetchRequest = TGWForecastDay.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "date IN {\(finalPredicate)}")
-    if let forecastDays = try? viewContext.fetch(fetchRequest) {
-      var todayArray = [Today]()
-      for day in forecastDays {
-        let thisDayResult = TodaySummaryViewModel().configureDay(todayForecast: day)
-        var today = thisDayResult.0
-        var hours = [HourForecast]()
-        for hour in thisDayResult.1 {
-          hours.append(configureHour(hour: hour))
-        }
-        today.hours = hours
-        todayArray.append(today)
+    var forecastDays: [TGWForecastDay] = []
+    do {
+      forecastDays = try viewContext.fetch(fetchRequest)
+    } catch {
+      logger.error("Couldn't fetch TGWForecastDay. 😭 \(error.localizedDescription)")
+    }
+    var todayArray = [Today]()
+    for day in forecastDays {
+      let thisDayResult = TodaySummaryViewModel().configureDay(todayForecast: day)
+      var today = thisDayResult.0
+      var hours = [HourForecast]()
+      for hour in thisDayResult.1 {
+        hours.append(configureHour(hour: hour))
       }
-      DispatchQueue.main.async {
-        self.todayArray = todayArray
-      }
+      today.hours = hours
+      todayArray.append(today)
+    }
+    DispatchQueue.main.async {
+      self.todayArray = todayArray
     }
   }
   
@@ -69,9 +73,11 @@ class DayDetailViewModel: ObservableObject {
     hourForecast.time = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
     hourForecast.timeFull = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
     hourForecast.date = "\(hour.date ?? "")"
-    let hourDate = Dates.makeDateFromTime(time: hour.date! + " " + hour.time!, format: "yyyy-MM-dd HH:mm")
-    hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
-    hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
+    if let time = hour.time {
+      let hourDate = Dates.makeDateFromTime(time: hour.date ?? "" + " " + time, format: "yyyy-MM-dd HH:mm")
+      hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+      hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
+    }
     return hourForecast
   }
   

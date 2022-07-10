@@ -22,18 +22,23 @@ struct APIsProvider {
     let apisEndpoint = APISettings.fetchAPISettings().apisEndpoint
     let signature = CryptoUtilities.signRequest(input: apiKey, secretKey: secretKey)
     
-    let apisURL = URL(string: urlBase + apisEndpoint)!
-    var urlRequest = URLRequest(url: apisURL)
-    urlRequest.setValue(apiKey, forHTTPHeaderField: "apiKey")
-    urlRequest.setValue(signature, forHTTPHeaderField: "signature")
-    
-    let session = URLSession.shared
-    guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
-    else {
-      logger.error("Failed to received valid response and/or data when fetching APIs. 😭")
-      return
+    if let apisURL = URL(string: urlBase + apisEndpoint) {
+      var urlRequest = URLRequest(url: apisURL)
+      urlRequest.setValue(apiKey, forHTTPHeaderField: "apiKey")
+      urlRequest.setValue(signature, forHTTPHeaderField: "signature")
+      
+      let session = URLSession.shared
+      do {
+        let (data, response) = try await session.data(for: urlRequest)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+          await decodeAPIs(data: data)
+        } else {
+          return
+        }
+      } catch {
+        logger.error("Failed to received valid response and/or data. 😭 \(error.localizedDescription)")
+      }
     }
-    await decodeAPIs(data: data)
   }
   
   private func decodeAPIs(data: Data) async {
@@ -56,10 +61,13 @@ struct APIsProvider {
     
     await taskContext.perform {
       let batchInsertRequest = self.newBatchInsertRequest(with: apisList)
-      if let fetchResult = try? taskContext.execute(batchInsertRequest),
-         let batchInsertResult = fetchResult as? NSBatchInsertResult,
-         let success = batchInsertResult.result as? Bool, success {
-        return
+      do {
+        let fetchResult = try taskContext.execute(batchInsertRequest)
+        if let batchInsertResult = fetchResult as? NSBatchInsertResult, let success = batchInsertResult.result as? Bool, success {
+          return
+        }
+      } catch {
+        logger.error("Couldn't finish batch insert of APIs. 😭 \(error.localizedDescription)")
       }
       logger.error("Failed to execute batch insert request. 😭")
     }

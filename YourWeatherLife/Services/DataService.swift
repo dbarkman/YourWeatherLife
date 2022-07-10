@@ -11,60 +11,44 @@ import CoreData
 
 struct DataService {
 
+  static let shared = DataService()
+  
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DataService")
-  var localContainer = LocalPersistenceController.shared.container
-  var cloudContainer = CloudPersistenceController.shared.container
-
+  
+  var viewCloudContext = CloudPersistenceController.shared.container.viewContext
+  
   func fetchAPIsFromCloud() async {
     await APIsProvider.shared.fetchAPIs()
   }
   
   func fetchPrimaryAPIFromLocal () async -> API {
-//    if !UserDefaults.standard.bool(forKey: "apisFetched") {
-//      await DataService().fetchAPIsFromCloud()
-//      UserDefaults.standard.set(true, forKey: "apisFetched")
-//      return await fetchPrimaryAPIFromLocal()
-//    } else {
-//      let request = API.fetchRequest()
-//      request.sortDescriptors = [NSSortDescriptor(keyPath: \API.priority, ascending: true)]
-//      request.fetchLimit = 1
-//      do {
-//        if let api = try localContainer.viewContext.fetch(request).first as? API {
-//          return api
-//        }
-//      } catch {
-//        logger.error("Error loading APIs from local. 😭 \(error.localizedDescription)")
-//      }
-//    }
     let api = API()
-//    api.shortName = "tgw"
     api.apiKey = APISettings.fetchAPISettings().tgwApiKey
     api.urlBase = APISettings.fetchAPISettings().tgwUrlBase
     return api
   }
   
   func fetchAPIFromLocalBy(shortName: String) -> API {
-//    let request = API.fetchRequest()
-//    request.predicate = NSPredicate(format: "shortName = %@", shortName)
-//    request.fetchLimit = 1
-//    do {
-//      if let api = try localContainer.viewContext.fetch(request).first as? API {
-//        return api
-//      }
-//    } catch {
-//      logger.error("Fetch API from local by name failed. 😭 \(error.localizedDescription)")
-//    }
     let api = API()
-//    api.shortName = "tgw"
     api.apiKey = APISettings.fetchAPISettings().tgwApiKey
     api.urlBase = APISettings.fetchAPISettings().tgwUrlBase
     return api
   }
   
   func updateNextStartDate() async {
-    let fetchRequest: NSFetchRequest<DailyEvent>
-    fetchRequest = DailyEvent.fetchRequest()
-    if let dailyEventList = try? cloudContainer.viewContext.fetch(fetchRequest) {
+    if !UserDefaults.standard.bool(forKey: "defaultEventsLoaded") {
+      await EventProvider.shared.importEventsFromSeed()
+      await updateNextStartDate()
+    } else {
+      logger.debug("Updating next start date.")
+      let fetchRequest: NSFetchRequest<DailyEvent>
+      fetchRequest = DailyEvent.fetchRequest()
+      var dailyEventList: [DailyEvent] = []
+      do {
+        dailyEventList = try viewCloudContext.fetch(fetchRequest)
+      } catch {
+        logger.error("Couldn't fetch DailyEvent. 😭 \(error.localizedDescription)")
+      }
       for dailyEvent in dailyEventList {
         let start = dailyEvent.startTime ?? "00:00"
         let end = dailyEvent.endTime ?? "00:00"
@@ -76,12 +60,12 @@ struct DataService {
           dailyEvent.setValue("", forKey: "tomorrow")
         }
         do {
-          try cloudContainer.viewContext.save()
-          NotificationCenter.default.post(name: .nextStartDateUpdated, object: nil)
+          try viewCloudContext.save()
         } catch {
           logger.error("Could not save nextStartDate. 😭 \(error.localizedDescription)")
         }
       }
+      NotificationCenter.default.post(name: .nextStartDateUpdated, object: nil)
     }
   }
 }

@@ -43,7 +43,7 @@ class TodaySummaryViewModel: ObservableObject {
   }
   
   func configureDay(todayForecast: TGWForecastDay) -> (Today, [TGWForecastHour]) {
-    let dayDate = todayForecast.date! + " 00:00"
+    let dayDate = todayForecast.date ?? "" + " 00:00"
     let dayOfWeekDate = Dates.makeDateFromTime(time: dayDate, format: "yyyy-MM-dd HH:mm")
     var precipitation = false
     var precipitationType = ""
@@ -78,8 +78,14 @@ class TodaySummaryViewModel: ObservableObject {
     let fetchRequest: NSFetchRequest<TGWForecastHour>
     fetchRequest = TGWForecastHour.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date = %@", todayForecast.date!)
-    guard let forecastHours = try? viewContext.fetch(fetchRequest) else { return (Today(), []) }
+    fetchRequest.predicate = NSPredicate(format: "date = %@", todayForecast.date ?? "")
+    var forecastHours: [TGWForecastHour] = []
+    do {
+      forecastHours = try viewContext.fetch(fetchRequest)
+    } catch {
+      logger.error("Couldn't fetch TGWForecastHour. 😭 \(error.localizedDescription)")
+      return (Today(), [])
+    }
     for hour in forecastHours {
       let time = hour.time?.components(separatedBy: " ").last ?? "00:00"
       let hourComponent = time.components(separatedBy: ":").first ?? "00"
@@ -109,8 +115,8 @@ class TodaySummaryViewModel: ObservableObject {
     today.warmestTime = Dates.makeDisplayTimeFromTime(time: warmestTime, format: "HH:mm")
     today.sunriseTemp = Formatters.format(temp: sunriseTemp, from: .celsius)
     today.sunsetTemp = Formatters.format(temp: sunsetTemp, from: .celsius)
-    today.sunriseTime = Dates.makeDisplayTimeFromTime(time: sunriseTime!, format: "hh:mm aa")
-    today.sunsetTime = Dates.makeDisplayTimeFromTime(time: sunsetTime!, format: "hh:mm aa")
+    today.sunriseTime = Dates.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa")
+    today.sunsetTime = Dates.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
     today.dayOfWeek = Dates.makeStringFromDate(date: dayOfWeekDate, format: "EEE")
     today.displayDate = Dates.makeStringFromDate(date: dayOfWeekDate, format: "EEE, MM/dd")
     today.humidity = String(todayForecast.avghumidity)

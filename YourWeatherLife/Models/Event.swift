@@ -10,7 +10,7 @@ import OSLog
 
 struct EventDecoder: Decodable {
   
-//  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventDecoder")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventDecoder")
 
   private enum RootCodingKeys: String, CodingKey {
     case data
@@ -22,8 +22,11 @@ struct EventDecoder: Decodable {
     let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
     var dataContainer = try rootContainer.nestedUnkeyedContainer(forKey: .data)
     while !dataContainer.isAtEnd {
-      if let event = try? dataContainer.decode(Event.self) {
-        eventList.append(event)
+      do {
+        let event = try dataContainer.decode(Event.self)
+          eventList.append(event)
+      } catch {
+        logger.error("Couldn't decode APIs data container. 😭 \(error.localizedDescription)")
       }
     }
   }

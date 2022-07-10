@@ -40,15 +40,18 @@ struct tgw {
     if (authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse) {
       if let location = locationManager.location {
         let geocoder = CLGeocoder()
-        let reverseGeocodeLocation = try? await geocoder.reverseGeocodeLocation(location)
-        if let reverseGeocodeLocations = reverseGeocodeLocation {
-          if reverseGeocodeLocations.count > 0 {
-            return reverseGeocodeLocations[0].postalCode ?? "98034"
+        do {
+          let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
+          if reverseGeocodeLocation.count > 0 {
+            return reverseGeocodeLocation[0].postalCode ?? "98034"
           }
+          let latitude = location.coordinate.latitude
+          let longitude = location.coordinate.longitude
+          finalLocation = "\(latitude),\(longitude)"
+        } catch {
+          finalLocation = "98034"
+          print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
         }
-        let latitude = location.coordinate.latitude
-        let longitude = location.coordinate.longitude
-        finalLocation = "\(latitude),\(longitude)"
       } else {
         finalLocation = "98034"
       }

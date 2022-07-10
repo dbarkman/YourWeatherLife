@@ -17,30 +17,37 @@ struct TGW_ForecastProvider {
   static let shared = TGW_ForecastProvider()
   
   func fetchForecast() async {
-//    let api = DataService().fetchAPIFromLocalBy(shortName: "tgw")
     let url = await tgw.getWeatherForecastURL(days: "14")
-    
-    guard !url.isEmpty else { return }
-    let urlRequest = URLRequest(url: URL(string: url)!)
-    let session = URLSession.shared
-    guard let (data, response) = try? await session.data(for: urlRequest), let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200
-    else {
-      logger.error("Failed to received valid response and/or data. 😭")
-      return
-    }
-    Mixpanel.mainInstance().track(event: "Fetched Forecast")
+    if let url = URL(string: url) {
+      let urlRequest = URLRequest(url: url)
+      let session = URLSession.shared
+      
+      var encodedData = Data()
+      do {
+        let (data, response) = try await session.data(for: urlRequest)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+          Mixpanel.mainInstance().track(event: "Fetched Forecast")
+          encodedData = data
+        } else {
+          return
+        }
+      } catch {
+        logger.error("Failed to received valid response and/or data. 😭 \(error.localizedDescription)")
+      }
 
-    do {
-      let jsonDecoder = JSONDecoder()
-      let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: data)
-      let forecastDaysArray = forecastDecoder.tgw_forecastDays
-      let forecastHoursArray = forecastDecoder.tgw_forecastHours
-
-      await importForecastHours(from: forecastHoursArray)
-      await importForecastDays(from: forecastDaysArray)
-      NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
-    } catch {
-      logger.error("Forecast decode failed. 😭 \(error.localizedDescription)")
+      do {
+        let jsonDecoder = JSONDecoder()
+        let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: encodedData)
+        let forecastDaysArray = forecastDecoder.tgw_forecastDays
+        let forecastHoursArray = forecastDecoder.tgw_forecastHours
+        
+        await importForecastHours(from: forecastHoursArray)
+        await importForecastDays(from: forecastDaysArray)
+        NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
+        logger.debug("Days and Hours imported successfully! 🎉")
+      } catch {
+        logger.error("Forecast decode failed. 😭 \(error.localizedDescription)")
+      }
     }
   }
   
@@ -53,10 +60,13 @@ struct TGW_ForecastProvider {
     
     await taskContext.perform {
       let batchInsertRequest = self.newBatchInsertHoursRequest(with: forecastHoursArray)
-      if let fetchResult = try? taskContext.execute(batchInsertRequest),
-         let batchInsertResult = fetchResult as? NSBatchInsertResult,
-         let success = batchInsertResult.result as? Bool, success {
-        return
+      do {
+        let fetchResult = try taskContext.execute(batchInsertRequest)
+        if let batchInsertResult = fetchResult as? NSBatchInsertResult, let success = batchInsertResult.result as? Bool, success {
+          return
+        }
+      } catch {
+        logger.error("Couldn't finish batch insert of hours. 😭 \(error.localizedDescription)")
       }
       logger.error("Failed to execute batch insert request of hours. 😭")
     }
@@ -83,10 +93,13 @@ struct TGW_ForecastProvider {
     
     await taskContext.perform {
       let batchInsertRequest = self.newBatchInsertDaysRequest(with: forecastDaysArray)
-      if let fetchResult = try? taskContext.execute(batchInsertRequest),
-         let batchInsertResult = fetchResult as? NSBatchInsertResult,
-         let success = batchInsertResult.result as? Bool, success {
-        return
+      do {
+        let fetchResult = try taskContext.execute(batchInsertRequest)
+        if let batchInsertResult = fetchResult as? NSBatchInsertResult, let success = batchInsertResult.result as? Bool, success {
+          return
+        }
+      } catch {
+        logger.error("Couldn't finish batch insert of days. 😭 \(error.localizedDescription)")
       }
       logger.error("Failed to execute batch insert request of days. 😭")
     }

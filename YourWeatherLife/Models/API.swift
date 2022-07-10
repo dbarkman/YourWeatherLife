@@ -7,10 +7,13 @@
 
 import Foundation
 import CoreData
+import OSLog
 
 @objc(API)
 class API: NSManagedObject {
   
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "API")
+
   @NSManaged var api: String
   @NSManaged var shortName: String
   @NSManaged var priority: Int
@@ -45,6 +48,8 @@ class API: NSManagedObject {
 
 struct APIDecoder: Decodable {
   
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "APIDecoder")
+  
   private enum RootCodingKeys: String, CodingKey {
     case data
   }
@@ -55,8 +60,11 @@ struct APIDecoder: Decodable {
     let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
     var dataContainer = try rootContainer.nestedUnkeyedContainer(forKey: .data)
     while !dataContainer.isAtEnd {
-      if let apis = try? dataContainer.decode(APIProperties.self) {
+      do {
+        let apis = try dataContainer.decode(APIProperties.self)
         apisList.append(apis)
+      } catch {
+        logger.error("Couldn't decode APIs data container. 😭 \(error.localizedDescription)")
       }
     }
   }

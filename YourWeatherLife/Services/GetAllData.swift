@@ -13,18 +13,9 @@ struct GetAllData {
   static let shared = GetAllData()
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GetAllData")
-
-  func getAllData() async {
-//    if !UserDefaults.standard.bool(forKey: "apisFetched") {
-//      await DataService().fetchAPIsFromCloud()
-//      UserDefaults.standard.set(true, forKey: "apisFetched")
-//      await getAllData()
-//    } else {
-      await updateForecasts()
-//    }
-  }
   
   func fetchCurrentConditions() -> Bool {
+    logger.debug("Trying to fetch current conditions.")
     let now = Date()
     var nextUpdate: Date
     if let currentConditionsNextUpdate = UserDefaults.standard.object(forKey: "currentConditionsNextUpdate") as? Date {
@@ -33,6 +24,7 @@ struct GetAllData {
       nextUpdate = Date(timeIntervalSince1970: 0)
     }
     if now > nextUpdate {
+      logger.debug("Fetching current conditions.")
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
       return true
@@ -41,6 +33,7 @@ struct GetAllData {
   }
   
   func updateForecasts() async {
+    logger.debug("Trying to fetch forecasts.")
     let now = Date()
     var nextUpdate: Date
     if let forecastsNextUpdate = UserDefaults.standard.object(forKey: "forecastsNextUpdate") as? Date {
@@ -49,6 +42,7 @@ struct GetAllData {
       nextUpdate = Date(timeIntervalSince1970: 0)
     }
     if now > nextUpdate {
+      logger.debug("Fetching forecasts.")
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
       await TGW_ForecastProvider.shared.fetchForecast()
