@@ -46,7 +46,7 @@ class HomeViewModel: ObservableObject {
   }
   func awaitUpdateNextStartDate() {
     Task {
-      await DataService.shared.updateNextStartDate()
+      await DataService.shared.updateNextStartDate(who: "homeViewModel")
     }
   }
   
