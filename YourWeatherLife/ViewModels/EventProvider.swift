@@ -33,6 +33,7 @@ struct EventProvider {
       let eventDecoder = try jsonDecoder.decode(EventDecoder.self, from: data)
       let eventList = eventDecoder.eventList
       await importEvents(from: eventList)
+      
       UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
       logger.debug("Events imported successfully! 🎉")
     } catch {
