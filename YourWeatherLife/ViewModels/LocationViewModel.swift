@@ -7,8 +7,12 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "LocationViewModel")
+
   @Published var authorizationStatus: CLAuthorizationStatus
   @Published var lastSeenLocation: CLLocation?
   @Published var currentPlacemark: CLPlacemark?
@@ -30,19 +34,12 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
   }
   
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    logger.debug("LocationManager DidChangeAuthorization")
     NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
     authorizationStatus = manager.authorizationStatus
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    lastSeenLocation = locations.first
-  }
-  
-  func fetchCountryAndCity(for location: CLLocation?) {
-    guard let location = location else { return }
-    let geocoder = CLGeocoder()
-    geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-      self.currentPlacemark = placemarks?.first
-    }
+//    logger.debug("LocationManager DidUpdateLocations")
   }
 }

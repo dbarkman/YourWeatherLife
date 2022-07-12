@@ -123,9 +123,9 @@ class HomeViewModel: ObservableObject {
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "date >= %@", today)
+    var forecastDays = [Today]()
     do {
       let forecastDay = try viewContext.fetch(fetchRequest)
-      var forecastDays = [Today]()
       for day in forecastDay {
         let todayResult = TodaySummaryViewModel().configureDay(todayForecast: day)
         var today = todayResult.0
@@ -137,11 +137,11 @@ class HomeViewModel: ObservableObject {
         today.hours = hoursForecast
         forecastDays.append(today)
       }
-      DispatchQueue.main.async {
-        self.forecastDays = forecastDays
-      }
     } catch {
       logger.error("Couldn't fetch 14 day forecast. 😭 \(error.localizedDescription)")
+    }
+    DispatchQueue.main.async {
+      self.forecastDays = forecastDays
     }
   }
   

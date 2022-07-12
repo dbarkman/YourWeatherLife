@@ -7,9 +7,12 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct HourDetail: View {
 
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "HourDetail")
+  
   @State var hour = HourForecast()
   @State var showingFeedback = false
 

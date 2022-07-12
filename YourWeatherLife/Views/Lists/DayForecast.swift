@@ -7,8 +7,11 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct DayForecast: View {
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
   
   @StateObject private var homeViewModel = HomeViewModel()
   

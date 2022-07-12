@@ -7,9 +7,12 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct DayDetail: View {
-  
+
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayDetail")
+
   @StateObject private var dayDetail = DayDetailViewModel()
   
   @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
