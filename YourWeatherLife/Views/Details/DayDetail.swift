@@ -26,7 +26,7 @@ struct DayDetail: View {
           Text("Coldest: \(day.coldestTemp) at \(day.coldestTime)")
           Text("Sunrise: \(day.sunriseTemp) at \(day.sunriseTime)")
           Text("Warmest: \(day.warmestTemp) at \(day.warmestTime)")
-          Text("Sunset: \(day.sunsetTemp) at \(day.dayOfWeek)")
+          Text("Sunset: \(day.sunsetTemp) at \(day.sunsetTime)")
           if day.precipitation {
             Text("\(day.precipitationType): \(day.precipitationPercent) chance")
           }
