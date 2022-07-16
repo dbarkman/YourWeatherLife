@@ -288,8 +288,10 @@ struct Home: View {
         if UserDefaults.standard.bool(forKey: "userNotLoggedIniCloud") {
           homeViewModel.showiCloudLoginAlert = true
         }
+        globalViewModel.countEverything()
       }
       .onReceive(self.observer.$enteredForeground) { _ in
+        locationViewModel.requestPermission()
         homeViewModel.globalViewModel = globalViewModel
         currentConditions.globalViewModel = globalViewModel
       }

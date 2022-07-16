@@ -115,12 +115,14 @@ class HomeViewModel: ObservableObject {
       let summary = EventSummary()
       let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
       let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
-      if event.tomorrow.isEmpty { //today
-        todayEventsList.append(event)
-        todayEventForecastHoursList[eventName] = forecastHours
-      } else { //tomorrow
-        tomorrowEventsList.append(event)
-        tomorrowEventForecastHoursList[eventName] = forecastHours
+      if !todayEventsList.contains(event) && !tomorrowEventsList.contains(event) {
+        if event.tomorrow.isEmpty { //today
+          todayEventsList.append(event)
+          todayEventForecastHoursList[eventName] = forecastHours
+        } else { //tomorrow
+          tomorrowEventsList.append(event)
+          tomorrowEventForecastHoursList[eventName] = forecastHours
+        }
       }
     }
     DispatchQueue.main.async {
