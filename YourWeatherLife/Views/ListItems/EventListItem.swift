@@ -24,8 +24,6 @@ struct EventListItem: View {
           .fontWeight(.semibold)
           .minimumScaleFactor(0.1)
         Spacer()
-        Text(tomorrow)
-          .font(.caption2)
         Text(startTime)
           .font(.callout)
         Text(" - ")

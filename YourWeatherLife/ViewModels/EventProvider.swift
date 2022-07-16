@@ -13,6 +13,8 @@ struct EventProvider {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventProvider")
   
+  var viewCloudContext = CloudPersistenceController.shared.container.viewContext
+
   static let shared = EventProvider()
   
   func importEventsFromSeed() async {
@@ -31,15 +33,41 @@ struct EventProvider {
     do {
       let jsonDecoder = JSONDecoder()
       let eventDecoder = try jsonDecoder.decode(EventDecoder.self, from: data)
-      let eventList = eventDecoder.eventList
-      await importEvents(from: eventList)
-      
-      UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
-      logger.debug("Events imported successfully! 🎉")
+      insertEvents(eventList: eventDecoder.eventList)
     } catch {
       logger.error("Failed to decode data when fetching Events. 😭 \(error.localizedDescription)")
     }
   }
+  
+  private func insertEvents(eventList: [Event]) {
+    let fetchRequest: NSFetchRequest<DailyEvent>
+    fetchRequest = DailyEvent.fetchRequest()
+    for event in eventList {
+      fetchRequest.predicate = NSPredicate(format: "event = %@", event.event)
+      do {
+        let dailyEvent = try viewCloudContext.fetch(fetchRequest)
+        if dailyEvent.count == 0 {
+          let newDailyEvent = DailyEvent(context: viewCloudContext)
+          newDailyEvent.event = event.event
+          newDailyEvent.startTime = event.startTime
+          newDailyEvent.endTime = event.endTime
+          do {
+            try viewCloudContext.save()
+          } catch {
+            logger.error("Could not save Daily Event: \(event.event)")
+          }
+        } else {
+          continue
+        }
+      } catch {
+        logger.error("Could not fetch Daily Events. 😭 \(error.localizedDescription)")
+      }
+    }
+    UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
+    logger.debug("Events imported successfully! 🎉")
+  }
+  
+  //unused
   
   private func importEvents(from eventList: [Event]) async {
     guard !eventList.isEmpty else { return }

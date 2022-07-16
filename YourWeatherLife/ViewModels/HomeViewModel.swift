@@ -16,24 +16,35 @@ class HomeViewModel: ObservableObject {
   var viewContext = LocalPersistenceController.shared.container.viewContext
   var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
-  @Published var events = [EventForecast]()
-  @Published var eventForecastHours = [String: [TGWForecastHour]]()
+  var globalViewModel: GlobalViewModel?
+  
+  @Published var todayEvents = [EventForecast]()
+  @Published var todayEventForecastHours = [String: [TGWForecastHour]]()
+  @Published var tomorrowEvents = [EventForecast]()
+  @Published var tomorrowEventForecastHours = [String: [TGWForecastHour]]()
   @Published var forecastDays = [Today]()
   @Published var forecastHours = [HourForecast]()
+  @Published var showiCloudLoginAlert = false
 
-  private var eventsList = [EventForecast]()
-  private var eventForecastHoursList = [String: [TGWForecastHour]]()
+  private var todayEventsList = [EventForecast]()
+  private var todayEventForecastHoursList = [String: [TGWForecastHour]]()
+  private var tomorrowEventsList = [EventForecast]()
+  private var tomorrowEventForecastHoursList = [String: [TGWForecastHour]]()
 
   init() {
     NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcast), name: .locationUpdatedEvent, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(objcUpdateNextStartDate), name: .forecastInsertedEvent, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateEventList), name: .nextStartDateUpdated, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(objcUpdateNextStartDate), name: .forecastInsertedEvent, object: nil)
   }
   
   @objc func overrideFetchForcast() {
-    let nextUpdate = Date(timeIntervalSince1970: 0)
-    UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
-    fetchForecast()
+    if let globalViewModel = globalViewModel {
+      if globalViewModel.networkOnline {
+        let nextUpdate = Date(timeIntervalSince1970: 0)
+        UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
+        fetchForecast()
+      }
+    }
   }
   func fetchForecast() {
     Task {
@@ -46,7 +57,7 @@ class HomeViewModel: ObservableObject {
   }
   func awaitUpdateNextStartDate() {
     Task {
-      await DataService.shared.updateNextStartDate(who: "homeViewModel")
+      await DataService.shared.updateNextStartDate()
     }
   }
   
@@ -61,7 +72,8 @@ class HomeViewModel: ObservableObject {
 
   func createUpdateEventList() async {
     logger.debug("Creating/updating event list.")
-    eventsList.removeAll()
+    todayEventsList.removeAll()
+    tomorrowEventsList.removeAll()
     let fetchRequest: NSFetchRequest<DailyEvent>
     fetchRequest = DailyEvent.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DailyEvent.nextStartDate, ascending: true)]
@@ -103,14 +115,23 @@ class HomeViewModel: ObservableObject {
       let summary = EventSummary()
       let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
       let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
-      eventsList.append(event)
-      eventForecastHoursList[eventName] = forecastHours
+      if event.tomorrow.isEmpty { //today
+        todayEventsList.append(event)
+        todayEventForecastHoursList[eventName] = forecastHours
+      } else { //tomorrow
+        tomorrowEventsList.append(event)
+        tomorrowEventForecastHoursList[eventName] = forecastHours
+      }
     }
     DispatchQueue.main.async {
-      self.events.removeAll()
-      self.events = self.eventsList
-      self.eventForecastHours.removeAll()
-      self.eventForecastHours = self.eventForecastHoursList
+      self.todayEvents.removeAll()
+      self.tomorrowEvents.removeAll()
+      self.todayEvents = self.todayEventsList
+      self.tomorrowEvents = self.tomorrowEventsList
+      self.todayEventForecastHours.removeAll()
+      self.tomorrowEventForecastHours.removeAll()
+      self.todayEventForecastHours = self.todayEventForecastHoursList
+      self.tomorrowEventForecastHours = self.tomorrowEventForecastHoursList
       self.viewContext.refreshAllObjects()
       self.viewCloudContext.refreshAllObjects()
     }
@@ -166,5 +187,11 @@ class HomeViewModel: ObservableObject {
       logger.error("Couldn't fetch 336 hour forecast. 😭 \(error.localizedDescription)")
     }
   }
-
+  
+  func disableiCloudSync() async {
+    UserDefaults.standard.set(true, forKey: "disableiCloudSync")
+    UserDefaults.standard.set(false, forKey: "userNotLoggedIniCloud")
+    await EventProvider.shared.importEventsFromSeed()
+    await DataService.shared.updateNextStartDate()
+  }
 }

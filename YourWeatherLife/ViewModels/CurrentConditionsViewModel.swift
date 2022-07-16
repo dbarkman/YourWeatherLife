@@ -13,6 +13,8 @@ class CurrentConditionsViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "CurrentConditionsViewModel")
   
+  var globalViewModel: GlobalViewModel?
+  
   var data = Data()
 
   @Published var current: Current?
@@ -22,9 +24,13 @@ class CurrentConditionsViewModel: ObservableObject {
   }
 
   @objc func overrideUpdateCurrent() {
-    let nextUpdate = Date(timeIntervalSince1970: 0)
-    UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
-    updateCurrent()
+    if let globalViewModel = globalViewModel {
+      if globalViewModel.networkOnline {
+        let nextUpdate = Date(timeIntervalSince1970: 0)
+        UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
+        updateCurrent()
+      }
+    }
   }
   func updateCurrent() {
     Task {

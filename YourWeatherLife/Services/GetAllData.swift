@@ -46,8 +46,6 @@ struct GetAllData {
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
       await TGW_ForecastProvider.shared.fetchForecast()
-//    } else {
-//      await DataService.shared.updateNextStartDate(who: "Get All Data")
     }
   }
 }
