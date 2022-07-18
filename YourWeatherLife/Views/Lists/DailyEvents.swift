@@ -6,56 +6,45 @@
 //
 
 import SwiftUI
+import CoreData
 import Mixpanel
+import OSLog
 
 struct DailyEvents: View {
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventProvider")
+  
+  @Environment(\.managedObjectContext) private var viewCloudContext
+  @EnvironmentObject private var globalViewModel: GlobalViewModel
+  @StateObject private var eventViewModel = EventViewModel()
+  
+  @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
+  private var events: FetchedResults<DailyEvent>
 
-  @State var showingFeedback = false
+  @State var showFeedback = false
+  @State var showAddEvent = false
 
   var body: some View {
     ZStack {
       BackgroundColor()
       List {
         Section(header: Text("Repeating Weekday Events")) {
-          NavigationLink(destination: EditDailyEvent(eventName: "Morning Commute", eventStartTime: "7a", eventEndTime: "9a")) {
-            HStack {
-              Text("Morning Commute")
-              Spacer()
-              Text("7a - 9a")
+          ForEach(events, id: \.self) { individualEvent in
+            if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
+              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromTime(time: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromTime(time: end, format: "HH:mm"), oldEventName: event)) {
+                HStack {
+                  Text(event)
+                  Spacer()
+                  HStack {
+                    Text(Dates.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
+                    Text("-")
+                    Text(Dates.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
+                  }
+                }
+              }
             }
-          }
-          NavigationLink(destination: EditDailyEvent(eventName: "Lunch", eventStartTime: "11a", eventEndTime: "1p")) {
-            HStack {
-              Text("Lunch")
-              Spacer()
-              Text("11a - 1p")
-            }
-          }
-          NavigationLink(destination: EditDailyEvent(eventName: "Afternoon Commute", eventStartTime: "4p", eventEndTime: "6p")) {
-            HStack {
-              Text("Afternoon Commute")
-              Spacer()
-              Text("4p - 6p")
-            }
-          }
-          NavigationLink(destination: EditDailyEvent(eventName: "Dinner", eventStartTime: "7p", eventEndTime: "8:30p")) {
-            HStack {
-              Text("Dinner")
-              Spacer()
-              Text("7p - 8:30p")
-            }
-          }
-        }
-        .listRowBackground(Color("ListBackground"))
-        Section(header: Text("Repeating Weekend Events")) {
-          NavigationLink(destination: EditDailyEvent(eventName: "Lunch", eventStartTime: "11a", eventEndTime: "1p")) {
-            HStack {
-              Text("Lunch")
-              Spacer()
-              Text("11a - 1p")
-            }
-          }
-        }
+          } //end of ForEach
+          .onDelete(perform: delete)
+        } //end of Section
         .listRowBackground(Color("ListBackground"))
       } //end of list
       .navigationTitle("Events")
@@ -66,19 +55,47 @@ struct DailyEvents: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
-      Mixpanel.mainInstance().track(event: "DailyEvents View")
+      globalViewModel.returningFromChildView = true
+        Mixpanel.mainInstance().track(event: "DailyEvents View")
     }
     .toolbar {
-      ToolbarItem {
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button(action: add) {
+          Label("Add Event", systemImage: "plus")
+        }
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
+        EditButton()
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
         Button(action: {
-          showingFeedback.toggle()
+          showFeedback.toggle()
         }) {
           Label("Feedback", systemImage: "star")
         }
-        .sheet(isPresented: $showingFeedback) {
+        .sheet(isPresented: $showFeedback) {
           FeedbackModal()
         }
       }
+    }
+    .sheet(isPresented: $showAddEvent) {
+      NavigationView {
+        EditDailyEvent(addEvent: true)
+      }
+    }
+  }
+
+  func add() {
+    showAddEvent = true
+  }
+  
+  func delete(offsets: IndexSet) {
+    print("deleting an event")
+    offsets.map { events[$0] }.forEach(viewCloudContext.delete)
+    do {
+      try viewCloudContext.save()
+    } catch {
+      logger.error("Could not delete Daily Event")
     }
   }
 }

@@ -13,9 +13,10 @@ struct DayForecast: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
   
+  @EnvironmentObject private var globalViewModel: GlobalViewModel
   @StateObject private var homeViewModel = HomeViewModel()
   
-  @State var showingFeedback = false
+  @State var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -48,16 +49,17 @@ struct DayForecast: View {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         Mixpanel.mainInstance().track(event: "14DayForecast View")
+        globalViewModel.returningFromChildView = true
         homeViewModel.create14DayForecast()
       }
       .toolbar {
         ToolbarItem {
           Button(action: {
-            showingFeedback.toggle()
+            showFeedback.toggle()
           }) {
             Label("Feedback", systemImage: "star")
           }
-          .sheet(isPresented: $showingFeedback) {
+          .sheet(isPresented: $showFeedback) {
             FeedbackModal()
           }
         }

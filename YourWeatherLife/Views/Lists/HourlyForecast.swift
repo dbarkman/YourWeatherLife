@@ -10,9 +10,10 @@ import Mixpanel
 
 struct HourlyForecast: View {
   
+  @EnvironmentObject private var globalViewModel: GlobalViewModel
   @StateObject private var homeViewModel = HomeViewModel()
 
-  @State var showingFeedback = false
+  @State var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -39,16 +40,17 @@ struct HourlyForecast: View {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         Mixpanel.mainInstance().track(event: "336HourForecast View")
+        globalViewModel.returningFromChildView = true
         homeViewModel.create336HourForecast()
       }
       .toolbar {
         ToolbarItem {
           Button(action: {
-            showingFeedback.toggle()
+            showFeedback.toggle()
           }) {
             Label("Feedback", systemImage: "star")
           }
-          .sheet(isPresented: $showingFeedback) {
+          .sheet(isPresented: $showFeedback) {
             FeedbackModal()
           }
         }

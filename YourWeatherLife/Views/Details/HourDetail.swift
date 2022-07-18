@@ -14,7 +14,7 @@ struct HourDetail: View {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "HourDetail")
   
   @State var hour = HourForecast()
-  @State var showingFeedback = false
+  @State var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -57,11 +57,11 @@ struct HourDetail: View {
     .toolbar {
       ToolbarItem {
         Button(action: {
-          showingFeedback.toggle()
+          showFeedback.toggle()
         }) {
           Label("Feedback", systemImage: "star")
         }
-        .sheet(isPresented: $showingFeedback) {
+        .sheet(isPresented: $showFeedback) {
           FeedbackModal()
         }
       }

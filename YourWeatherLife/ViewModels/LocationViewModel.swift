@@ -25,8 +25,10 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     super.init()
     locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-    locationManager.startUpdatingLocation()
+//    locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+//    locationManager.startUpdatingLocation()
+    locationManager.startMonitoringSignificantLocationChanges()
+    locationManager.pausesLocationUpdatesAutomatically = true
   }
   
   func requestPermission() {

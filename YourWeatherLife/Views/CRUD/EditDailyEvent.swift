@@ -10,36 +10,75 @@ import Mixpanel
 
 struct EditDailyEvent: View {
   
+  @Environment(\.presentationMode) var presentationMode
+  
+  @StateObject private var eventViewModel = EventViewModel()
+  
+  @State var addEvent = false
   @State var eventName = ""
-  @State var eventStartTime = ""
-  @State var eventEndTime = ""
-  @State var showingFeedback = false
-
+  @State var startTimeDate = Dates.roundTimeUp(date: Date())
+  @State var endTimeDate = Dates.roundTimeUp(date: Date())
+  @State var showFeedback = false
+  
+  var oldEventName = ""
+  
   var body: some View {
     ZStack {
       BackgroundColor()
       List {
-        Section(footer: Text("for a more precise forecast, create events lasting 1-2 hours")) {
+        Section() {
           HStack {
             Text("Event Name:")
             TextField("event name", text: $eventName)
               .textFieldStyle(RoundedBorderTextFieldStyle())
+              .environment(\.colorScheme, .light)
           }
           HStack {
-            Text("Event Start:")
-            TextField("start time", text: $eventStartTime)
-              .textFieldStyle(RoundedBorderTextFieldStyle())
-            
+            Text("Event Start Time:")
+            DatePicker("", selection: $startTimeDate, displayedComponents: .hourAndMinute)
+              .labelsHidden()
+              .environment(\.colorScheme, .dark)
           }
           HStack {
-            Text("Event End:")
-            TextField("end time", text: $eventEndTime)
-              .textFieldStyle(RoundedBorderTextFieldStyle())
+            Text("Event End Time:")
+            DatePicker("", selection: $endTimeDate, displayedComponents: .hourAndMinute)
+              .labelsHidden()
+              .environment(\.colorScheme, .dark)
+              .foregroundColor(.white)
           }
+          Text("for a more precise forecast, create events lasting 1-2 hours")
+            .font(.footnote)
+          if !eventViewModel.eventSaveResult.isEmpty {
+            HStack {
+              Text(eventViewModel.eventSaveResult)
+              Spacer()
+              Text("OK")
+                .onTapGesture(perform: {
+                  withAnimation() {
+                    eventViewModel.eventSaveResult = ""
+                  }
+                })
+            }
+            .listRowBackground(Color.red.opacity(0.75))
+          }
+          Button(action: {
+            withAnimation() {
+              eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
+                if success {
+                  presentationMode.wrappedValue.dismiss()
+                }
+              })
+            }
+          }, label: {
+            Text("Save")
+              .font(.title2)
+              .foregroundColor(Color("AccentColor"))
+          })
         }
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
+      .navigationBarTitle(addEvent ? "Add Event" : "Edit Event")
     } //end of ZStack
     .onAppear() {
       let appearance = UINavigationBarAppearance()
@@ -49,14 +88,24 @@ struct EditDailyEvent: View {
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
     }
     .toolbar {
-      ToolbarItem {
-        Button(action: {
-          showingFeedback.toggle()
-        }) {
-          Label("Feedback", systemImage: "star")
+      ToolbarItem(placement: .navigationBarLeading) {
+        if addEvent {
+          Button(action: {
+            presentationMode.wrappedValue.dismiss()
+          }) {
+            Text("Cancel")
+          }
         }
-        .sheet(isPresented: $showingFeedback) {
-          FeedbackModal()
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button(action: {
+          eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
+            if success {
+              presentationMode.wrappedValue.dismiss()
+            }
+          })
+        }) {
+          Text("Save")
         }
       }
     }
@@ -65,6 +114,6 @@ struct EditDailyEvent: View {
 
 struct EditDailyEvent_Previews: PreviewProvider {
   static var previews: some View {
-    EditDailyEvent(eventName: "", eventStartTime: "", eventEndTime: "")
+    EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
   }
 }
