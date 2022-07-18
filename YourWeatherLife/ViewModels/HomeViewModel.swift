@@ -70,7 +70,7 @@ class HomeViewModel: ObservableObject {
     }
   }
 
-  func createUpdateEventList() async {
+  private func createUpdateEventList() async {
     logger.debug("Creating/updating event list.")
     todayEventsList.removeAll()
     tomorrowEventsList.removeAll()

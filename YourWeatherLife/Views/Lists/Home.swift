@@ -25,7 +25,7 @@ struct Home: View {
   @StateObject private var locationViewModel = LocationViewModel()
   @StateObject private var currentConditions = CurrentConditionsViewModel()
 
-  @State var showingFeedback = false
+  @State var showFeedback = false
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
@@ -77,11 +77,11 @@ struct Home: View {
                       .lineLimit(1)
                     .minimumScaleFactor(0.1)
                     Button(action: {
-                      showingFeedback.toggle()
+                      showFeedback.toggle()
                     }) {
                       Label("", systemImage: "star")
                     }
-                    .sheet(isPresented: $showingFeedback) {
+                    .sheet(isPresented: $showFeedback) {
                       FeedbackModal()
                     }
                     .padding(.leading, -5)
@@ -258,6 +258,7 @@ struct Home: View {
               homeViewModel.fetchForecast()
               currentConditions.updateCurrent()
             }
+            homeViewModel.awaitUpdateNextStartDate()
           }
           .alert(Text("iCloud Login Error"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
             Button("Settings") {
@@ -281,7 +282,7 @@ struct Home: View {
         } //end of VStack
         .navigationBarHidden(true)
         
-        NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
+        NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, CloudPersistenceController.shared.container.viewContext), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of ZStack
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
@@ -289,6 +290,10 @@ struct Home: View {
           homeViewModel.showiCloudLoginAlert = true
         }
         globalViewModel.countEverything()
+        if globalViewModel.returningFromChildView {
+          globalViewModel.returningFromChildView = false
+          homeViewModel.awaitUpdateNextStartDate()
+        }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
         locationViewModel.requestPermission()

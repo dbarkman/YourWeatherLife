@@ -32,8 +32,9 @@ struct FeedbackModal: View {
               .keyboardType(.emailAddress)
               .disableAutocorrection(true)
               .autocapitalization(.none)
-              .background(.gray)
               .cornerRadius(5)
+              .background(RoundedRectangle(cornerRadius: 50).fill(Color.red))
+              .environment(\.colorScheme, .light)
           }
           .listRowBackground(Color("ListBackground"))
           VStack(alignment: .leading) {
@@ -42,6 +43,7 @@ struct FeedbackModal: View {
               .disabled(feedback.count >= (256))
               .background(.gray)
               .cornerRadius(5)
+              .environment(\.colorScheme, .light)
             Text("\(feedback.count) of 256")
               .font(.caption2)
           }
@@ -96,6 +98,6 @@ struct FeedbackModal: View {
 
 struct FeedbackModal_Previews: PreviewProvider {
   static var previews: some View {
-    FeedbackModal()
+    FeedbackModal().environment(\.colorScheme, .dark)
   }
 }

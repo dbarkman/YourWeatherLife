@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EventListItem: View {
+  
   @EnvironmentObject private var globalViewModel: GlobalViewModel
   
   @State var event: String

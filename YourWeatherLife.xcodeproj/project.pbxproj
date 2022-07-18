@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63279096288471BC00E551CA /* EventResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63279095288471BC00E551CA /* EventResult.swift */; };
+		632790982884B95F00E551CA /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790972884B95F00E551CA /* EventViewModel.swift */; };
 		63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */; };
 		63481AC2286A075600478C11 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC1286A075600478C11 /* Current.swift */; };
 		63481AC4286AC2B100478C11 /* TGW_ForecastProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */; };
@@ -97,6 +99,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		63279095288471BC00E551CA /* EventResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventResult.swift; sourceTree = "<group>"; };
+		632790972884B95F00E551CA /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
 		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGW_ForecastProvider.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				63481B022875E0F900478C11 /* WindDirection.swift */,
+				63279095288471BC00E551CA /* EventResult.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -341,6 +346,7 @@
 				63481AFD28753B1200478C11 /* DayDetailViewModel.swift */,
 				63481B082876A24000478C11 /* HomeViewModel.swift */,
 				63481B142877589F00478C11 /* LocationViewModel.swift */,
+				632790972884B95F00E551CA /* EventViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -605,6 +611,7 @@
 				634BCC442860ED010062E105 /* APIsProvider.swift in Sources */,
 				63481ACF2870223500478C11 /* Dates.swift in Sources */,
 				63481B07287699BA00478C11 /* DayForecast.swift in Sources */,
+				632790982884B95F00E551CA /* EventViewModel.swift in Sources */,
 				63481ADE2875084200478C11 /* ForecastInsertedEvent.swift in Sources */,
 				63481B092876A24000478C11 /* HomeViewModel.swift in Sources */,
 				63481AD12870AAA800478C11 /* EventSummary.swift in Sources */,
@@ -635,6 +642,7 @@
 				634BCC752860EE5D0062E105 /* Home.swift in Sources */,
 				634BCCA9286299F30062E105 /* DataService.swift in Sources */,
 				63481AD72872849500478C11 /* Observer.swift in Sources */,
+				63279096288471BC00E551CA /* EventResult.swift in Sources */,
 				634BCCB22866DF090062E105 /* aowm.swift in Sources */,
 				63FBEC8D287A9D5C0010A42E /* NextStartDateUpdated.swift in Sources */,
 				634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */,

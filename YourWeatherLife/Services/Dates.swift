@@ -58,6 +58,13 @@ struct Dates {
     return time
   }
   
+  static func roundTimeUp(date: Date) -> Date {
+    guard let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: date) else { return Date() }
+    let time = makeStringFromDate(date: nextHour, format: "HH:mm")
+    let timeRoundedDown = roundTimeDown(time: time)
+    return makeDateFromTime(time: timeRoundedDown, format: "HH:mm")
+  }
+  
   private static func getLastHour(time: String, startTimeDate: Date) -> String {
     var lastHour = time
     let dateTime = makeDateFromTime(time: time, format: "HH:mm")

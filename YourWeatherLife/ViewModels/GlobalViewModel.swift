@@ -23,6 +23,7 @@ class GlobalViewModel: ObservableObject {
   private var locationViewModel = LocationViewModel()
   
   @Published var isShowingDailyEvents = false
+  @Published var returningFromChildView = false
   @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
   @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
   @Published var networkOnline = true {
