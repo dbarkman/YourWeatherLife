@@ -32,17 +32,15 @@ struct EventListItem: View {
           .padding(.horizontal, -5)
         Text(endTime)
           .font(.callout)
-        EditEventPencil()
+        Image(systemName: "chevron.right")
+          .symbolRenderingMode(.monochrome)
+          .foregroundColor(Color.accentColor)
+          .padding(.horizontal, 5)
       } //end of HStack
       HStack {
         Text(summary)
           .font(.title2)
           .minimumScaleFactor(0.1)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
-          .padding(.horizontal, 5)
       }
     } //end of VStack
     .padding([.leading, .trailing, .top], 10)

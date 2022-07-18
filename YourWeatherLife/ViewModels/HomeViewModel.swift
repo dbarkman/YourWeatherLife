@@ -25,6 +25,7 @@ class HomeViewModel: ObservableObject {
   @Published var forecastDays = [Today]()
   @Published var forecastHours = [HourForecast]()
   @Published var showiCloudLoginAlert = false
+  @Published var showiCloudFetchAlert = false
 
   private var todayEventsList = [EventForecast]()
   private var todayEventForecastHoursList = [String: [TGWForecastHour]]()
@@ -191,8 +192,8 @@ class HomeViewModel: ObservableObject {
   }
   
   func disableiCloudSync() async {
-    UserDefaults.standard.set(true, forKey: "disableiCloudSync")
     UserDefaults.standard.set(false, forKey: "userNotLoggedIniCloud")
+    UserDefaults.standard.set(true, forKey: "disableiCloudSync")
     await EventProvider.shared.importEventsFromSeed()
     await DataService.shared.updateNextStartDate()
   }

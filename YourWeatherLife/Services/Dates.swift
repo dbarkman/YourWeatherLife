@@ -38,7 +38,7 @@ struct Dates {
     let now = Date()
     var dateFormat = ""
     var dateString = ""
-    if !format.contains("yyyy-MM-dd") {
+    if format == "HH:mm" {
       let dateFormatter = DateFormatter()
       dateFormatter.dateFormat = "yyyy-MM-dd"
       dateString = dateFormatter.string(from: now)
@@ -46,7 +46,8 @@ struct Dates {
     }
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = dateFormat + format
-    guard let dateTime = dateTimeFormatter.date(from: dateString + " " + time) else { return now }
+    let thing = dateString + " " + time
+    guard let dateTime = dateTimeFormatter.date(from: thing) else { return now }
     return dateTime
   }
   
@@ -54,7 +55,10 @@ struct Dates {
     let dateTime = makeDateFromTime(time: time, format: "HH:mm")
     let components = Calendar.current.dateComponents([.hour], from: dateTime)
     let hour = components.hour ?? 0
-    let time = "\(hour):00"
+    var time = "\(hour):00"
+    if time.count == 4 {
+      time = "0" + time
+    }
     return time
   }
   
@@ -65,9 +69,9 @@ struct Dates {
     return makeDateFromTime(time: timeRoundedDown, format: "HH:mm")
   }
   
-  private static func getLastHour(time: String, startTimeDate: Date) -> String {
-    var lastHour = time
-    let dateTime = makeDateFromTime(time: time, format: "HH:mm")
+  private static func getLastHour(endTime: String, startTimeDate: Date) -> String {
+    var lastHour = endTime
+    let dateTime = makeDateFromTime(time: endTime, format: "HH:mm")
     let components = Calendar.current.dateComponents([.hour, .minute], from: dateTime)
     if components.minute == 0 {
       let hour = components.hour ?? 0
@@ -78,33 +82,35 @@ struct Dates {
         lastHour = "\(roundDownHour):00"
       }
     } else {
-      lastHour = roundTimeDown(time: time)
+      lastHour = roundTimeDown(time: endTime)
     }
-    let lastHourDate = makeDateFromTime(time: lastHour, format: "HH:mm")
-    if lastHourDate < startTimeDate {
-      guard let lastHourTomorrow = Calendar.current.date(byAdding: .day, value: 1, to: lastHourDate) else { return time }
-      return makeStringFromDate(date: lastHourTomorrow, format: "yyyy-MM-dd HH:mm") //returns yyyy-MM-dd HH:mm
-    }
-    return lastHour //returns HH:mm
+    return lastHour
   }
   
   static func getEventHours(start: String, end: String, startOnly: Bool = false) -> [String] {
     var timeArray: [String] = []
-    let startTime = roundTimeDown(time: start)
-    let startTimeDate = makeDateFromTime(time: startTime, format: "HH:mm")
-    let lastHour = getLastHour(time: end, startTimeDate: startTimeDate)
+    let now = Date()
+    let roundDownStartTime = roundTimeDown(time: start)
+    var startTimeDate = makeDateFromTime(time: roundDownStartTime, format: "HH:mm")
     var endTimeDate = makeDateFromTime(time: end, format: "HH:mm")
-    if startTimeDate > endTimeDate { endTimeDate = makeFutureDateFromTime(time: end) }
-    let makeFuture = startTimeDate < Date() && endTimeDate > Date() ? false : true
-    let startDateTime = makeFutureDateFromTime(time: startTime, makeFuture: makeFuture)
-    if startOnly == true { return [makeStringFromDate(date: startDateTime, format: "yyyy-MM-dd HH:mm")] }
-    let endDateTime = makeFutureDateFromTime(time: lastHour, makeFuture: makeFuture)
-    timeArray.append(makeStringFromDate(date: startDateTime, format: "yyyy-MM-dd HH:mm"))
-    var startDateTimeTemp = startDateTime
-    while startDateTimeTemp < endDateTime {
-      if let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: startDateTimeTemp) {
-        startDateTimeTemp = nextHour
-        timeArray.append(makeStringFromDate(date: startDateTimeTemp, format: "yyyy-MM-dd HH:mm"))
+    if endTimeDate < now {
+      endTimeDate = makeFutureDateFromTime(time: end, makeFuture: true)
+    }
+    let futureStartTimeDate = makeFutureDateFromTime(time: roundDownStartTime)
+    if futureStartTimeDate < endTimeDate {
+      startTimeDate = futureStartTimeDate
+    } else {
+      if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: startTimeDate) {
+        let timeDifference = Calendar.current.dateComponents([.minute], from: yesterday, to: now)
+        if let minutes = timeDifference.minute, minutes < 1440 {
+          startTimeDate = yesterday
+        }
+      }
+    }
+    while startTimeDate < endTimeDate {
+      if let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: startTimeDate) {
+        timeArray.append(makeStringFromDate(date: startTimeDate, format: "yyyy-MM-dd HH:mm"))
+        startTimeDate = nextHour
       } else {
         break
       }
@@ -126,7 +132,10 @@ struct Dates {
   static func getEventDateTimeAndIsToday(start: String, end: String) -> (String, Bool) {
     let nextStart = getEventHours(start: start, end: end, startOnly: true)[0]
     let nextStartDate = makeDateFromTime(time: nextStart, format: "yyyy-MM-dd HH:mm")
-    let isToday = Calendar.current.isDateInToday(nextStartDate)
+    var isToday = Calendar.current.isDateInToday(nextStartDate)
+    if !isToday {
+      isToday = Calendar.current.isDateInYesterday(nextStartDate)
+    }
     return (nextStart, isToday)
   }
   

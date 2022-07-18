@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		63279096288471BC00E551CA /* EventResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63279095288471BC00E551CA /* EventResult.swift */; };
 		632790982884B95F00E551CA /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790972884B95F00E551CA /* EventViewModel.swift */; };
+		6327909A2884F9EF00E551CA /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790992884F9EF00E551CA /* CloudKitManager.swift */; };
 		63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */; };
 		63481AC2286A075600478C11 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC1286A075600478C11 /* Current.swift */; };
 		63481AC4286AC2B100478C11 /* TGW_ForecastProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */; };
@@ -101,6 +102,7 @@
 /* Begin PBXFileReference section */
 		63279095288471BC00E551CA /* EventResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventResult.swift; sourceTree = "<group>"; };
 		632790972884B95F00E551CA /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
+		632790992884F9EF00E551CA /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
 		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGW_ForecastProvider.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 				63481ACA286CC1C400478C11 /* GetAllData.swift */,
 				63481ACE2870223500478C11 /* Dates.swift */,
 				63481AD62872849500478C11 /* Observer.swift */,
+				632790992884F9EF00E551CA /* CloudKitManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 				634BCC492860ED220062E105 /* API.swift in Sources */,
 				634BCCA7286298BE0062E105 /* CurrentConditionsViewModel.swift in Sources */,
 				63481AFE28753B1200478C11 /* DayDetailViewModel.swift in Sources */,
+				6327909A2884F9EF00E551CA /* CloudKitManager.swift in Sources */,
 				634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */,
 				634BCC07286028A70062E105 /* LocalPersistenceController.swift in Sources */,
 				63481B0B2876AA6300478C11 /* HourlyForecast.swift in Sources */,

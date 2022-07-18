@@ -76,7 +76,10 @@ struct DataService {
     do {
       let dailyEvents = try viewCloudContext.fetch(fetchRequest)
       if dailyEvents.isEmpty {
-        if FileManager.default.ubiquityIdentityToken != nil {
+        let cloudKitManager = await CloudKitManager()
+        let accountStatus = cloudKitManager.accountStatus
+
+        if FileManager.default.ubiquityIdentityToken != nil && accountStatus == .available {
           await checkiCloud()
         } else {
           UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")

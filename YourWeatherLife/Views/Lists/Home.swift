@@ -76,17 +76,16 @@ struct Home: View {
                       .font(.largeTitle)
                       .lineLimit(1)
                     .minimumScaleFactor(0.1)
-                    Button(action: {
-                      showFeedback.toggle()
-                    }) {
-                      Label("", systemImage: "star")
-                    }
-                    .sheet(isPresented: $showFeedback) {
-                      FeedbackModal()
-                    }
-                    .padding(.leading, -5)
-                    .padding(.trailing, -15)
+                    Image(systemName: "star")
+                      .symbolRenderingMode(.monochrome)
+                      .foregroundColor(Color.accentColor)
+                      .onTapGesture(perform: {
+                        showFeedback.toggle()
+                      })
                   }
+                  .padding(.leading, -5)
+                  .padding(.trailing, -5)
+                  .padding(.bottom, 1)
                   HStack {
                     Image(systemName: "location.fill")
                       .symbolRenderingMode(.monochrome)
@@ -113,7 +112,15 @@ struct Home: View {
                   Divider()
                     .background(.black)
                     .frame(height: 1)
-                  Text("Today")
+                  HStack {
+                    Text("Today")
+                    Spacer()
+                    Text("Edit Events")
+                      .foregroundColor(Color("AccentColor"))
+                      .onTapGesture {
+                        globalViewModel.showDailyEvents()
+                      }
+                  }
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -132,7 +139,15 @@ struct Home: View {
                   Divider()
                     .background(.black)
                     .frame(height: 1)
-                  Text("Tomorrow")
+                  HStack {
+                    Text("Tomorrow")
+                    Spacer()
+                    Text("Edit Events")
+                      .foregroundColor(Color("AccentColor"))
+                      .onTapGesture {
+                        globalViewModel.showDailyEvents()
+                      }
+                  }
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -262,7 +277,9 @@ struct Home: View {
           }
           .alert(Text("iCloud Login Error"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
             Button("Settings") {
-              UIApplication.shared.open(URL.init(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+              if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsUrl)
+              }
             }
             Button("Disable Sync") {
               Task {
@@ -272,7 +289,7 @@ struct Home: View {
           }, message: {
             Text("You may not be logged into iCloud which is only required if you want to sync your events between your own devices, iPhone, iPad, etc. Choose Settings to go there and login to iCloud or choose Disable Sync and this device will not sync your events.")
           })
-          .alert(Text("iCloud Fetch Failed"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
+          .alert(Text("iCloud Fetch Failed"), isPresented: $homeViewModel.showiCloudFetchAlert, actions: {
             Button("OK") {
               UserDefaults.standard.set(false, forKey: "initialFetchFailed")
             }
@@ -284,11 +301,11 @@ struct Home: View {
         
         NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, CloudPersistenceController.shared.container.viewContext), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of ZStack
+      .sheet(isPresented: $showFeedback) {
+        FeedbackModal()
+      }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
-        if UserDefaults.standard.bool(forKey: "userNotLoggedIniCloud") {
-          homeViewModel.showiCloudLoginAlert = true
-        }
         globalViewModel.countEverything()
         if globalViewModel.returningFromChildView {
           globalViewModel.returningFromChildView = false
@@ -302,12 +319,21 @@ struct Home: View {
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {
+          logger.debug("active")
           if globalViewModel.networkOnline {
             homeViewModel.fetchForecast()
             currentConditions.updateCurrent()
           }
+          if UserDefaults.standard.bool(forKey: "userNotLoggedIniCloud") {
+            homeViewModel.showiCloudLoginAlert = true
+          }
+          if UserDefaults.standard.bool(forKey: "initialFetchFailed") {
+            homeViewModel.showiCloudFetchAlert = true
+          }
         } else if newPhase == .inactive {
+          logger.debug("inactive")
         } else if newPhase == .background {
+          logger.debug("background")
         }
       }
     } //end of NavigationView
