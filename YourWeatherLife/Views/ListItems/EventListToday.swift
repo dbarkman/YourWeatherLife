@@ -23,7 +23,7 @@ struct EventListToday: View {
           .font(.title2)
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
+          .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)

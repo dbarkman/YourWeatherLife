@@ -39,6 +39,7 @@ struct HourlyForecast: View {
         appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "336HourForecast View")
         globalViewModel.returningFromChildView = true
         homeViewModel.create336HourForecast()

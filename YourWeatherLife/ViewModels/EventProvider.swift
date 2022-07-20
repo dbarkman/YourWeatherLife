@@ -52,6 +52,7 @@ struct EventProvider {
           newDailyEvent.event = event.event
           newDailyEvent.startTime = event.startTime
           newDailyEvent.endTime = event.endTime
+          newDailyEvent.days = event.days
           do {
             try viewCloudContext.save()
             result = .eventSaved
@@ -87,6 +88,7 @@ struct EventProvider {
         dailyEvent.setValue("", forKey: "tomorrow")
         dailyEvent.setValue("", forKey: "nextStartDate")
         dailyEvent.setValue("", forKey: "summary")
+        dailyEvent.setValue(event.days, forKey: "days")
         do {
           try viewCloudContext.save()
           result = .eventSaved

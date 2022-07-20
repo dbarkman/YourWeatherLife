@@ -13,7 +13,7 @@ struct EditEventPencil: View {
   var body: some View {
     Image(systemName: "pencil")
       .symbolRenderingMode(.monochrome)
-      .foregroundColor(Color.accentColor)
+      .foregroundColor(Color("AccentColor"))
       .onTapGesture {
         globalViewModel.showDailyEvents()
       }

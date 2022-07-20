@@ -135,8 +135,6 @@ class HomeViewModel: ObservableObject {
       self.tomorrowEventForecastHours.removeAll()
       self.todayEventForecastHours = self.todayEventForecastHoursList
       self.tomorrowEventForecastHours = self.tomorrowEventForecastHoursList
-      self.viewContext.refreshAllObjects()
-      self.viewCloudContext.refreshAllObjects()
     }
   }
   

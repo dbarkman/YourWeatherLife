@@ -61,6 +61,7 @@ struct EventDetail: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")
     }

@@ -7,15 +7,12 @@
 
 import Foundation
 import CoreData
-import Network
 import Mixpanel
 import OSLog
 
 class GlobalViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GlobalViewModel")
-  
-  let monitor = NWPathMonitor()
   
   var viewContext: NSManagedObjectContext
   var viewCloudContext: NSManagedObjectContext
@@ -38,31 +35,11 @@ class GlobalViewModel: ObservableObject {
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     self.viewContext = viewContext
     self.viewCloudContext = viewCloudContext
-    
-    monitor.pathUpdateHandler = { path in
-      if path.status == .satisfied {
-        self.checkInternetConnection(closure: { connected in
-          if connected {
-            self.logger.debug("dbark - Network connected!")
-            DispatchQueue.main.async {
-              self.networkOnline = true
-            }
-          } else {
-            DispatchQueue.main.async {
-              self.networkOnline = false
-            }
-            self.logger.debug("dbark - Connected to a network, but the Internet is not available.")
-          }
-        })
-      } else {
-        self.logger.debug("dbark - No network connection.")
-        DispatchQueue.main.async {
-          self.networkOnline = false
-        }
+    checkInternetConnection(closure: { connected in
+      DispatchQueue.main.async {
+        self.networkOnline = connected
       }
-    }
-    let queue = DispatchQueue(label: "Monitor")
-    monitor.start(queue: queue)
+    })
   }
   
   func countEverything() {
@@ -102,7 +79,7 @@ class GlobalViewModel: ObservableObject {
       var request = URLRequest(url: url)
       request.httpMethod = "HEAD"
       request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-      request.timeoutInterval = 5
+      request.timeoutInterval = 2
       let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
         closure(error == nil)
       })

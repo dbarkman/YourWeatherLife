@@ -28,6 +28,8 @@ struct GetAllData {
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
       return true
+    } else {
+      logger.debug("Next current conditions update available at \(nextUpdate)")
     }
     return false
   }
@@ -46,6 +48,10 @@ struct GetAllData {
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
       await TGW_ForecastProvider.shared.fetchForecast()
+      NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
+      logger.debug("Days and Hours imported successfully! 🎉")
+    } else {
+      logger.debug("Next forecast update available at \(nextUpdate)")
     }
   }
 }

@@ -46,7 +46,21 @@ struct Home: View {
                   HStack {
                     Spacer()
                     Text("No Internet Connection")
-                      .foregroundColor(Color.white)
+                      .foregroundColor(.white)
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                      .symbolRenderingMode(.monochrome)
+                      .foregroundColor(.white)
+                      .onTapGesture(perform: {
+                        DispatchQueue.main.async {
+                          globalViewModel.networkOnline = true
+                        }
+                        globalViewModel.checkInternetConnection(closure: { connected in
+                          DispatchQueue.main.async {
+                            globalViewModel.networkOnline = connected
+                          }
+                        })
+                      })
                     Spacer()
                   }
                 }
@@ -78,7 +92,7 @@ struct Home: View {
                     .minimumScaleFactor(0.1)
                     Image(systemName: "star")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .onTapGesture(perform: {
                         showFeedback.toggle()
                       })
@@ -89,13 +103,13 @@ struct Home: View {
                   HStack {
                     Image(systemName: "location.fill")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                     Text(currentConditions.current?.location ?? "Mesa")
                       .font(.body)
                       .minimumScaleFactor(0.1)
                     Image(systemName: "chevron.down")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
 
                   } //end of HStack
                 } //end of VStack
@@ -202,7 +216,7 @@ struct Home: View {
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .padding(.horizontal, 5)
                   }
                   .padding(.bottom, 1)
@@ -227,7 +241,7 @@ struct Home: View {
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .padding(.horizontal, 5)
                   }
                   .padding(.bottom, 1)

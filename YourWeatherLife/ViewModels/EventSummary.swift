@@ -82,28 +82,28 @@ class EventSummary {
     switch true {
       case temp > 54.4:
         tempDescription = "blazing hot"
-        tempConjunction = tempChangeDescription == "temps falling" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps falling" ? " but " : " and "
       case temp > 43.3:
         tempDescription = "scorching hot"
-        tempConjunction = tempChangeDescription == "temps falling" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps falling" ? " but " : " and "
       case temp > 32.2:
         tempDescription = "hot"
-        tempConjunction = tempChangeDescription == "temps falling" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps falling" ? " but " : " and "
       case temp > 21.1:
         tempDescription = "warm"
-        tempConjunction = tempChangeDescription == "temps falling" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps falling" ? " but " : " and "
       case temp > 10:
         tempDescription = "cool"
-        tempConjunction = tempChangeDescription == "temps rising" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps rising" ? " but " : " and "
       case temp > 0:
         tempDescription = "cold"
-        tempConjunction = tempChangeDescription == "temps rising" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps rising" ? " but " : " and "
       case temp > -12.2:
         tempDescription = "freezing"
-        tempConjunction = tempChangeDescription == "temps rising" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps rising" ? " but " : " and "
       default:
         tempDescription = "bitter freezing"
-        tempConjunction = tempChangeDescription == "temps rising" ? "but" : "and"
+        tempConjunction = tempChangeDescription == "temps rising" ? " but " : " and "
     }
   }
   

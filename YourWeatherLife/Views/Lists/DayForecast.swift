@@ -48,6 +48,7 @@ struct DayForecast: View {
         appearance.backgroundColor = UIColor(Color("NavigationBackground"))
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "14DayForecast View")
         globalViewModel.returningFromChildView = true
         homeViewModel.create14DayForecast()

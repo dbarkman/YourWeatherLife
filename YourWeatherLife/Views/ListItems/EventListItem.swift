@@ -34,7 +34,7 @@ struct EventListItem: View {
           .font(.callout)
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
+          .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
       } //end of HStack
       HStack {

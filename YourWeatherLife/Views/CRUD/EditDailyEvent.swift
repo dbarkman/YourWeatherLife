@@ -7,18 +7,25 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct EditDailyEvent: View {
   
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EditDailyEvent")
+  
   @Environment(\.presentationMode) var presentationMode
+  @Environment(\.colorScheme) var colorScheme
   
   @StateObject private var eventViewModel = EventViewModel()
   
+  @State private var selection: Set<String> = []
+
+  @State var showFeedback = false
   @State var addEvent = false
   @State var eventName = ""
   @State var startTimeDate = Dates.roundTimeUp(date: Date())
   @State var endTimeDate = Dates.roundTimeUp(date: Date())
-  @State var showFeedback = false
+  @State var daysSelected = [0]
   
   var oldEventName = ""
   
@@ -46,6 +53,17 @@ struct EditDailyEvent: View {
               .environment(\.colorScheme, .dark)
               .foregroundColor(.white)
           }
+          NavigationLink(destination: Days(selection: $selection).environmentObject(eventViewModel)) {
+            Text("Select Days for Event Forecast")
+          }
+          NavigationLink(destination: Days(selection: $selection).environmentObject(eventViewModel)) {
+            HStack {
+              Image(systemName: "chevron.right")
+                .symbolRenderingMode(.monochrome)
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+              Text(eventViewModel.daysSelected)
+            }
+          }
           Text("for a more precise forecast, create events lasting 1-2 hours")
             .font(.footnote)
           if !eventViewModel.eventSaveResult.isEmpty {
@@ -63,11 +81,7 @@ struct EditDailyEvent: View {
           }
           Button(action: {
             withAnimation() {
-              eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
-                if success {
-                  presentationMode.wrappedValue.dismiss()
-                }
-              })
+              saveEvent()
             }
           }, label: {
             Text("Save")
@@ -85,30 +99,46 @@ struct EditDailyEvent: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
+      
+      if eventViewModel.returningFromChildView {
+        eventViewModel.returningFromChildView = false
+      } else {
+        eventViewModel.convertSelectedInts(selectedInts: &daysSelected)
+      }
     }
+    .onChange(of: eventViewModel.selectedSet) { _ in
+      selection = eventViewModel.selectedSet
+    }
+    .onChange(of: selection) { _ in
+      eventViewModel.convertDaysSelected(selection: selection)
+    }
+    .navigationBarBackButtonHidden(true)
     .toolbar {
       ToolbarItem(placement: .navigationBarLeading) {
-        if addEvent {
-          Button(action: {
-            presentationMode.wrappedValue.dismiss()
-          }) {
-            Text("Cancel")
-          }
+        Button(action: {
+          presentationMode.wrappedValue.dismiss()
+        }) {
+          Text("Cancel")
         }
       }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button(action: {
-          eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
-            if success {
-              presentationMode.wrappedValue.dismiss()
-            }
-          })
+          saveEvent()
         }) {
           Text("Save")
         }
       }
     }
+  }
+  
+  func saveEvent() {
+    eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
+      if success {
+        presentationMode.wrappedValue.dismiss()
+      }
+    })
   }
 }
 

@@ -40,6 +40,7 @@ struct Event: Decodable, Hashable {
   var summary: String
   var nextStartDate: String
   var tomorrow: String
+  var days: String
   
   var dictionaryValue: [String: Any] {
     [
@@ -48,7 +49,8 @@ struct Event: Decodable, Hashable {
       "endTime": endTime,
       "summary": summary,
       "nextStartDate": nextStartDate,
-      "tomorrow": tomorrow
+      "tomorrow": tomorrow,
+      "days": days
     ]
   }
 }

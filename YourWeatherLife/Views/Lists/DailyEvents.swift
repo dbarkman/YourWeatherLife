@@ -11,10 +11,11 @@ import Mixpanel
 import OSLog
 
 struct DailyEvents: View {
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventProvider")
   
-  @Environment(\.managedObjectContext) private var viewCloudContext
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DailyEvents")
+  
   @EnvironmentObject private var globalViewModel: GlobalViewModel
+  @Environment(\.managedObjectContext) private var viewCloudContext
   @StateObject private var eventViewModel = EventViewModel()
   
   @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
@@ -22,7 +23,7 @@ struct DailyEvents: View {
 
   @State var showFeedback = false
   @State var showAddEvent = false
-
+  
   var body: some View {
     ZStack {
       BackgroundColor()
@@ -30,7 +31,9 @@ struct DailyEvents: View {
         Section(header: Text("Repeating Weekday Events")) {
           ForEach(events, id: \.self) { individualEvent in
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
-              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromTime(time: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromTime(time: end, format: "HH:mm"), oldEventName: event)) {
+              let days = individualEvent.days ?? "1234567"
+              let daysIntArray = days.compactMap { $0.wholeNumberValue }
+              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromTime(time: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromTime(time: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
                 HStack {
                   Text(event)
                   Spacer()
@@ -55,6 +58,7 @@ struct DailyEvents: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
         Mixpanel.mainInstance().track(event: "DailyEvents View")
     }
@@ -80,7 +84,7 @@ struct DailyEvents: View {
     }
     .sheet(isPresented: $showAddEvent) {
       NavigationView {
-        EditDailyEvent(addEvent: true)
+        EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7])
       }
     }
   }
@@ -90,7 +94,6 @@ struct DailyEvents: View {
   }
   
   func delete(offsets: IndexSet) {
-    print("deleting an event")
     offsets.map { events[$0] }.forEach(viewCloudContext.delete)
     do {
       try viewCloudContext.save()

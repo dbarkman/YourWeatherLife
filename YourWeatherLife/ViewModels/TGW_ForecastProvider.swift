@@ -43,8 +43,6 @@ struct TGW_ForecastProvider {
         
         await importForecastHours(from: forecastHoursArray)
         await importForecastDays(from: forecastDaysArray)
-        NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
-        logger.debug("Days and Hours imported successfully! 🎉")
       } catch {
         logger.error("Forecast decode failed. 😭 \(error.localizedDescription)")
       }
