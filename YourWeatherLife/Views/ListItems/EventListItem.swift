@@ -15,27 +15,35 @@ struct EventListItem: View {
   @State var startTime: String
   @State var endTime: String
   @State var summary: String
-  @State var tomorrow: String
+  @State var when: String
   
   var body: some View {
     VStack(alignment: .leading) {
-      HStack {
+      HStack(alignment: .top) {
         Text(event)
           .font(.callout)
           .fontWeight(.semibold)
           .minimumScaleFactor(0.1)
         Spacer()
-        Text(startTime)
-          .font(.callout)
-        Text(" - ")
-          .font(.callout)
-          .padding(.horizontal, -5)
-        Text(endTime)
-          .font(.callout)
+        VStack(alignment: .trailing) {
+          if when != "Today" && when != "Tomorrow" {
+            Text(when)
+          }
+          HStack {
+            Text(startTime)
+              .font(.callout)
+            Text(" - ")
+              .font(.callout)
+              .padding(.horizontal, -5)
+            Text(endTime)
+              .font(.callout)
+          }
+        }
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
           .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
+          .padding(.top, 3)
       } //end of HStack
       HStack {
         Text(summary)
@@ -56,6 +64,6 @@ struct EventListItem: View {
 
 struct EventListItem_Previews: PreviewProvider {
   static var previews: some View {
-    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry", tomorrow: "Tomorrow")
+    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry", when: "Tomorrow")
   }
 }

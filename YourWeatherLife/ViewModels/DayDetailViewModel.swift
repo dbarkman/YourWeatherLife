@@ -73,11 +73,16 @@ class DayDetailViewModel: ObservableObject {
     hourForecast.time = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
     hourForecast.timeFull = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
     hourForecast.date = "\(hour.date ?? "")"
-    if let time = hour.time {
-      let hourDate = Dates.makeDateFromTime(time: (hour.date ?? "") + " " + time, format: "yyyy-MM-dd HH:mm")
+    if let dateTime = hour.dateTime {
+      let hourDate = Dates.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
       hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
       hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
     }
+//    if let time = hour.time {
+//      let hourDate = Dates.makeDateFromTime(time: (hour.date ?? "") + " " + time, format: "yyyy-MM-dd HH:mm")
+//      hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+//      hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
+//    }
     return hourForecast
   }
   

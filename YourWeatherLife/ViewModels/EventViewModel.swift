@@ -34,7 +34,7 @@ class EventViewModel: ObservableObject {
       days.append("\(selected)")
     }
 
-    let event = Event(event: eventName, startTime: Dates.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", tomorrow: "", days: days)
+    let event = Event(event: eventName, startTime: Dates.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", when: "", days: days)
     var result = EventResult.noResult
     if addEvent {
       result = EventProvider.shared.insertEvents(eventList: [event])

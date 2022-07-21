@@ -14,9 +14,9 @@ struct Home: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
+  @Environment(\.scenePhase) var scenePhase
   @Environment(\.managedObjectContext) private var viewContext
   @Environment(\.managedObjectContext) private var viewCloudContext
-  @Environment(\.scenePhase) var scenePhase
 
   @ObservedObject var observer = Observer()
   @ObservedObject private var globalViewModel: GlobalViewModel
@@ -141,9 +141,9 @@ struct Home: View {
               }
               ForEach(homeViewModel.todayEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(eventForecast: event)) { }
+                  NavigationLink(destination: EventDetail(event: event)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -168,14 +168,41 @@ struct Home: View {
               }
               ForEach(homeViewModel.tomorrowEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(eventForecast: event)) { }
+                  NavigationLink(destination: EventDetail(event: event)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
               }
-              if homeViewModel.todayEvents.isEmpty && homeViewModel.tomorrowEvents.isEmpty {
+              if !homeViewModel.laterEvents.isEmpty {
+                VStack(alignment: .leading) {
+                  Divider()
+                    .background(.black)
+                    .frame(height: 1)
+                  HStack {
+                    Text("Later")
+                    Spacer()
+                    Text("Edit Events")
+                      .foregroundColor(Color("AccentColor"))
+                      .onTapGesture {
+                        globalViewModel.showDailyEvents()
+                      }
+                  }
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+              ForEach(homeViewModel.laterEvents, id: \.self) { event in
+                ZStack(alignment: .leading) {
+                  NavigationLink(destination: EventDetail(event: event)) { }
+                    .opacity(0)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+              if homeViewModel.todayEvents.isEmpty && homeViewModel.tomorrowEvents.isEmpty && homeViewModel.laterEvents.isEmpty {
                 Text("Your saved events are syncing from iCloud and should display momentarily.")
                   .listRowSeparator(.hidden)
                   .listRowBackground(Color.clear)

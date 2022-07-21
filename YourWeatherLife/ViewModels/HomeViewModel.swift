@@ -22,6 +22,8 @@ class HomeViewModel: ObservableObject {
   @Published var todayEventForecastHours = [String: [TGWForecastHour]]()
   @Published var tomorrowEvents = [EventForecast]()
   @Published var tomorrowEventForecastHours = [String: [TGWForecastHour]]()
+  @Published var laterEvents = [EventForecast]()
+  @Published var laterEventForecastHours = [String: [TGWForecastHour]]()
   @Published var forecastDays = [Today]()
   @Published var forecastHours = [HourForecast]()
   @Published var showiCloudLoginAlert = false
@@ -31,6 +33,8 @@ class HomeViewModel: ObservableObject {
   private var todayEventForecastHoursList = [String: [TGWForecastHour]]()
   private var tomorrowEventsList = [EventForecast]()
   private var tomorrowEventForecastHoursList = [String: [TGWForecastHour]]()
+  private var laterEventsList = [EventForecast]()
+  private var laterEventForecastHoursList = [String: [TGWForecastHour]]()
 
   init() {
     NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcast), name: .locationUpdatedEvent, object: nil)
@@ -75,6 +79,7 @@ class HomeViewModel: ObservableObject {
     logger.debug("Creating/updating event list.")
     todayEventsList.removeAll()
     tomorrowEventsList.removeAll()
+    laterEventsList.removeAll()
     let fetchRequest: NSFetchRequest<DailyEvent>
     fetchRequest = DailyEvent.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DailyEvent.nextStartDate, ascending: true)]
@@ -89,10 +94,14 @@ class HomeViewModel: ObservableObject {
       let eventName = dailyEvent.event ?? ""
       let start = dailyEvent.startTime ?? "00:00"
       let end = dailyEvent.endTime ?? "00:00"
-      let tomorrow = dailyEvent.tomorrow ?? ""
+      let when = dailyEvent.when ?? ""
+      let days = dailyEvent.days ?? "1234567"
+      let nextStartDateTime = dailyEvent.nextStartDate ?? Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")
+      let nextStartDateString = String(nextStartDateTime.prefix(10))
+      let nextStartDate = Dates.makeDateFromString(date: nextStartDateString, format: "yyyy-MM-dd")
+      let eventArray = Dates.getEventHours(start: start, end: end, date: nextStartDate)
       let startTime = Dates.makeDisplayTimeFromTime(time: start, format: "HH:mm")
       let endTime = Dates.makeDisplayTimeFromTime(time: end, format: "HH:mm")
-      let eventArray = Dates.getEventHours(start: start, end: end)
       var predicate = ""
       for event in eventArray {
         predicate.append("'\(event)',")
@@ -115,26 +124,33 @@ class HomeViewModel: ObservableObject {
       }
       let summary = EventSummary()
       let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-      let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", tomorrow: tomorrow, forecastHours: hours)
+      let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours)
       if !todayEventsList.contains(event) && !tomorrowEventsList.contains(event) {
-        if event.tomorrow.isEmpty { //today
+        if event.when == "Today" { //today
           todayEventsList.append(event)
           todayEventForecastHoursList[eventName] = forecastHours
-        } else { //tomorrow
+        } else if event.when == "Tomorrow" { //tomorrow
           tomorrowEventsList.append(event)
           tomorrowEventForecastHoursList[eventName] = forecastHours
+        } else { //later
+          laterEventsList.append(event)
+          laterEventForecastHoursList[eventName] = forecastHours
         }
       }
     }
     DispatchQueue.main.async {
       self.todayEvents.removeAll()
       self.tomorrowEvents.removeAll()
+      self.laterEvents.removeAll()
       self.todayEvents = self.todayEventsList
       self.tomorrowEvents = self.tomorrowEventsList
+      self.laterEvents = self.laterEventsList
       self.todayEventForecastHours.removeAll()
       self.tomorrowEventForecastHours.removeAll()
+      self.laterEventForecastHours.removeAll()
       self.todayEventForecastHours = self.todayEventForecastHoursList
       self.tomorrowEventForecastHours = self.tomorrowEventForecastHoursList
+      self.laterEventForecastHours = self.laterEventForecastHoursList
     }
   }
   

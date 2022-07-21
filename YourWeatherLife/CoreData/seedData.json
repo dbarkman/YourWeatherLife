@@ -6,7 +6,7 @@
       "endTime": "09:00",
       "summary": "",
       "nextStartDate": "",
-      "tomorrow": "",
+      "when": "",
       "days": "1234567"
     },
     {
@@ -15,7 +15,7 @@
       "endTime": "12:00",
       "summary": "",
       "nextStartDate": "",
-      "tomorrow": "",
+      "when": "",
       "days": "1234567"
     },
     {
@@ -24,7 +24,7 @@
       "endTime": "18:00",
       "summary": "",
       "nextStartDate": "",
-      "tomorrow": "",
+      "when": "",
       "days": "1234567"
     },
     {
@@ -33,7 +33,7 @@
       "endTime": "20:30",
       "summary": "",
       "nextStartDate": "",
-      "tomorrow": "",
+      "when": "",
       "days": "1234567"
     }
   ]

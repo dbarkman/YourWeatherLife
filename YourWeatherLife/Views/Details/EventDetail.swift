@@ -12,8 +12,9 @@ struct EventDetail: View {
   
   @EnvironmentObject private var globalViewModel: GlobalViewModel
   
-  @State var eventForecast = EventForecast()
+  @State var event = EventForecast()
   @State var showFeedback = false
+  @State var showEditEvent = false
   
 //    if event == "Taco Tuesday" {
 //      let hourDetails1 = HourDetails(id: UUID(), current: "83° and Sunny", winds: "Winds 2 mph from the southwest", precip: "15% humidity, no chance of rain")
@@ -39,21 +40,21 @@ struct EventDetail: View {
   var body: some View {
     ZStack {
       BackgroundColor()
-      List(eventForecast.forecastHours, id: \.self) { hour in
+      List(event.forecastHours, id: \.self) { hour in
         Section(header: Text(hour.timeFull)) {
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(eventForecast.tomorrow.isEmpty ? "Today" : "Tomorrow") @ \(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
             Text("\(hour.temperature) and \(hour.condition)")
           }
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(eventForecast.tomorrow.isEmpty ? "Today" : "Tomorrow") @ \(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
             Text("Winds \(hour.wind) from the \(hour.windDirection)")
           }
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(eventForecast.tomorrow.isEmpty ? "Today" : "Tomorrow") @ \(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
             Text("\(hour.humidity)% humidity, \(hour.rainChance)% chance of rain")
           }
         }
         .listRowBackground(Color("ListBackground"))
       } // end of List
-      .navigationTitle(eventForecast.eventName)
+      .navigationTitle(event.eventName)
       .listStyle(.plain)
     } //end of ZStack
     .onAppear() {
@@ -66,7 +67,12 @@ struct EventDetail: View {
       Mixpanel.mainInstance().track(event: "EventDetail View")
     }
     .toolbar {
-      ToolbarItem {
+//      ToolbarItem(placement: .navigationBarTrailing) {
+//        Button("Edit", action: {
+//          showEditEvent = true
+//        })
+//      }
+      ToolbarItem(placement: .navigationBarTrailing) {
         Button(action: {
           showFeedback.toggle()
         }) {
@@ -75,6 +81,12 @@ struct EventDetail: View {
         .sheet(isPresented: $showFeedback) {
           FeedbackModal()
         }
+      }
+    }
+    .sheet(isPresented: $showEditEvent) {
+      NavigationView {
+        let daysIntArray = event.days.compactMap { $0.wholeNumberValue }
+        EditDailyEvent(eventName: event.eventName, startTimeDate: Dates.makeDateFromString(date: event.startTime, format: "h:mma"), endTimeDate: Dates.makeDateFromString(date: event.endTime, format: "h:mma"), daysSelected: daysIntArray, oldEventName: event.eventName)
       }
     }
   }

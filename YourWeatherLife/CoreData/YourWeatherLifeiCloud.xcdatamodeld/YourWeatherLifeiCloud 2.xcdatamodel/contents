@@ -7,7 +7,7 @@
         <attribute name="nextStartDate" optional="YES" attributeType="String"/>
         <attribute name="startTime" optional="YES" attributeType="String"/>
         <attribute name="summary" optional="YES" attributeType="String"/>
-        <attribute name="tomorrow" optional="YES" attributeType="String"/>
+        <attribute name="when" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

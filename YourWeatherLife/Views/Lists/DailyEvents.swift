@@ -33,7 +33,7 @@ struct DailyEvents: View {
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
               let days = individualEvent.days ?? "1234567"
               let daysIntArray = days.compactMap { $0.wholeNumberValue }
-              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromTime(time: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromTime(time: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
+              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
                 HStack {
                   Text(event)
                   Spacer()

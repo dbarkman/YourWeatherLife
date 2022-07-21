@@ -51,15 +51,37 @@ struct DataService {
         logger.error("Couldn't fetch DailyEvent. 😭 \(error.localizedDescription)")
       }
       for dailyEvent in dailyEventList {
+        
         let start = dailyEvent.startTime ?? "00:00"
-        let end = dailyEvent.endTime ?? "00:00"
-        let result = Dates.getEventDateTimeAndIsToday(start: start, end: end)
-        dailyEvent.setValue(result.0, forKey: "nextStartDate")
-        if !result.1 {
-          dailyEvent.setValue("Tomorrow", forKey: "tomorrow")
-        } else {
-          dailyEvent.setValue("", forKey: "tomorrow")
+        let now = Date()
+        let dayString = dailyEvent.days ?? "123456789" //[2,4,6]
+        let days = dayString.compactMap { $0.wholeNumberValue }
+        var dates: [Date] = []
+        for day in days {
+          var components = DateComponents(weekday: day)
+          components.hour = Int(start.prefix(2))
+          components.minute = Int(start.suffix(2))
+          let nextOccurrence = Calendar.current.nextDate(after: now, matching: components, matchingPolicy: .nextTime) ?? now
+          dates.append(nextOccurrence)
         }
+        dates.sort()
+        var nextEventDate = now
+        for day in dates {
+          nextEventDate = day
+          break
+        }
+        var when = ""
+        if Calendar.current.isDateInToday(nextEventDate) {
+          when = "Today"
+        } else if Calendar.current.isDateInTomorrow(nextEventDate) {
+          when = "Tomorrow"
+        } else {
+          when = Dates.makeStringFromDate(date: nextEventDate, format: "EEEE")
+        }
+        let nextStartDate = Dates.makeStringFromDate(date: nextEventDate, format: "yyyy-MM-dd HH:mm")
+        dailyEvent.setValue(nextStartDate, forKey: "nextStartDate")
+        dailyEvent.setValue(when, forKey: "when")
+
         do {
           try viewCloudContext.save()
         } catch {
@@ -109,5 +131,4 @@ struct DataService {
       }
     }
   }
-  
 }
