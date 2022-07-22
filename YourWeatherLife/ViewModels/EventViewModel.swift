@@ -28,6 +28,11 @@ class EventViewModel: ObservableObject {
       }
       return
     }
+    
+    if startTimeDate == endTimeDate {
+      eventSaveResult = "Times must be 1 hour apart or more"
+      return
+    }
 
     var days = ""
     for selected in selectedDays {

@@ -11,6 +11,7 @@
 		632790982884B95F00E551CA /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790972884B95F00E551CA /* EventViewModel.swift */; };
 		6327909A2884F9EF00E551CA /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790992884F9EF00E551CA /* CloudKitManager.swift */; };
 		6327909D2886361300E551CA /* Days.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6327909C2886361300E551CA /* Days.swift */; };
+		632790A3288906F800E551CA /* UpdateLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790A2288906F800E551CA /* UpdateLocation.swift */; };
 		63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */; };
 		63481AC2286A075600478C11 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC1286A075600478C11 /* Current.swift */; };
 		63481AC4286AC2B100478C11 /* TGW_ForecastProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */; };
@@ -106,6 +107,7 @@
 		632790992884F9EF00E551CA /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		6327909B2886310F00E551CA /* YourWeatherLifeiCloud 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 2.xcdatamodel"; sourceTree = "<group>"; };
 		6327909C2886361300E551CA /* Days.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Days.swift; sourceTree = "<group>"; };
+		632790A2288906F800E551CA /* UpdateLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocation.swift; sourceTree = "<group>"; };
 		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
 		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGW_ForecastProvider.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				634BCC602860EE380062E105 /* EditDailyEvent.swift */,
+				632790A2288906F800E551CA /* UpdateLocation.swift */,
 			);
 			path = CRUD;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				63481B172877616E00478C11 /* LocationUpdatedEvent.swift in Sources */,
 				6327909D2886361300E551CA /* Days.swift in Sources */,
 				634BCC7D286122590062E105 /* YourWeatherLifeiCloud.xcdatamodeld in Sources */,
+				632790A3288906F800E551CA /* UpdateLocation.swift in Sources */,
 				634BCC392860ECBB0062E105 /* WeatherSolutions.swift in Sources */,
 				634BCC752860EE5D0062E105 /* Home.swift in Sources */,
 				634BCCA9286299F30062E105 /* DataService.swift in Sources */,

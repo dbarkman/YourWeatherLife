@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import CoreLocation
 import OSLog
 
 class HomeViewModel: ObservableObject {
@@ -28,6 +29,7 @@ class HomeViewModel: ObservableObject {
   @Published var forecastHours = [HourForecast]()
   @Published var showiCloudLoginAlert = false
   @Published var showiCloudFetchAlert = false
+  @Published var showNoLocationAlert = false
 
   private var todayEventsList = [EventForecast]()
   private var todayEventForecastHoursList = [String: [TGWForecastHour]]()
@@ -49,6 +51,11 @@ class HomeViewModel: ObservableObject {
         UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
         fetchForecast()
       }
+    }
+    let locationManager = CLLocationManager()
+    let authorizationStatus = locationManager.authorizationStatus
+    if authorizationStatus != .authorizedAlways && authorizationStatus != .authorizedWhenInUse {
+      showNoLocationAlert = true
     }
   }
   func fetchForecast() {

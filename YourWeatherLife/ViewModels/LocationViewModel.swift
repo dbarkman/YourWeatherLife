@@ -13,10 +13,16 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "LocationViewModel")
 
-  @Published var authorizationStatus: CLAuthorizationStatus
   @Published var lastSeenLocation: CLLocation?
   @Published var currentPlacemark: CLPlacemark?
-  
+  @Published var authorizationStatus: CLAuthorizationStatus {
+    didSet {
+      guard oldValue != authorizationStatus else { return }
+      NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
+      logger.debug("LocationManager DidChangeAuthorization")
+    }
+  }
+
   private let locationManager: CLLocationManager
   
   override init() {
@@ -36,8 +42,6 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
   }
   
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-    logger.debug("LocationManager DidChangeAuthorization")
-    NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
     authorizationStatus = manager.authorizationStatus
   }
   

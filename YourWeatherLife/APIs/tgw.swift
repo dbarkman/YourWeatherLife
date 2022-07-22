@@ -33,7 +33,21 @@ struct tgw {
     return url
   }
   
-  static func getLocation() async -> String {
+  private static func getLocation() async -> String {
+    var location = ""
+    if UserDefaults.standard.bool(forKey: "automaticLocation") {
+      location = await getAutomaticLocation()
+    } else {
+      if let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") {
+        location = manualLocationData
+      } else {
+        location = "98034"
+      }
+    }
+    return location
+  }
+  
+  private static func getAutomaticLocation() async -> String {
     var finalLocation = ""
     let locationManager = CLLocationManager()
     let authorizationStatus = locationManager.authorizationStatus

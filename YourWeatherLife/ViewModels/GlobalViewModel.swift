@@ -27,7 +27,8 @@ class GlobalViewModel: ObservableObject {
     didSet {
       guard oldValue != networkOnline else { return }
       if networkOnline {
-        self.locationViewModel.requestPermission()
+        logger.debug("Network online now!")
+        NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
       }
     }
   }
@@ -40,6 +41,16 @@ class GlobalViewModel: ObservableObject {
         self.networkOnline = connected
       }
     })
+
+    if locationViewModel.authorizationStatus == .authorizedAlways || locationViewModel.authorizationStatus == .authorizedWhenInUse {
+      UserDefaults.standard.set(true, forKey: "automaticLocation")
+    } else {
+      UserDefaults.standard.set(false, forKey: "automaticLocation")
+      guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
+        UserDefaults.standard.set("98034", forKey: "manualLocationData")
+        return
+      }
+    }
   }
   
   func countEverything() {

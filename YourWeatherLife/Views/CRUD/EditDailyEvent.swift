@@ -144,6 +144,8 @@ struct EditDailyEvent: View {
 
 struct EditDailyEvent_Previews: PreviewProvider {
   static var previews: some View {
-    EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
+    NavigationView {
+      EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
+    }
   }
 }

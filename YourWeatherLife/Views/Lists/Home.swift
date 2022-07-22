@@ -26,6 +26,7 @@ struct Home: View {
   @StateObject private var currentConditions = CurrentConditionsViewModel()
 
   @State var showFeedback = false
+  @State var showUpdateLocation = false
   
   init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
     globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
@@ -101,17 +102,22 @@ struct Home: View {
                   .padding(.trailing, -5)
                   .padding(.bottom, 1)
                   HStack {
-                    Image(systemName: "location.fill")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color("AccentColor"))
+                    if UserDefaults.standard.bool(forKey: "automaticLocation") {
+                      Image(systemName: "location.fill")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    } else {
+                      Image(systemName: "mappin")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    }
                     Text(currentConditions.current?.location ?? "Mesa")
                       .font(.body)
                       .minimumScaleFactor(0.1)
-                    Image(systemName: "chevron.down")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color("AccentColor"))
-
                   } //end of HStack
+                  .onTapGesture {
+                    showUpdateLocation = true
+                  }
                 } //end of VStack
                 .padding(.horizontal, 10)
               } //end of HStack
@@ -316,6 +322,20 @@ struct Home: View {
             }
             homeViewModel.awaitUpdateNextStartDate()
           }
+          .alert(Text("Location Unavailable"), isPresented: $homeViewModel.showNoLocationAlert, actions: {
+            Button("No Thanks") {
+              if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsUrl)
+              }
+            }
+            Button("Enter Location") {
+              Task {
+                showUpdateLocation = true
+              }
+            }
+          }, message: {
+            Text("Since you did not grant location access, you may enter a manual location by tapping the \"Enter Location\" button below, or tapping on the city in the top right of the home screen at any time.")
+          })
           .alert(Text("iCloud Login Error"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
             Button("Settings") {
               if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
@@ -344,6 +364,9 @@ struct Home: View {
       } //end of ZStack
       .sheet(isPresented: $showFeedback) {
         FeedbackModal()
+      }
+      .sheet(isPresented: $showUpdateLocation) {
+        UpdateLocation()
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")

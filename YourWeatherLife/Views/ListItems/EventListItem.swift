@@ -20,16 +20,15 @@ struct EventListItem: View {
   var body: some View {
     VStack(alignment: .leading) {
       HStack(alignment: .top) {
-        Text(event)
-          .font(.callout)
-          .fontWeight(.semibold)
-          .minimumScaleFactor(0.1)
-        Spacer()
-        VStack(alignment: .trailing) {
-          if when != "Today" && when != "Tomorrow" {
-            Text(when)
-          }
+        VStack(alignment: .leading) {
+          Text(event)
+            .font(.body)
+            .fontWeight(.semibold)
+//          .minimumScaleFactor(0.1)
           HStack {
+            if when != "Today" && when != "Tomorrow" {
+              Text(when + ":")
+            }
             Text(startTime)
               .font(.callout)
             Text(" - ")
@@ -39,6 +38,7 @@ struct EventListItem: View {
               .font(.callout)
           }
         }
+        Spacer()
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
           .foregroundColor(Color("AccentColor"))
