@@ -13,9 +13,11 @@ struct EventProvider {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventProvider")
   
+  static let shared = EventProvider()
+  
   var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
-  static let shared = EventProvider()
+  private init() { }
   
   func importEventsFromSeed() async {
     logger.debug("Importing seed events.")

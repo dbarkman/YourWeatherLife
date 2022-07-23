@@ -14,23 +14,18 @@ struct Home: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  
   @Environment(\.scenePhase) var scenePhase
-  @Environment(\.managedObjectContext) private var viewContext
-  @Environment(\.managedObjectContext) private var viewCloudContext
 
-  @ObservedObject var observer = Observer()
-  @ObservedObject private var globalViewModel: GlobalViewModel
-  
-  @StateObject private var homeViewModel = HomeViewModel()
-  @StateObject private var locationViewModel = LocationViewModel()
-  @StateObject private var currentConditions = CurrentConditionsViewModel()
+  @ObservedObject private var observer = Observer()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var homeViewModel = HomeViewModel.shared
+  @StateObject private var locationViewModel = LocationViewModel.shared
+  @StateObject private var currentConditions = CurrentConditionsViewModel.shared
 
-  @State var showFeedback = false
-  @State var showUpdateLocation = false
-  
-  init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
-    globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
-  }
+  @State private var showFeedback = false
+  @State private var showUpdateLocation = false
   
   var body: some View {
     
@@ -114,6 +109,11 @@ struct Home: View {
                     Text(currentConditions.current?.location ?? "Mesa")
                       .font(.body)
                       .minimumScaleFactor(0.1)
+                    if UserDefaults.standard.bool(forKey: "automaticLocation") {
+                      Image(systemName: "arrow.triangle.2.circlepath")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    }
                   } //end of HStack
                   .onTapGesture {
                     showUpdateLocation = true
@@ -320,14 +320,9 @@ struct Home: View {
               homeViewModel.fetchForecast()
               currentConditions.updateCurrent()
             }
-            homeViewModel.awaitUpdateNextStartDate()
           }
           .alert(Text("Location Unavailable"), isPresented: $homeViewModel.showNoLocationAlert, actions: {
-            Button("No Thanks") {
-              if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(settingsUrl)
-              }
-            }
+            Button("No Thanks") { }
             Button("Enter Location") {
               Task {
                 showUpdateLocation = true
@@ -360,7 +355,7 @@ struct Home: View {
         } //end of VStack
         .navigationBarHidden(true)
         
-        NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, CloudPersistenceController.shared.container.viewContext), isActive: $globalViewModel.isShowingDailyEvents) { }
+        NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of ZStack
       .sheet(isPresented: $showFeedback) {
         FeedbackModal()
@@ -377,9 +372,6 @@ struct Home: View {
         }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
-        locationViewModel.requestPermission()
-        homeViewModel.globalViewModel = globalViewModel
-        currentConditions.globalViewModel = globalViewModel
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {
@@ -394,6 +386,9 @@ struct Home: View {
           if UserDefaults.standard.bool(forKey: "initialFetchFailed") {
             homeViewModel.showiCloudFetchAlert = true
           }
+          if locationViewModel.authorizationStatus == .notDetermined {
+            locationViewModel.requestPermission()
+          }
         } else if newPhase == .inactive {
           logger.debug("inactive")
         } else if newPhase == .background {
@@ -401,12 +396,10 @@ struct Home: View {
         }
       }
     } //end of NavigationView
-    .environmentObject(globalViewModel)
   }
 }
 
 //struct ListView_Previews: PreviewProvider {
-//  @Environment(\.managedObjectContext) private var viewContext
 //  static var previews: some View {
 //    Home(viewContext: viewContext)
 //  }

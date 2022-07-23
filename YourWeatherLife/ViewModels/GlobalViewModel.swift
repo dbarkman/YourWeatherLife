@@ -14,15 +14,15 @@ class GlobalViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GlobalViewModel")
   
-  var viewContext: NSManagedObjectContext
-  var viewCloudContext: NSManagedObjectContext
-  
-  private var locationViewModel = LocationViewModel()
+  static let shared = GlobalViewModel()
+
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @Published var isShowingDailyEvents = false
   @Published var returningFromChildView = false
-  @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
-  @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
+  @Published var today = Dates.shared.getTodayDateString(format: "yyyy-MM-dd")
+  @Published var weekend = Dates.shared.getThisWeekendDateStrings(format: "yyyy-MM-dd")
   @Published var networkOnline = true {
     didSet {
       guard oldValue != networkOnline else { return }
@@ -33,21 +33,22 @@ class GlobalViewModel: ObservableObject {
     }
   }
   
-  init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
-    self.viewContext = viewContext
-    self.viewCloudContext = viewCloudContext
+  private init() {
     checkInternetConnection(closure: { connected in
       DispatchQueue.main.async {
         self.networkOnline = connected
       }
     })
 
-    if locationViewModel.authorizationStatus == .authorizedAlways || locationViewModel.authorizationStatus == .authorizedWhenInUse {
-      UserDefaults.standard.set(true, forKey: "automaticLocation")
-    } else {
-      UserDefaults.standard.set(false, forKey: "automaticLocation")
+    if !UserDefaults.standard.bool(forKey: "automaticLocation") {
       guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
-        UserDefaults.standard.set("98034", forKey: "manualLocationData")
+        let authorizationStatus = LocationViewModel.shared.authorizationStatus
+        if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+          UserDefaults.standard.set(true, forKey: "automaticLocation")
+        } else {
+          UserDefaults.standard.set(false, forKey: "automaticLocation")
+          UserDefaults.standard.set("98034", forKey: "manualLocationData")
+        }
         return
       }
     }

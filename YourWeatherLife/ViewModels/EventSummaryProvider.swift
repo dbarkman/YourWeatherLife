@@ -1,5 +1,5 @@
 //
-//  EventSummary.swift
+//  EventSummaryProvider.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 7/2/22.
@@ -8,7 +8,11 @@
 import Foundation
 import Mixpanel
 
-class EventSummary {
+class EventSummaryProvider {
+  
+  static let shared = EventSummaryProvider()
+  
+  private init() { }
   
   //todos
   //sleet, hurricanes, tornados, dust, windchill
@@ -60,7 +64,7 @@ class EventSummary {
     }
     
     let temp = countD > 0 ? averageTemp / countD : 0
-    tempActual = String(Formatters.format(temp: temp, from: .celsius))
+    tempActual = String(Formatters.shared.format(temp: temp, from: .celsius))
     let tempChange = firstTemp - lastTemp
     if tempChange >= 10 { tempChangeDescription = "temps falling" }
     if tempChange <= -10 { tempChangeDescription = "temps rising" }

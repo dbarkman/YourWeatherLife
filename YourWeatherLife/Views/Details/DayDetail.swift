@@ -13,11 +13,11 @@ struct DayDetail: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayDetail")
 
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  @StateObject private var dayDetail = DayDetailViewModel()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var dayDetail = DayDetailViewModel.shared
   
-  @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
-  @State var showFeedback = false
+  @State private var showFeedback = false
+  @State var dates = [Dates.shared.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
 
   var body: some View {
     ZStack {

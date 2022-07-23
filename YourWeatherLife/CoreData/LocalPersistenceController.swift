@@ -8,9 +8,9 @@
 import CoreData
 import OSLog
 
-class LocalPersistenceController {
+struct LocalPersistenceController {
   
-  static let shared = LocalPersistenceController()
+  static var shared = LocalPersistenceController()
   
   private let inMemory: Bool
   
@@ -40,7 +40,7 @@ class LocalPersistenceController {
     return container
   }()
   
-  init(inMemory: Bool = false) {
+  private init(inMemory: Bool = false) {
     self.inMemory = inMemory
   }
 }

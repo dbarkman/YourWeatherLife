@@ -7,19 +7,23 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 
 struct UpdateLocation: View {
+  
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "UpdateLocation")
   
   @Environment(\.presentationMode) var presentationMode
   @Environment(\.colorScheme) var colorScheme
   
-  @StateObject private var locationViewModel = LocationViewModel()
+  @StateObject private var locationViewModel = LocationViewModel.shared
 
   @State private var location = 0
   @State private var manualLocation = 0
   @State private var zipcode = ""
   @State private var latitude = ""
   @State private var longitude = ""
+  @State private var updateLocationResult = ""
 
   var body: some View {
     NavigationView {
@@ -49,8 +53,7 @@ struct UpdateLocation: View {
                     .foregroundColor(Color("AccentColor"))
                 })
               }
-            }
-            if location == 1 {
+            } else if location == 1 {
               Text("Will you provide zip/postal code or latitude and longitude coordinates?")
               Picker("", selection: $manualLocation) {
                 Text("Zip/Postal Code").tag(0)
@@ -83,15 +86,40 @@ struct UpdateLocation: View {
                 }
               }
             }
-            Button(action: {
-              withAnimation() {
-                updateLocation()
+            if !updateLocationResult.isEmpty {
+              HStack {
+                Text(updateLocationResult)
+                Spacer()
+                Text("OK")
+                  .onTapGesture(perform: {
+                    withAnimation() {
+                      updateLocationResult = ""
+                    }
+                  })
               }
-            }, label: {
+              .listRowBackground(Color.red.opacity(0.75))
+            }
+            HStack {
               Text("Update")
                 .font(.title2)
                 .foregroundColor(Color("AccentColor"))
-            })
+                .onTapGesture {
+                  withAnimation() {
+                    updateLocation()
+                  }
+                }
+              if location == 0 {
+                Spacer()
+                Text("Refresh Location")
+                  .font(.title2)
+                  .foregroundColor(Color("AccentColor"))
+                  .onTapGesture {
+                    withAnimation() {
+                      updateLocation()
+                    }
+                  }
+              }
+            }
           }
           .listRowBackground(Color("ListBackground"))
         } //end of List
@@ -139,14 +167,29 @@ struct UpdateLocation: View {
     }
   }
   
-  func updateLocation() {
+  private func updateLocation() {
     if location == 0 {
+      if locationViewModel.authorizationStatus != .authorizedWhenInUse && locationViewModel.authorizationStatus != .authorizedAlways {
+        updateLocationResult = "Location permission must be granted in order to use automatic location."
+        return
+      }
       UserDefaults.standard.set(true, forKey: "automaticLocation")
     } else {
       UserDefaults.standard.set(false, forKey: "automaticLocation")
       if manualLocation == 0 {
+        if zipcode.isEmpty {
+          updateLocationResult = "Zip/Postal Code cannot be empty."
+          return
+        } else if zipcode.count < 3 {
+          updateLocationResult = "Zip/Postal Code is too short."
+          return
+        }
         UserDefaults.standard.set(zipcode, forKey: "manualLocationData")
       } else {
+        if latitude.isEmpty || longitude.isEmpty {
+          updateLocationResult = "Both latitude and longitude must be entered."
+          return
+        }
         UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "manualLocationData")
       }
     }

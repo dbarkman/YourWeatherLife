@@ -11,6 +11,7 @@ import OSLog
 struct TGW_CurrentConditionsDecoder: Decodable {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_CurrentConditionsDecoder")
+  
   var container = LocalPersistenceController.shared.container
 
   private enum RootCodingKeys: String, CodingKey {
@@ -27,7 +28,7 @@ struct TGW_CurrentConditionsDecoder: Decodable {
     self.tgw_location = try rootContainer.decode(TGW_Location.self, forKey: .location)
     self.tgw_current = try rootContainer.decode(TGW_Current.self, forKey: .current)
     
-    let temperature = Formatters.format(temp: self.tgw_current.temp_c, from: .celsius)
+    let temperature = Formatters.shared.format(temp: self.tgw_current.temp_c, from: .celsius)
     let condition = tgw_current.condition.text
     let isDay = Int16(tgw_current.is_day)
     let iconFileName = tgw_current.condition.icon.components(separatedBy: "/").last

@@ -14,15 +14,17 @@ struct DailyEvents: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DailyEvents")
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  @Environment(\.managedObjectContext) private var viewCloudContext
-  @StateObject private var eventViewModel = EventViewModel()
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
   private var events: FetchedResults<DailyEvent>
 
-  @State var showFeedback = false
-  @State var showAddEvent = false
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var eventViewModel = EventViewModel.shared
+  
+  @State private var showFeedback = false
+  @State private var showAddEvent = false
   
   var body: some View {
     ZStack {
@@ -33,14 +35,14 @@ struct DailyEvents: View {
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
               let days = individualEvent.days ?? "1234567"
               let daysIntArray = days.compactMap { $0.wholeNumberValue }
-              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
+              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.shared.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.shared.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
                 HStack {
                   Text(event)
                   Spacer()
                   HStack {
-                    Text(Dates.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
+                    Text(Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
                     Text("-")
-                    Text(Dates.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
+                    Text(Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
                   }
                 }
               }
@@ -89,11 +91,11 @@ struct DailyEvents: View {
     }
   }
 
-  func add() {
+  private func add() {
     showAddEvent = true
   }
   
-  func delete(offsets: IndexSet) {
+  private func delete(offsets: IndexSet) {
     offsets.map { events[$0] }.forEach(viewCloudContext.delete)
     do {
       try viewCloudContext.save()

@@ -10,8 +10,9 @@ import Mixpanel
 
 struct Days: View {
   
-  @EnvironmentObject private var eventViewModel: EventViewModel
   @Environment(\.presentationMode) var presentationMode
+
+  @StateObject private var eventViewModel = EventViewModel.shared
 
   @State private var isEditMode: EditMode = .active
   @Binding var selection: Set<String>

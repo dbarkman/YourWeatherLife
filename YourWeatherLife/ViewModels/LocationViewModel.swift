@@ -12,29 +12,50 @@ import OSLog
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "LocationViewModel")
-
-  @Published var lastSeenLocation: CLLocation?
-  @Published var currentPlacemark: CLPlacemark?
+  
+  static let shared = LocationViewModel()
+  
+  @Published var lastSeenLocation: CLLocation? {
+    didSet {
+      guard oldValue != lastSeenLocation else { return }
+      logger.debug("LocationManager lastSeenLocation updated")
+    }
+  }
+  @Published var currentPlacemark: CLPlacemark? {
+    didSet {
+      guard oldValue != currentPlacemark else { return }
+      logger.debug("LocationManager currentPlacemark updated")
+    }
+  }
   @Published var authorizationStatus: CLAuthorizationStatus {
     didSet {
       guard oldValue != authorizationStatus else { return }
+      logger.debug("LocationManager authorizationStatus updated")
       NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
-      logger.debug("LocationManager DidChangeAuthorization")
+      if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+        UserDefaults.standard.set(true, forKey: "automaticLocation")
+      } else {
+        UserDefaults.standard.set(false, forKey: "automaticLocation")
+        guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
+          UserDefaults.standard.set("98034", forKey: "manualLocationData")
+          return
+        }
+      }
     }
   }
 
-  private let locationManager: CLLocationManager
+  let locationManager: CLLocationManager
   
-  override init() {
+  override private init() {
     locationManager = CLLocationManager()
     authorizationStatus = locationManager.authorizationStatus
     
     super.init()
     locationManager.delegate = self
-//    locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+    locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
 //    locationManager.startUpdatingLocation()
-    locationManager.startMonitoringSignificantLocationChanges()
     locationManager.pausesLocationUpdatesAutomatically = true
+    locationManager.startMonitoringSignificantLocationChanges()
   }
   
   func requestPermission() {
@@ -46,6 +67,6 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
   }
   
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//    logger.debug("LocationManager DidUpdateLocations")
+    lastSeenLocation = locations.first
   }
 }

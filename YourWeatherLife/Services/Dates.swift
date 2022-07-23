@@ -8,8 +8,12 @@
 import Foundation
 
 struct Dates {
+  
+  static let shared = Dates()
+  
+  private init() { }
 
-  private static func makeFutureDateFromTime(time: String, date: Date, makeFuture: Bool = true) -> Date {
+  private func makeFutureDateFromTime(time: String, date: Date, makeFuture: Bool = true) -> Date {
     let now = date
     var dateString = ""
     let dateFormatter = DateFormatter()
@@ -28,20 +32,20 @@ struct Dates {
     }
   }
   
-  static func makeStringFromDate(date: Date, format: String) -> String {
+  func makeStringFromDate(date: Date, format: String) -> String {
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = format
     return dateTimeFormatter.string(from: date)
   }
 
-  static func makeDateFromString(date: String, format: String) -> Date {
+  func makeDateFromString(date: String, format: String) -> Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
     guard let date = dateFormatter.date(from: date) else { return Date() }
     return date
   }
 
-  static func makeDateFromTime(time: String, date: Date, format: String) -> Date {
+  private func makeDateFromTime(time: String, date: Date, format: String) -> Date {
     let now = date
     var dateFormat = ""
     var dateString = ""
@@ -58,7 +62,7 @@ struct Dates {
     return dateTime
   }
 
-  private static func roundTimeDown(time: String) -> String {
+  private func roundTimeDown(time: String) -> String {
     let dateTime = makeDateFromTime(time: time, date: Date(), format: "HH:mm")
     let components = Calendar.current.dateComponents([.hour], from: dateTime)
     let hour = components.hour ?? 0
@@ -69,14 +73,14 @@ struct Dates {
     return time
   }
 
-  static func roundTimeUp(date: Date) -> Date {
+  func roundTimeUp(date: Date) -> Date {
     guard let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: date) else { return Date() }
     let time = makeStringFromDate(date: nextHour, format: "HH:mm")
     let timeRoundedDown = roundTimeDown(time: time)
     return makeDateFromTime(time: timeRoundedDown, date: date, format: "HH:mm")
   }
 
-  private static func getLastHour(endTime: String) -> String {
+  private func getLastHour(endTime: String) -> String {
     var lastHour = endTime
     let dateTime = makeDateFromTime(time: endTime, date: Date(), format: "HH:mm")
     let components = Calendar.current.dateComponents([.hour, .minute], from: dateTime)
@@ -94,7 +98,7 @@ struct Dates {
     return lastHour
   }
 
-  static func getEventHours(start: String, end: String, date: Date, startOnly: Bool = false) -> [String] {
+  func getEventHours(start: String, end: String, date: Date, startOnly: Bool = false) -> [String] {
     var timeArray: [String] = []
     let now = date
     let roundDownStartTime = roundTimeDown(time: start)
@@ -125,7 +129,7 @@ struct Dates {
     return timeArray
   }
 
-  static func makeDisplayTimeFromTime(time: String, format: String, full: Bool = false) -> String {
+  func makeDisplayTimeFromTime(time: String, format: String, full: Bool = false) -> String {
     let date = Date()
     let timeDate = makeDateFromTime(time: time, date: date, format: format)
     let formatter = DateFormatter()
@@ -137,18 +141,18 @@ struct Dates {
     return String(formatter.string(from: timeDate).lowercased().dropLast())
   }
 
-  static func getTodayDateString(format: String) -> String {
+  func getTodayDateString(format: String) -> String {
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = format
     let today = dateTimeFormatter.string(from: Date())
     return today
   }
   
-  static func getThisWeekendDateStrings(format: String) -> [String] {
+  func getThisWeekendDateStrings(format: String) -> [String] {
     let saturdayDate = Calendar.current.nextWeekend(startingAfter: Date())?.start ?? Date()
     let sundayDate = Calendar.current.date(byAdding: .day, value: 1, to: saturdayDate) ?? Date()
-    let saturday = Dates.makeStringFromDate(date: saturdayDate, format: format)
-    let sunday = Dates.makeStringFromDate(date: sundayDate, format: format)
+    let saturday = Dates.shared.makeStringFromDate(date: saturdayDate, format: format)
+    let sunday = Dates.shared.makeStringFromDate(date: sundayDate, format: format)
     return [saturday, sunday]
   }
 }

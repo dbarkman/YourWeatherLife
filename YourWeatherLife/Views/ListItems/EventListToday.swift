@@ -12,7 +12,7 @@ struct EventListToday: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventListToday")
 
-  @StateObject private var today = TodaySummaryViewModel()
+  @StateObject private var today = TodaySummaryViewModel.shared
 
   private let todayViewFontSize = Font.callout
   

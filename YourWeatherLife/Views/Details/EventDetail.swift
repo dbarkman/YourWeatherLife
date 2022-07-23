@@ -10,12 +10,12 @@ import Mixpanel
 
 struct EventDetail: View {
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+
+  @State private var showFeedback = false
+  @State private var showEditEvent = false
   @State var event = EventForecast()
-  @State var showFeedback = false
-  @State var showEditEvent = false
-  
+
 //    if event == "Taco Tuesday" {
 //      let hourDetails1 = HourDetails(id: UUID(), current: "83° and Sunny", winds: "Winds 2 mph from the southwest", precip: "15% humidity, no chance of rain")
 //      let hour1 = Hour(id: UUID(), title: "6:00 PM ☀️", details: hourDetails1)
@@ -86,7 +86,7 @@ struct EventDetail: View {
     .sheet(isPresented: $showEditEvent) {
       NavigationView {
         let daysIntArray = event.days.compactMap { $0.wholeNumberValue }
-        EditDailyEvent(eventName: event.eventName, startTimeDate: Dates.makeDateFromString(date: event.startTime, format: "h:mma"), endTimeDate: Dates.makeDateFromString(date: event.endTime, format: "h:mma"), daysSelected: daysIntArray, oldEventName: event.eventName)
+        EditDailyEvent(eventName: event.eventName, startTimeDate: Dates.shared.makeDateFromString(date: event.startTime, format: "h:mma"), endTimeDate: Dates.shared.makeDateFromString(date: event.endTime, format: "h:mma"), daysSelected: daysIntArray, oldEventName: event.eventName)
       }
     }
   }

@@ -9,7 +9,11 @@ import Foundation
 
 struct Formatters {
   
-  static func format(temp: Double, from unit: UnitTemperature) -> String {
+  static let shared = Formatters()
+  
+  private init() { }
+  
+  func format(temp: Double, from unit: UnitTemperature) -> String {
     let formatter = MeasurementFormatter()
     formatter.unitStyle = .short
     formatter.numberFormatter.roundingMode = .halfUp
@@ -18,7 +22,7 @@ struct Formatters {
     return formatter.string(from: measurement)
   }
   
-  static func format(speed: Double, from unit: UnitSpeed) -> String {
+  func format(speed: Double, from unit: UnitSpeed) -> String {
     let formatter = MeasurementFormatter()
     formatter.unitStyle = .medium
     formatter.numberFormatter.roundingMode = .halfUp
@@ -27,7 +31,7 @@ struct Formatters {
     return formatter.string(from: measurement)
   }
   
-  static func format(length: Double, from unit: UnitLength) -> String {
+  func format(length: Double, from unit: UnitLength) -> String {
     let formatter = MeasurementFormatter()
     formatter.unitStyle = .medium
     formatter.numberFormatter.roundingMode = .halfUp
@@ -36,7 +40,7 @@ struct Formatters {
     return formatter.string(from: measurement)
   }
   
-  static func format(pressure: Double, from unit: UnitPressure) -> String {
+  func format(pressure: Double, from unit: UnitPressure) -> String {
     let formatter = MeasurementFormatter()
     formatter.unitStyle = .short
     formatter.numberFormatter.roundingMode = .halfUp

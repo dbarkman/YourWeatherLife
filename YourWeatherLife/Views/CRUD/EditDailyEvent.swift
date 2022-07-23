@@ -16,15 +16,15 @@ struct EditDailyEvent: View {
   @Environment(\.presentationMode) var presentationMode
   @Environment(\.colorScheme) var colorScheme
   
-  @StateObject private var eventViewModel = EventViewModel()
+  @StateObject private var eventViewModel = EventViewModel.shared
   
   @State private var selection: Set<String> = []
 
-  @State var showFeedback = false
+  @State private var showFeedback = false
   @State var addEvent = false
   @State var eventName = ""
-  @State var startTimeDate = Dates.roundTimeUp(date: Date())
-  @State var endTimeDate = Dates.roundTimeUp(date: Date())
+  @State var startTimeDate = Dates.shared.roundTimeUp(date: Date())
+  @State var endTimeDate = Dates.shared.roundTimeUp(date: Date())
   @State var daysSelected = [0]
   
   var oldEventName = ""
@@ -53,10 +53,10 @@ struct EditDailyEvent: View {
               .environment(\.colorScheme, .dark)
               .foregroundColor(.white)
           }
-          NavigationLink(destination: Days(selection: $selection).environmentObject(eventViewModel)) {
+          NavigationLink(destination: Days(selection: $selection)) {
             Text("Select Days for Event Forecast")
           }
-          NavigationLink(destination: Days(selection: $selection).environmentObject(eventViewModel)) {
+          NavigationLink(destination: Days(selection: $selection)) {
             HStack {
               Image(systemName: "chevron.right")
                 .symbolRenderingMode(.monochrome)

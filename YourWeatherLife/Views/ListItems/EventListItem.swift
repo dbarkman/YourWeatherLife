@@ -9,8 +9,8 @@ import SwiftUI
 
 struct EventListItem: View {
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+
   @State var event: String
   @State var startTime: String
   @State var endTime: String
@@ -58,7 +58,6 @@ struct EventListItem: View {
         .stroke(.gray, lineWidth: 2)
         .padding(.bottom, 10)
     }
-    .environmentObject(globalViewModel)
   }
 }
 

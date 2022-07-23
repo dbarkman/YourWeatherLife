@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EventListWeekend: View {
   
-  @StateObject private var weekend = WeekendSummaryViewModel()
+  @StateObject private var weekend = WeekendSummaryViewModel.shared
   
   private let todayViewFontSize = Font.callout
   

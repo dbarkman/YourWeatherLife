@@ -13,9 +13,13 @@ class DayDetailViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "WeekendSummaryViewModel")
   
-  @Published var todayArray = [Today]()
+  static let shared = DayDetailViewModel()
   
-  var viewContext = LocalPersistenceController.shared.container.viewContext
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  
+  @Published var todayArray = [Today]()
+
+  private init() { }
   
   @objc func fetchDayDetail(dates: [String]) {
     var predicate = ""
@@ -35,7 +39,7 @@ class DayDetailViewModel: ObservableObject {
     }
     var todayArray = [Today]()
     for day in forecastDays {
-      let thisDayResult = TodaySummaryViewModel().configureDay(todayForecast: day)
+      let thisDayResult = TodaySummaryViewModel.shared.configureDay(todayForecast: day)
       var today = thisDayResult.0
       var hours = [HourForecast]()
       for hour in thisDayResult.1 {
@@ -51,42 +55,42 @@ class DayDetailViewModel: ObservableObject {
   
   func configureHour(hour: TGWForecastHour) -> HourForecast {
     var hourForecast = HourForecast()
-    hourForecast.temperature = Formatters.format(temp: hour.temp_c, from: .celsius)
-    hourForecast.feelsLike = Formatters.format(temp: hour.feelslike_c, from: .celsius)
-    hourForecast.heatIndex = Formatters.format(temp: hour.heatindex_c, from: .celsius)
-    hourForecast.windChill = Formatters.format(temp: hour.windchill_c, from: .celsius)
+    hourForecast.temperature = Formatters.shared.format(temp: hour.temp_c, from: .celsius)
+    hourForecast.feelsLike = Formatters.shared.format(temp: hour.feelslike_c, from: .celsius)
+    hourForecast.heatIndex = Formatters.shared.format(temp: hour.heatindex_c, from: .celsius)
+    hourForecast.windChill = Formatters.shared.format(temp: hour.windchill_c, from: .celsius)
     hourForecast.humidity = "\(hour.humidity)"
-    hourForecast.dewPoint = Formatters.format(temp: hour.dewpoint_c, from: .celsius)
+    hourForecast.dewPoint = Formatters.shared.format(temp: hour.dewpoint_c, from: .celsius)
     hourForecast.willItRain = hour.will_it_rain == 1 ? true : false
     hourForecast.rainChance = "\(hour.chance_of_rain)"
-    hourForecast.precipAmount = Formatters.format(length: hour.precip_mm, from: .millimeters)
+    hourForecast.precipAmount = Formatters.shared.format(length: hour.precip_mm, from: .millimeters)
     hourForecast.willItSnow = hour.will_it_snow == 1 ? true : false
     hourForecast.snowChance = "\(hour.chance_of_snow)"
-    hourForecast.wind = Formatters.format(speed: hour.wind_kph, from: .kilometersPerHour)
-    hourForecast.windGust = Formatters.format(speed: hour.gust_kph, from: .kilometersPerHour)
+    hourForecast.wind = Formatters.shared.format(speed: hour.wind_kph, from: .kilometersPerHour)
+    hourForecast.windGust = Formatters.shared.format(speed: hour.gust_kph, from: .kilometersPerHour)
     hourForecast.windDirection = "\(getWindDirectionFull(windDirection: hour.wind_dir ?? ""))"
-    hourForecast.pressure = Formatters.format(pressure: hour.pressure_mb, from: .millibars)
-    hourForecast.visibility = Formatters.format(length: hour.vis_km, from: .kilometers)
+    hourForecast.pressure = Formatters.shared.format(pressure: hour.pressure_mb, from: .millibars)
+    hourForecast.visibility = Formatters.shared.format(length: hour.vis_km, from: .kilometers)
     hourForecast.uv = "\(Int(hour.uv))"
     hourForecast.condition = "\(hour.condition_text ?? "")"
     hourForecast.conditionIcon = "\(hour.condition_icon ?? "")"
-    hourForecast.time = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
-    hourForecast.timeFull = Dates.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
+    hourForecast.time = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
+    hourForecast.timeFull = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
     hourForecast.date = "\(hour.date ?? "")"
     if let dateTime = hour.dateTime {
-      let hourDate = Dates.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
-      hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
-      hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
+      let hourDate = Dates.shared.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
+      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+      hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
     }
 //    if let time = hour.time {
-//      let hourDate = Dates.makeDateFromTime(time: (hour.date ?? "") + " " + time, format: "yyyy-MM-dd HH:mm")
-//      hourForecast.displayDate = Dates.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
-//      hourForecast.dayOfWeek = Dates.makeStringFromDate(date: hourDate, format: "EEEE")
+//      let hourDate = Dates.shared.makeDateFromTime(time: (hour.date ?? "") + " " + time, format: "yyyy-MM-dd HH:mm")
+//      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+//      hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
 //    }
     return hourForecast
   }
   
-  func getWindDirectionFull(windDirection: String) -> String {
+  private func getWindDirectionFull(windDirection: String) -> String {
     switch windDirection {
       case "N":
         return "North"

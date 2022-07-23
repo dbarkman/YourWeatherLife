@@ -13,8 +13,8 @@ struct HourDetail: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "HourDetail")
   
+  @State private var showFeedback = false
   @State var hour = HourForecast()
-  @State var showFeedback = false
 
   var body: some View {
     ZStack {

@@ -19,7 +19,7 @@ class Observer: ObservableObject {
     }
   }
   
-  @objc func willEnterForeground() {
+  @objc private func willEnterForeground() {
     enteredForeground.toggle()
   }
   

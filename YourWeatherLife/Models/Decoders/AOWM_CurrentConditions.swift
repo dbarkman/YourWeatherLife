@@ -59,14 +59,14 @@ struct AOWM_CurrentConditionsDecoder: Decodable {
     self.aowm_currentCityId = try rootContainer.decode(Int.self, forKey: .id)
     self.aowm_currentCityName = try rootContainer.decode(String.self, forKey: .name)
     
-    let temperature = Formatters.format(temp: self.aowm_main.aowm_mainTemp, from: .celsius)
+    let temperature = Formatters.shared.format(temp: self.aowm_main.aowm_mainTemp, from: .celsius)
     var condition = "Unknown"
     var isDay = true
     var icon = "day/113"
     if aowm_weatherList.count > 0 {
       condition = aowm_weatherList[0].aowm_weatherMain
       isDay = aowm_weatherList[0].aowm_weatherIcon.last == "d" ? true : false
-      icon = AOWM_Icon.getCurrentConditionsIcon(iconId: aowm_weatherList[0].aowm_weatherId, isDay: isDay)
+      icon = AOWM_Icon.shared.getCurrentConditionsIcon(iconId: aowm_weatherList[0].aowm_weatherId, isDay: isDay)
     }
     let location = aowm_currentCityName
     

@@ -12,8 +12,8 @@ struct FeedbackModal: View {
   
   @Environment(\.presentationMode) var presentationMode
   
-  @State var email = ""
-  @State var feedback = ""
+  @State private var email = ""
+  @State private var feedback = ""
 
   var body: some View {
     NavigationView {
@@ -88,7 +88,7 @@ struct FeedbackModal: View {
     }
   }
   
-  func sendFeedback() {
+  private func sendFeedback() {
     Mixpanel.mainInstance().track(event: "Feedback", properties: [
       "email": email,
       "feedback": feedback

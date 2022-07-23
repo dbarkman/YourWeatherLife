@@ -13,11 +13,13 @@ class TodaySummaryViewModel: ObservableObject {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TodaySummaryViewModel")
   
+  static let shared = TodaySummaryViewModel()
+  
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  
   @Published var summary = Today()
   
-  var viewContext = LocalPersistenceController.shared.container.viewContext
-  
-  init() {
+  private init() {
     NotificationCenter.default.addObserver(self, selector: #selector(fetchTodaySummary), name: .forecastInsertedEvent, object: nil)
   }
   
@@ -44,7 +46,7 @@ class TodaySummaryViewModel: ObservableObject {
   
   func configureDay(todayForecast: TGWForecastDay) -> (Today, [TGWForecastHour]) {
     let dayDate = (todayForecast.date ?? "") + " 00:00"
-    let dayOfWeekDate = Dates.makeDateFromString(date: dayDate, format: "yyyy-MM-dd HH:mm")
+    let dayOfWeekDate = Dates.shared.makeDateFromString(date: dayDate, format: "yyyy-MM-dd HH:mm")
     var precipitation = false
     var precipitationType = ""
     var precipitationPercent = ""
@@ -108,29 +110,29 @@ class TodaySummaryViewModel: ObservableObject {
     today.precipitation = precipitation
     today.precipitationType = precipitationType
     today.precipitationPercent = precipitationPercent
-    today.precipitationTotal = String(Formatters.format(length: precipitaionTotal, from: .millimeters))
-    today.coldestTemp = Formatters.format(temp: coldestTemp, from: .celsius)
-    today.warmestTemp = Formatters.format(temp: warmestTemps, from: .celsius)
-    today.coldestTime = Dates.makeDisplayTimeFromTime(time: coldestTime, format: "HH:mm")
-    today.warmestTime = Dates.makeDisplayTimeFromTime(time: warmestTime, format: "HH:mm")
-    today.sunriseTemp = Formatters.format(temp: sunriseTemp, from: .celsius)
-    today.sunsetTemp = Formatters.format(temp: sunsetTemp, from: .celsius)
-    today.sunriseTime = Dates.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa")
-    today.sunsetTime = Dates.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
-    today.dayOfWeek = Dates.makeStringFromDate(date: dayOfWeekDate, format: "EEE")
-    today.displayDate = Dates.makeStringFromDate(date: dayOfWeekDate, format: "EEE, MM/dd")
+    today.precipitationTotal = String(Formatters.shared.format(length: precipitaionTotal, from: .millimeters))
+    today.coldestTemp = Formatters.shared.format(temp: coldestTemp, from: .celsius)
+    today.warmestTemp = Formatters.shared.format(temp: warmestTemps, from: .celsius)
+    today.coldestTime = Dates.shared.makeDisplayTimeFromTime(time: coldestTime, format: "HH:mm")
+    today.warmestTime = Dates.shared.makeDisplayTimeFromTime(time: warmestTime, format: "HH:mm")
+    today.sunriseTemp = Formatters.shared.format(temp: sunriseTemp, from: .celsius)
+    today.sunsetTemp = Formatters.shared.format(temp: sunsetTemp, from: .celsius)
+    today.sunriseTime = Dates.shared.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa")
+    today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
+    today.dayOfWeek = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEE")
+    today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEE, MM/dd")
     today.humidity = String(todayForecast.avghumidity)
-    today.averageTemp = String(Formatters.format(temp: todayForecast.avgtemp_c, from: .celsius))
-    today.visibility = String(Formatters.format(length: todayForecast.avgvis_km, from: .kilometers))
+    today.averageTemp = String(Formatters.shared.format(temp: todayForecast.avgtemp_c, from: .celsius))
+    today.visibility = String(Formatters.shared.format(length: todayForecast.avgvis_km, from: .kilometers))
     today.condition = todayForecast.condition_text ?? ""
     today.conditionIcon = todayForecast.condition_icon ?? ""
-    today.wind = String(Formatters.format(speed: todayForecast.maxwind_kph, from: .kilometersPerHour))
+    today.wind = String(Formatters.shared.format(speed: todayForecast.maxwind_kph, from: .kilometersPerHour))
     today.moonIllumination = todayForecast.moon_illumination ?? ""
     today.moonPhase = todayForecast.moon_phase ?? ""
     today.moonRiseTime = todayForecast.moonrise ?? ""
     today.moonSetTime = todayForecast.moonset ?? ""
     today.uv = String(todayForecast.uv)
-    today.date = Dates.makeStringFromDate(date: dayOfWeekDate, format: "yyyy-MM-dd")
+    today.date = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "yyyy-MM-dd")
     return (today, forecastHours)
   }
 }

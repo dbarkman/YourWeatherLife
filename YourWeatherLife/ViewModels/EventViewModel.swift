@@ -12,15 +12,19 @@ class EventViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventViewModel")
   
+  static let shared = EventViewModel()
+  
   @Published var eventSaveResult = ""
   @Published var daysSelected = ""
   @Published var selectedSet: Set<String> = [""]
   @Published var returningFromChildView = false
 
-  var selectedDays = [Int]()
-
   private var days = ""
 
+  var selectedDays = [Int]()
+  
+  private init() { }
+  
   func saveEvent(eventName: String, startTimeDate: Date, endTimeDate: Date, oldEventName: String = "", addEvent: Bool = false, closure: @escaping (Bool) -> Void) {
     guard !eventName.isEmpty else {
       DispatchQueue.main.async {
@@ -39,7 +43,7 @@ class EventViewModel: ObservableObject {
       days.append("\(selected)")
     }
 
-    let event = Event(event: eventName, startTime: Dates.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", when: "", days: days)
+    let event = Event(event: eventName, startTime: Dates.shared.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.shared.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", when: "", days: days)
     var result = EventResult.noResult
     if addEvent {
       result = EventProvider.shared.insertEvents(eventList: [event])

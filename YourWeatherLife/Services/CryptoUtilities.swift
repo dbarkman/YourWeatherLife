@@ -10,7 +10,11 @@ import CryptoKit
 
 struct CryptoUtilities {
   
-  static func signRequest(input: String, secretKey: String) -> String {
+  static let shared = CryptoUtilities()
+  
+  private init() { }
+  
+  func signRequest(input: String, secretKey: String) -> String {
     let inputData: Data = (input).data(using: .utf8)!
     let secretKeyData = SymmetricKey(data: secretKey.data(using: .utf8)!)
     let authenticationCode = HMAC<SHA256>.authenticationCode(for: inputData, using: secretKeyData)

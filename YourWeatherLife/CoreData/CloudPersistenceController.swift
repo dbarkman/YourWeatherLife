@@ -8,15 +8,9 @@
 import CoreData
 import OSLog
 
-class CloudPersistenceController {
+struct CloudPersistenceController {
   
-  static let shared = CloudPersistenceController()
-  
-  static let preview: CloudPersistenceController = {
-    let result = CloudPersistenceController(inMemory: true)
-    let viewContext = result.container.viewContext
-    return result
-  }()
+  static var shared = CloudPersistenceController()
   
   private let inMemory: Bool
   
@@ -53,7 +47,7 @@ class CloudPersistenceController {
     return container
   }()
   
-  init(inMemory: Bool = false) {
+  private init(inMemory: Bool = false) {
     self.inMemory = inMemory
   }
 }
