@@ -12,7 +12,7 @@ struct EventListToday: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventListToday")
 
-  @StateObject private var today = TodaySummaryViewModel()
+  @StateObject private var today = TodaySummaryViewModel.shared
 
   private let todayViewFontSize = Font.callout
   
@@ -23,7 +23,7 @@ struct EventListToday: View {
           .font(.title2)
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
+          .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)

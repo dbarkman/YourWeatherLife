@@ -10,7 +10,7 @@ import OSLog
 
 struct TGW_ForecastDecoder: Decodable {
   
-//  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastDecoder")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastDecoder")
 
   private enum RootCodingKeys: String, CodingKey {
     case location, current, forecast

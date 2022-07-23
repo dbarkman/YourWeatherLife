@@ -13,9 +13,11 @@ struct EventProvider {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventProvider")
   
+  static let shared = EventProvider()
+  
   var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
-  static let shared = EventProvider()
+  private init() { }
   
   func importEventsFromSeed() async {
     logger.debug("Importing seed events.")
@@ -52,6 +54,7 @@ struct EventProvider {
           newDailyEvent.event = event.event
           newDailyEvent.startTime = event.startTime
           newDailyEvent.endTime = event.endTime
+          newDailyEvent.days = event.days
           do {
             try viewCloudContext.save()
             result = .eventSaved
@@ -84,9 +87,10 @@ struct EventProvider {
         dailyEvent.setValue(event.event, forKey: "event")
         dailyEvent.setValue(event.startTime, forKey: "startTime")
         dailyEvent.setValue(event.endTime, forKey: "endTime")
-        dailyEvent.setValue("", forKey: "tomorrow")
+        dailyEvent.setValue("", forKey: "when")
         dailyEvent.setValue("", forKey: "nextStartDate")
         dailyEvent.setValue("", forKey: "summary")
+        dailyEvent.setValue(event.days, forKey: "days")
         do {
           try viewCloudContext.save()
           result = .eventSaved

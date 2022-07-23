@@ -13,19 +13,21 @@ class WeekendSummaryViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "WeekendSummaryViewModel")
   
+  static let shared = WeekendSummaryViewModel()
+  
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  
   @Published var summary = Weekend()
   
-  var viewContext = LocalPersistenceController.shared.container.viewContext
-  
-  init() {
+  private init() {
     NotificationCenter.default.addObserver(self, selector: #selector(fetchWeekendSummary), name: .forecastInsertedEvent, object: nil)
   }
   
   @objc func fetchWeekendSummary() {
     let saturdayDate = Calendar.current.nextWeekend(startingAfter: Date())?.start ?? Date()
     let sundayDate = Calendar.current.date(byAdding: .day, value: 1, to: saturdayDate) ?? Date()
-    let saturday = Dates.makeStringFromDate(date: saturdayDate, format: "yyyy-MM-dd")
-    let sunday = Dates.makeStringFromDate(date: sundayDate, format: "yyyy-MM-dd")
+    let saturday = Dates.shared.makeStringFromDate(date: saturdayDate, format: "yyyy-MM-dd")
+    let sunday = Dates.shared.makeStringFromDate(date: sundayDate, format: "yyyy-MM-dd")
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
@@ -45,11 +47,11 @@ class WeekendSummaryViewModel: ObservableObject {
       let sundayPrecipitationResult = setPrecipitation(forecastDay: forecastDays[1])
       
       DispatchQueue.main.async {
-        self.summary.saturdayLow = Formatters.format(temp: saturdayLow, from: .celsius)
-        self.summary.saturdayHigh = Formatters.format(temp: saturdayHigh, from: .celsius)
+        self.summary.saturdayLow = Formatters.shared.format(temp: saturdayLow, from: .celsius)
+        self.summary.saturdayHigh = Formatters.shared.format(temp: saturdayHigh, from: .celsius)
         self.summary.saturdayCondition = forecastDays[0].condition_text ?? ""
-        self.summary.sundayLow = Formatters.format(temp: sundayLow, from: .celsius)
-        self.summary.sundayHigh = Formatters.format(temp: sundayHigh, from: .celsius)
+        self.summary.sundayLow = Formatters.shared.format(temp: sundayLow, from: .celsius)
+        self.summary.sundayHigh = Formatters.shared.format(temp: sundayHigh, from: .celsius)
         self.summary.sundayCondition = forecastDays[1].condition_text ?? ""
         self.summary.saturdayPrecipitation = saturdayPrecipitationResult.0
         self.summary.saturdayPrecipitationType = saturdayPrecipitationResult.1
@@ -61,7 +63,7 @@ class WeekendSummaryViewModel: ObservableObject {
     }
   }
   
-  func setPrecipitation(forecastDay: TGWForecastDay) -> (Bool, String, String) {
+  private func setPrecipitation(forecastDay: TGWForecastDay) -> (Bool, String, String) {
     var precipitation = false
     var precipitationType = ""
     var precipitationPercent = ""

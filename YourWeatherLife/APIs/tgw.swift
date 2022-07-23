@@ -11,9 +11,13 @@ import OSLog
 
 struct tgw {
   
-  static func getCurrentWeatherURL() async -> String {
-    let apiKey = APISettings.fetchAPISettings().tgwApiKey
-    let urlBase = APISettings.fetchAPISettings().tgwUrlBase
+  static let shared = tgw()
+  
+  private init() { }
+  
+  func getCurrentWeatherURL() async -> String {
+    let apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
+    let urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {
@@ -22,9 +26,9 @@ struct tgw {
     return url
   }
   
-  static func getWeatherForecastURL(days: String) async -> String {
-    let apiKey = APISettings.fetchAPISettings().tgwApiKey
-    let urlBase = APISettings.fetchAPISettings().tgwUrlBase
+  func getWeatherForecastURL(days: String) async -> String {
+    let apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
+    let urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {
@@ -33,31 +37,47 @@ struct tgw {
     return url
   }
   
-  static func getLocation() async -> String {
-    var finalLocation = ""
-    let locationManager = CLLocationManager()
-    let authorizationStatus = locationManager.authorizationStatus
-    if (authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse) {
-      if let location = locationManager.location {
-        let geocoder = CLGeocoder()
-        do {
-          let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
-          if reverseGeocodeLocation.count > 0 {
-            return reverseGeocodeLocation[0].postalCode ?? "98034"
-          }
-          let latitude = location.coordinate.latitude
-          let longitude = location.coordinate.longitude
-          finalLocation = "\(latitude),\(longitude)"
-        } catch {
-          finalLocation = "98034"
-          print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
+  private func getLocation() async -> String {
+    let authorizationStatus = LocationViewModel.shared.authorizationStatus
+    if !UserDefaults.standard.bool(forKey: "automaticLocation") {
+      guard let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") else {
+        if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+          UserDefaults.standard.set(true, forKey: "automaticLocation")
+          return await getAutomaticLocation()
+        } else {
+          UserDefaults.standard.set(false, forKey: "automaticLocation")
+          UserDefaults.standard.set("98034", forKey: "manualLocationData")
+          return "98034"
         }
+      }
+      return manualLocationData.isEmpty ? "98034" : manualLocationData
+    } else {
+      if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+        return await getAutomaticLocation()
       } else {
-        finalLocation = "98034"
+        return "98034"
+      }
+    }
+  }
+  
+  private func getAutomaticLocation() async -> String {
+    let locationManager = LocationViewModel.shared.locationManager
+    if let location = locationManager.location {
+      let geocoder = CLGeocoder()
+      do {
+        let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
+        if reverseGeocodeLocation.count > 0 {
+          return reverseGeocodeLocation[0].postalCode ?? "98034"
+        }
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        return "\(latitude),\(longitude)"
+      } catch {
+        print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
+        return "98034"
       }
     } else {
-      finalLocation = "98034"
+      return "98034"
     }
-    return finalLocation
   }
 }

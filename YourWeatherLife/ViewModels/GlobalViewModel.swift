@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import Network
 import Mixpanel
 import OSLog
 
@@ -15,54 +14,44 @@ class GlobalViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GlobalViewModel")
   
-  let monitor = NWPathMonitor()
-  
-  var viewContext: NSManagedObjectContext
-  var viewCloudContext: NSManagedObjectContext
-  
-  private var locationViewModel = LocationViewModel()
+  static let shared = GlobalViewModel()
+
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @Published var isShowingDailyEvents = false
   @Published var returningFromChildView = false
-  @Published var today = Dates.getTodayDateString(format: "yyyy-MM-dd")
-  @Published var weekend = Dates.getThisWeekendDateStrings(format: "yyyy-MM-dd")
+  @Published var today = Dates.shared.getTodayDateString(format: "yyyy-MM-dd")
+  @Published var weekend = Dates.shared.getThisWeekendDateStrings(format: "yyyy-MM-dd")
   @Published var networkOnline = true {
     didSet {
       guard oldValue != networkOnline else { return }
       if networkOnline {
-        self.locationViewModel.requestPermission()
+        logger.debug("Network online now!")
+        NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
       }
     }
   }
   
-  init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
-    self.viewContext = viewContext
-    self.viewCloudContext = viewCloudContext
-    
-    monitor.pathUpdateHandler = { path in
-      if path.status == .satisfied {
-        self.checkInternetConnection(closure: { connected in
-          if connected {
-            self.logger.debug("dbark - Network connected!")
-            DispatchQueue.main.async {
-              self.networkOnline = true
-            }
-          } else {
-            DispatchQueue.main.async {
-              self.networkOnline = false
-            }
-            self.logger.debug("dbark - Connected to a network, but the Internet is not available.")
-          }
-        })
-      } else {
-        self.logger.debug("dbark - No network connection.")
-        DispatchQueue.main.async {
-          self.networkOnline = false
+  private init() {
+    checkInternetConnection(closure: { connected in
+      DispatchQueue.main.async {
+        self.networkOnline = connected
+      }
+    })
+
+    if !UserDefaults.standard.bool(forKey: "automaticLocation") {
+      guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
+        let authorizationStatus = LocationViewModel.shared.authorizationStatus
+        if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
+          UserDefaults.standard.set(true, forKey: "automaticLocation")
+        } else {
+          UserDefaults.standard.set(false, forKey: "automaticLocation")
+          UserDefaults.standard.set("98034", forKey: "manualLocationData")
         }
+        return
       }
     }
-    let queue = DispatchQueue(label: "Monitor")
-    monitor.start(queue: queue)
   }
   
   func countEverything() {
@@ -102,7 +91,7 @@ class GlobalViewModel: ObservableObject {
       var request = URLRequest(url: url)
       request.httpMethod = "HEAD"
       request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-      request.timeoutInterval = 5
+      request.timeoutInterval = 2
       let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
         closure(error == nil)
       })

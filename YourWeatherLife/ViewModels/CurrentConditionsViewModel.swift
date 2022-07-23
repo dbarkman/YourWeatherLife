@@ -13,23 +13,23 @@ class CurrentConditionsViewModel: ObservableObject {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "CurrentConditionsViewModel")
   
-  var globalViewModel: GlobalViewModel?
+  static let shared = CurrentConditionsViewModel()
+  var globalViewModel = GlobalViewModel.shared
   
-  var data = Data()
-
   @Published var current: Current?
   
-  init() {
+  var data = Data()
+  
+  private init() {
     NotificationCenter.default.addObserver(self, selector: #selector(overrideUpdateCurrent), name: .locationUpdatedEvent, object: nil)
   }
 
-  @objc func overrideUpdateCurrent() {
-    if let globalViewModel = globalViewModel {
-      if globalViewModel.networkOnline {
-        let nextUpdate = Date(timeIntervalSince1970: 0)
-        UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
-        updateCurrent()
-      }
+  @objc private func overrideUpdateCurrent() {
+    if globalViewModel.networkOnline {
+      logger.debug("Location updated, fetching current conditions.")
+      let nextUpdate = Date(timeIntervalSince1970: 0)
+      UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
+      updateCurrent()
     }
   }
   func updateCurrent() {
@@ -38,7 +38,7 @@ class CurrentConditionsViewModel: ObservableObject {
     }
   }
 
-  func fetchCurrentWeather() async {
+  private func fetchCurrentWeather() async {
     guard GetAllData.shared.fetchCurrentConditions() else {
       let temperature = UserDefaults.standard.string(forKey: "currentConditionsTemperature") ?? "88"
       let condition = UserDefaults.standard.string(forKey: "currentConditionsCondition") ?? "Sunny"
@@ -50,7 +50,7 @@ class CurrentConditionsViewModel: ObservableObject {
       }
       return
     }
-    let url = await tgw.getCurrentWeatherURL()
+    let url = await tgw.shared.getCurrentWeatherURL()
     if let url = URL(string: url) {
       let urlRequest = URLRequest(url: url)
       let session = URLSession.shared
@@ -74,12 +74,13 @@ class CurrentConditionsViewModel: ObservableObject {
       DispatchQueue.main.async {
         self.current = tgwDecoder.current
       }
+      logger.debug("Updated current conditions! 🎉")
     } catch {
       logger.error("Could not decode current conditions. 😭 \(error.localizedDescription)")
     }
   }
   
-  func saveCurrentConditions(current: Current) {
+  private func saveCurrentConditions(current: Current) {
     UserDefaults.standard.set(current.temperature, forKey: "currentConditionsTemperature")
     UserDefaults.standard.set(current.condition, forKey: "currentConditionsCondition")
     UserDefaults.standard.set(current.icon, forKey: "currentConditionsIcon")

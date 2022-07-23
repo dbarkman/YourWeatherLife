@@ -13,10 +13,10 @@ struct DayForecast: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  @StateObject private var homeViewModel = HomeViewModel()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var homeViewModel = HomeViewModel.shared
   
-  @State var showFeedback = false
+  @State private var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -48,6 +48,7 @@ struct DayForecast: View {
         appearance.backgroundColor = UIColor(Color("NavigationBackground"))
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "14DayForecast View")
         globalViewModel.returningFromChildView = true
         homeViewModel.create14DayForecast()

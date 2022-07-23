@@ -16,8 +16,10 @@ struct TGW_ForecastProvider {
   
   static let shared = TGW_ForecastProvider()
   
+  private init() { }
+  
   func fetchForecast() async {
-    let url = await tgw.getWeatherForecastURL(days: "14")
+    let url = await tgw.shared.getWeatherForecastURL(days: "14")
     if let url = URL(string: url) {
       let urlRequest = URLRequest(url: url)
       let session = URLSession.shared
@@ -43,8 +45,6 @@ struct TGW_ForecastProvider {
         
         await importForecastHours(from: forecastHoursArray)
         await importForecastDays(from: forecastDaysArray)
-        NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
-        logger.debug("Days and Hours imported successfully! 🎉")
       } catch {
         logger.error("Forecast decode failed. 😭 \(error.localizedDescription)")
       }

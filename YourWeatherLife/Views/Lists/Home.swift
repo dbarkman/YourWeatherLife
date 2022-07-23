@@ -14,22 +14,18 @@ struct Home: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
-  @Environment(\.managedObjectContext) private var viewContext
-  @Environment(\.managedObjectContext) private var viewCloudContext
+  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  
   @Environment(\.scenePhase) var scenePhase
 
-  @ObservedObject var observer = Observer()
-  @ObservedObject private var globalViewModel: GlobalViewModel
-  
-  @StateObject private var homeViewModel = HomeViewModel()
-  @StateObject private var locationViewModel = LocationViewModel()
-  @StateObject private var currentConditions = CurrentConditionsViewModel()
+  @ObservedObject private var observer = Observer()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var homeViewModel = HomeViewModel.shared
+  @StateObject private var locationViewModel = LocationViewModel.shared
+  @StateObject private var currentConditions = CurrentConditionsViewModel.shared
 
-  @State var showFeedback = false
-  
-  init(viewContext: NSManagedObjectContext, viewCloudContext: NSManagedObjectContext) {
-    globalViewModel = GlobalViewModel(viewContext: viewContext, viewCloudContext: viewCloudContext)
-  }
+  @State private var showFeedback = false
+  @State private var showUpdateLocation = false
   
   var body: some View {
     
@@ -46,7 +42,21 @@ struct Home: View {
                   HStack {
                     Spacer()
                     Text("No Internet Connection")
-                      .foregroundColor(Color.white)
+                      .foregroundColor(.white)
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                      .symbolRenderingMode(.monochrome)
+                      .foregroundColor(.white)
+                      .onTapGesture(perform: {
+                        DispatchQueue.main.async {
+                          globalViewModel.networkOnline = true
+                        }
+                        globalViewModel.checkInternetConnection(closure: { connected in
+                          DispatchQueue.main.async {
+                            globalViewModel.networkOnline = connected
+                          }
+                        })
+                      })
                     Spacer()
                   }
                 }
@@ -78,7 +88,7 @@ struct Home: View {
                     .minimumScaleFactor(0.1)
                     Image(systemName: "star")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .onTapGesture(perform: {
                         showFeedback.toggle()
                       })
@@ -87,17 +97,27 @@ struct Home: View {
                   .padding(.trailing, -5)
                   .padding(.bottom, 1)
                   HStack {
-                    Image(systemName: "location.fill")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                    if UserDefaults.standard.bool(forKey: "automaticLocation") {
+                      Image(systemName: "location.fill")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    } else {
+                      Image(systemName: "mappin")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    }
                     Text(currentConditions.current?.location ?? "Mesa")
                       .font(.body)
                       .minimumScaleFactor(0.1)
-                    Image(systemName: "chevron.down")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
-
+                    if UserDefaults.standard.bool(forKey: "automaticLocation") {
+                      Image(systemName: "arrow.triangle.2.circlepath")
+                        .symbolRenderingMode(.monochrome)
+                        .foregroundColor(Color("AccentColor"))
+                    }
                   } //end of HStack
+                  .onTapGesture {
+                    showUpdateLocation = true
+                  }
                 } //end of VStack
                 .padding(.horizontal, 10)
               } //end of HStack
@@ -127,9 +147,9 @@ struct Home: View {
               }
               ForEach(homeViewModel.todayEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(eventForecast: event)) { }
+                  NavigationLink(destination: EventDetail(event: event)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -154,14 +174,41 @@ struct Home: View {
               }
               ForEach(homeViewModel.tomorrowEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(eventForecast: event)) { }
+                  NavigationLink(destination: EventDetail(event: event)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, tomorrow: event.tomorrow)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
               }
-              if homeViewModel.todayEvents.isEmpty && homeViewModel.tomorrowEvents.isEmpty {
+              if !homeViewModel.laterEvents.isEmpty {
+                VStack(alignment: .leading) {
+                  Divider()
+                    .background(.black)
+                    .frame(height: 1)
+                  HStack {
+                    Text("Later")
+                    Spacer()
+                    Text("Edit Events")
+                      .foregroundColor(Color("AccentColor"))
+                      .onTapGesture {
+                        globalViewModel.showDailyEvents()
+                      }
+                  }
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+              ForEach(homeViewModel.laterEvents, id: \.self) { event in
+                ZStack(alignment: .leading) {
+                  NavigationLink(destination: EventDetail(event: event)) { }
+                    .opacity(0)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+              if homeViewModel.todayEvents.isEmpty && homeViewModel.tomorrowEvents.isEmpty && homeViewModel.laterEvents.isEmpty {
                 Text("Your saved events are syncing from iCloud and should display momentarily.")
                   .listRowSeparator(.hidden)
                   .listRowBackground(Color.clear)
@@ -202,7 +249,7 @@ struct Home: View {
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .padding(.horizontal, 5)
                   }
                   .padding(.bottom, 1)
@@ -227,7 +274,7 @@ struct Home: View {
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color.accentColor)
+                      .foregroundColor(Color("AccentColor"))
                       .padding(.horizontal, 5)
                   }
                   .padding(.bottom, 1)
@@ -273,8 +320,17 @@ struct Home: View {
               homeViewModel.fetchForecast()
               currentConditions.updateCurrent()
             }
-            homeViewModel.awaitUpdateNextStartDate()
           }
+          .alert(Text("Location Unavailable"), isPresented: $homeViewModel.showNoLocationAlert, actions: {
+            Button("No Thanks") { }
+            Button("Enter Location") {
+              Task {
+                showUpdateLocation = true
+              }
+            }
+          }, message: {
+            Text("Since you did not grant location access, you may enter a manual location by tapping the \"Enter Location\" button below, or tapping on the city in the top right of the home screen at any time.")
+          })
           .alert(Text("iCloud Login Error"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
             Button("Settings") {
               if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
@@ -299,10 +355,13 @@ struct Home: View {
         } //end of VStack
         .navigationBarHidden(true)
         
-        NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, CloudPersistenceController.shared.container.viewContext), isActive: $globalViewModel.isShowingDailyEvents) { }
+        NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
       } //end of ZStack
       .sheet(isPresented: $showFeedback) {
         FeedbackModal()
+      }
+      .sheet(isPresented: $showUpdateLocation) {
+        UpdateLocation()
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
@@ -313,9 +372,6 @@ struct Home: View {
         }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
-        locationViewModel.requestPermission()
-        homeViewModel.globalViewModel = globalViewModel
-        currentConditions.globalViewModel = globalViewModel
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {
@@ -330,6 +386,9 @@ struct Home: View {
           if UserDefaults.standard.bool(forKey: "initialFetchFailed") {
             homeViewModel.showiCloudFetchAlert = true
           }
+          if locationViewModel.authorizationStatus == .notDetermined {
+            locationViewModel.requestPermission()
+          }
         } else if newPhase == .inactive {
           logger.debug("inactive")
         } else if newPhase == .background {
@@ -337,12 +396,10 @@ struct Home: View {
         }
       }
     } //end of NavigationView
-    .environmentObject(globalViewModel)
   }
 }
 
 //struct ListView_Previews: PreviewProvider {
-//  @Environment(\.managedObjectContext) private var viewContext
 //  static var previews: some View {
 //    Home(viewContext: viewContext)
 //  }

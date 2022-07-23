@@ -13,8 +13,8 @@ struct HourDetail: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "HourDetail")
   
+  @State private var showFeedback = false
   @State var hour = HourForecast()
-  @State var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -52,6 +52,7 @@ struct HourDetail: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "HourDetail View")
     }
     .toolbar {

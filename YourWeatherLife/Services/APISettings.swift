@@ -8,7 +8,12 @@
 import Foundation
 
 struct APISettings {
-  static func fetchAPISettings() -> WeatherSolutions {
+  
+  static let shared = APISettings()
+  
+  private init() { }
+  
+  func fetchAPISettings() -> WeatherSolutions {
     var apiSettings = WeatherSolutions()
     if  let path = Bundle.main.path(forResource: "weatherSolutions", ofType: "plist"),
         let xml = FileManager.default.contents(atPath: path)

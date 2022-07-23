@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct EditEventPencil: View {
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
   
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+
   var body: some View {
     Image(systemName: "pencil")
       .symbolRenderingMode(.monochrome)
-      .foregroundColor(Color.accentColor)
+      .foregroundColor(Color("AccentColor"))
       .onTapGesture {
         globalViewModel.showDailyEvents()
       }

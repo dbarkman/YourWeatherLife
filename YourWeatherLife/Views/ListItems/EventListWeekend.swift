@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EventListWeekend: View {
   
-  @StateObject private var weekend = WeekendSummaryViewModel()
+  @StateObject private var weekend = WeekendSummaryViewModel.shared
   
   private let todayViewFontSize = Font.callout
   
@@ -20,7 +20,7 @@ struct EventListWeekend: View {
           .font(.title2)
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
+          .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)

@@ -22,7 +22,7 @@ class API: NSManagedObject {
   @NSManaged var urlBase: String
   @NSManaged var active: Int
   
-  func update(from apiProperties: APIProperties) throws {
+  private func update(from apiProperties: APIProperties) throws {
     let dictionary = apiProperties.dictionaryValue
     guard let newApi = dictionary["api"] as? String,
           let newShortName = dictionary["shortName"] as? String,

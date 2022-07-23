@@ -12,7 +12,7 @@ import Mixpanel
 @main
 struct YourWeatherLifeApp: App {
   
-//  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   
   init() {
     Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
@@ -20,10 +20,7 @@ struct YourWeatherLifeApp: App {
   
   var body: some Scene {
     WindowGroup {
-//      ContentView()
-      Home(viewContext: LocalPersistenceController.shared.container.viewContext, viewCloudContext: CloudPersistenceController.shared.container.viewContext)
-        .environment(\.managedObjectContext, LocalPersistenceController.shared.container.viewContext)
-        .environment(\.managedObjectContext, CloudPersistenceController.shared.container.viewContext)
+      Home()
     }
   }
 }

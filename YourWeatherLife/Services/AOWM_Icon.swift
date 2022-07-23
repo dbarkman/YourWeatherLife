@@ -10,14 +10,18 @@ import UIKit
 
 struct AOWM_Icon {
   
-  static func getCurrentConditionsIcon(iconId: Int, isDay: Bool) -> String {
+  static let shared = AOWM_Icon()
+  
+  private init() { }
+  
+  func getCurrentConditionsIcon(iconId: Int, isDay: Bool) -> String {
     var iconName = "day/113"
     let name = getIconName(iconId: iconId)
     iconName = isDay ? "day/" + name : "night/" + name
     return iconName
   }
   
-  static private func getIconName(iconId: Int) -> String {
+  private func getIconName(iconId: Int) -> String {
     var icon = ""
     switch iconId {
       case 801, 802:

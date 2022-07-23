@@ -10,10 +10,10 @@ import Mixpanel
 
 struct HourlyForecast: View {
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  @StateObject private var homeViewModel = HomeViewModel()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var homeViewModel = HomeViewModel.shared
 
-  @State var showFeedback = false
+  @State private var showFeedback = false
 
   var body: some View {
     ZStack {
@@ -39,6 +39,7 @@ struct HourlyForecast: View {
         appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "336HourForecast View")
         globalViewModel.returningFromChildView = true
         homeViewModel.create336HourForecast()

@@ -9,33 +9,41 @@ import SwiftUI
 
 struct EventListItem: View {
   
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+
   @State var event: String
   @State var startTime: String
   @State var endTime: String
   @State var summary: String
-  @State var tomorrow: String
+  @State var when: String
   
   var body: some View {
     VStack(alignment: .leading) {
-      HStack {
-        Text(event)
-          .font(.callout)
-          .fontWeight(.semibold)
-          .minimumScaleFactor(0.1)
+      HStack(alignment: .top) {
+        VStack(alignment: .leading) {
+          Text(event)
+            .font(.body)
+            .fontWeight(.semibold)
+//          .minimumScaleFactor(0.1)
+          HStack {
+            if when != "Today" && when != "Tomorrow" {
+              Text(when + ":")
+            }
+            Text(startTime)
+              .font(.callout)
+            Text(" - ")
+              .font(.callout)
+              .padding(.horizontal, -5)
+            Text(endTime)
+              .font(.callout)
+          }
+        }
         Spacer()
-        Text(startTime)
-          .font(.callout)
-        Text(" - ")
-          .font(.callout)
-          .padding(.horizontal, -5)
-        Text(endTime)
-          .font(.callout)
         Image(systemName: "chevron.right")
           .symbolRenderingMode(.monochrome)
-          .foregroundColor(Color.accentColor)
+          .foregroundColor(Color("AccentColor"))
           .padding(.horizontal, 5)
+          .padding(.top, 3)
       } //end of HStack
       HStack {
         Text(summary)
@@ -50,12 +58,11 @@ struct EventListItem: View {
         .stroke(.gray, lineWidth: 2)
         .padding(.bottom, 10)
     }
-    .environmentObject(globalViewModel)
   }
 }
 
 struct EventListItem_Previews: PreviewProvider {
   static var previews: some View {
-    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry", tomorrow: "Tomorrow")
+    EventListItem(event: "Morning Commute:", startTime: "7a", endTime: "9a", summary: "75° Clear and dry", when: "Tomorrow")
   }
 }

@@ -15,12 +15,14 @@ struct APIsProvider {
   
   static let shared = APIsProvider()
   
+  private init() { }
+  
   func fetchAPIs() async {
-    let apiKey = APISettings.fetchAPISettings().apiKey
-    let secretKey = APISettings.fetchAPISettings().secretKey
-    let urlBase = APISettings.fetchAPISettings().urlBase
-    let apisEndpoint = APISettings.fetchAPISettings().apisEndpoint
-    let signature = CryptoUtilities.signRequest(input: apiKey, secretKey: secretKey)
+    let apiKey = APISettings.shared.fetchAPISettings().apiKey
+    let secretKey = APISettings.shared.fetchAPISettings().secretKey
+    let urlBase = APISettings.shared.fetchAPISettings().urlBase
+    let apisEndpoint = APISettings.shared.fetchAPISettings().apisEndpoint
+    let signature = CryptoUtilities.shared.signRequest(input: apiKey, secretKey: secretKey)
     
     if let apisURL = URL(string: urlBase + apisEndpoint) {
       var urlRequest = URLRequest(url: apisURL)

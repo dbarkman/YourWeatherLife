@@ -13,11 +13,11 @@ struct DayDetail: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayDetail")
 
-  @EnvironmentObject private var globalViewModel: GlobalViewModel
-  @StateObject private var dayDetail = DayDetailViewModel()
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var dayDetail = DayDetailViewModel.shared
   
-  @State var dates = [Dates.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
-  @State var showFeedback = false
+  @State private var showFeedback = false
+  @State var dates = [Dates.shared.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
 
   var body: some View {
     ZStack {
@@ -60,6 +60,7 @@ struct DayDetail: View {
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "DayDetail View")
       globalViewModel.returningFromChildView = true
       dayDetail.fetchDayDetail(dates: dates)

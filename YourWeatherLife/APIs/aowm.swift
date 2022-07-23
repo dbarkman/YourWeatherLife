@@ -9,7 +9,11 @@ import Foundation
 
 struct aowm {
   
-  static func getCurrentWeatherURL(_ api: API) -> String {
+  static let shared = aowm()
+  
+  private init() { }
+  
+  func getCurrentWeatherURL(_ api: API) -> String {
     var url = ""
     if !api.urlBase.isEmpty && !api.apiKey.isEmpty {
       url = api.urlBase + "/weather" + "?appid=" + api.apiKey + "&lat=33.4805859&lon=-111.7018452" + "&units=metric"
