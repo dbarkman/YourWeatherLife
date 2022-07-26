@@ -32,5 +32,6 @@ struct HourForecast: Hashable {
   var timeFull = ""
   var date = ""
   var displayDate = ""
+  var shortDisplayDate = ""
   var dayOfWeek = ""
 }

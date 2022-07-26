@@ -47,13 +47,13 @@ struct EventDetail: View {
       BackgroundColor()
       List(event.forecastHours, id: \.self) { hour in
         Section(header: Text(hour.timeFull)) {
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour, navigationTitle: hour.timeFull)) {
             Text("\(hour.temperature) and \(hour.condition)")
           }
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour, navigationTitle: hour.timeFull)) {
             Text("Winds \(hour.wind) from the \(hour.windDirection)")
           }
-          NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.timeFull)")) {
+          NavigationLink(destination: HourDetail(hour: hour, navigationTitle: hour.timeFull)) {
             Text("\(hour.humidity)% humidity, \(hour.rainChance)% chance of rain")
           }
         }

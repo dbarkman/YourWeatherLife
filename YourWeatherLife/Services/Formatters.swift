@@ -31,11 +31,12 @@ struct Formatters {
     return formatter.string(from: measurement)
   }
   
-  func format(length: Double, from unit: UnitLength) -> String {
+  func format(length: Double, from unit: UnitLength, natural: Bool = false) -> String {
     let formatter = MeasurementFormatter()
     formatter.unitStyle = .medium
     formatter.numberFormatter.roundingMode = .halfUp
     formatter.numberFormatter.maximumFractionDigits = 0
+    if natural { formatter.unitOptions = .naturalScale }
     let measurement = Measurement(value: length, unit: unit)
     return formatter.string(from: measurement)
   }

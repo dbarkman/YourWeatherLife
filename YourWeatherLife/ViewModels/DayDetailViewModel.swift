@@ -21,7 +21,7 @@ class DayDetailViewModel: ObservableObject {
 
   private init() { }
   
-  @objc func fetchDayDetail(dates: [String]) {
+  func fetchDayDetail(dates: [String], isToday: Bool = false) {
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     var predicate = ""
     for date in dates {
@@ -40,7 +40,7 @@ class DayDetailViewModel: ObservableObject {
     }
     var todayArray = [Today]()
     for day in forecastDays {
-      let thisDayResult = TodaySummaryViewModel.shared.configureDay(todayForecast: day)
+      let thisDayResult = TodaySummaryViewModel.shared.configureDay(todayForecast: day, isToday: isToday)
       var today = thisDayResult.0
       var hours = [HourForecast]()
       for hour in thisDayResult.1 {
@@ -64,7 +64,7 @@ class DayDetailViewModel: ObservableObject {
     hourForecast.dewPoint = Formatters.shared.format(temp: hour.dewpoint_c, from: .celsius)
     hourForecast.willItRain = hour.will_it_rain == 1 ? true : false
     hourForecast.rainChance = "\(hour.chance_of_rain)"
-    hourForecast.precipAmount = Formatters.shared.format(length: hour.precip_mm, from: .millimeters)
+    hourForecast.precipAmount = Formatters.shared.format(length: hour.precip_mm, from: .millimeters, natural: true)
     hourForecast.willItSnow = hour.will_it_snow == 1 ? true : false
     hourForecast.snowChance = "\(hour.chance_of_snow)"
     hourForecast.wind = Formatters.shared.format(speed: hour.wind_kph, from: .kilometersPerHour)
@@ -76,11 +76,12 @@ class DayDetailViewModel: ObservableObject {
     hourForecast.condition = "\(hour.condition_text ?? "")"
     hourForecast.conditionIcon = "\(hour.condition_icon ?? "")"
     hourForecast.time = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
-    hourForecast.timeFull = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
+    hourForecast.timeFull = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", short: true)
     hourForecast.date = "\(hour.date ?? "")"
     if let dateTime = hour.dateTime {
       let hourDate = Dates.shared.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
-      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE, M/d, h a")
+      hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
       hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
     }
 //    if let time = hour.time {

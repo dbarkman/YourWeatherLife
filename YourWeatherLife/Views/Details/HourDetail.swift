@@ -15,46 +15,97 @@ struct HourDetail: View {
   
   @State private var showFeedback = false
   @State var hour = HourForecast()
+  
+  var navigationTitle: String
 
   var body: some View {
     ZStack {
       BackgroundColor()
       List {
         Group {
-          Text("Temp: \(hour.temperature)")
-          Text("Feels like: \(hour.feelsLike)")
-          Text("Humidity: \(hour.humidity)%")
-          Text("Dewpoint: \(hour.dewPoint)")
+          HStack {
+            Text("Temperature:")
+              .fontWeight(.semibold)
+            Text("\(hour.temperature)")
+          }
+          HStack {
+            Text("Feels like:")
+              .fontWeight(.semibold)
+            Text("\(hour.feelsLike)")
+          }
+          HStack {
+            Text("Humidity:")
+              .fontWeight(.semibold)
+            Text("\(hour.humidity)%")
+          }
+          HStack {
+            Text("Dewpoint:")
+              .fontWeight(.semibold)
+            Text("\(hour.dewPoint)")
+          }
           if hour.willItRain {
-            Text("Chance of rain: \(hour.rainChance)")
-            Text("Expectd Rain Amount: \(hour.precipAmount)")
+            HStack {
+              Text("Chance of rain:")
+                .fontWeight(.semibold)
+              Text("\(hour.rainChance)%")
+            }
+            HStack {
+              Text("Expectd Rain Amount:")
+                .fontWeight(.semibold)
+              Text("\(hour.precipAmount)")
+            }
           }
           if hour.willItSnow {
-            Text("Chance of snow: \(hour.snowChance)")
-            Text("Expected Snow Amount: \(hour.precipAmount)")
+            HStack {
+              Text("Chance of snow:")
+                .fontWeight(.semibold)
+              Text("\(hour.snowChance)%")
+            }
+            HStack {
+              Text("Expectd Snow Amount:")
+                .fontWeight(.semibold)
+              Text("\(hour.precipAmount)")
+            }
           }
         }
         .listRowBackground(Color("ListBackground"))
         Group {
-          Text("Winds: \(hour.wind)")
-          Text("Gusting to: \(hour.windGust)")
-          Text("From the: \(hour.windDirection)")
-          Text("Pressure: \(hour.pressure)")
-          Text("Visibility: \(hour.visibility)")
-          Text("UV Index: \(hour.uv)")
+          HStack {
+            Text("Winds:")
+              .fontWeight(.semibold)
+            Text("\(hour.wind)")
+          }
+          HStack {
+            Text("Gusting to:")
+              .fontWeight(.semibold)
+            Text("\(hour.windGust)")
+          }
+          HStack {
+            Text("From the:")
+              .fontWeight(.semibold)
+            Text("\(hour.windDirection)")
+          }
+          HStack {
+            Text("Pressure:")
+              .fontWeight(.semibold)
+            Text("\(hour.pressure)")
+          }
+          HStack {
+            Text("Visibility:")
+              .fontWeight(.semibold)
+            Text("\(hour.visibility)")
+          }
+          HStack {
+            Text("UV Index:")
+              .fontWeight(.semibold)
+            Text("\(hour.uv)")
+          }
         }
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
     } //end of ZStack
-    .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
-      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-      Mixpanel.mainInstance().track(event: "HourDetail View")
-    }
+    .navigationTitle(navigationTitle)
     .toolbar {
       ToolbarItem {
         Button(action: {
@@ -67,13 +118,21 @@ struct HourDetail: View {
         }
       }
     }
+    .onAppear() {
+      let appearance = UINavigationBarAppearance()
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      UINavigationBar.appearance().standardAppearance = appearance
+      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "HourDetail View")
+    }
   }
 }
 
 struct HourDetail_Previews: PreviewProvider {
   static var previews: some View {
     NavigationView {
-      HourDetail()
+      HourDetail(navigationTitle: "Hour")
     }
     .accentColor(Color("AccentColor"))
   }

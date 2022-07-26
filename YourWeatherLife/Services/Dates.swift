@@ -139,12 +139,16 @@ struct Dates {
     return (nextStart, isToday)
   }
 
-  func makeDisplayTimeFromTime(time: String, format: String, full: Bool = false) -> String {
+  func makeDisplayTimeFromTime(time: String, format: String, full: Bool = false, short: Bool = false) -> String {
     let date = Date()
     let timeDate = makeDateFromTime(time: time, date: date, format: format)
     let formatter = DateFormatter()
     if full {
       formatter.dateFormat = "h:mm a"
+      return String(formatter.string(from: timeDate))
+    }
+    if short {
+      formatter.dateFormat = "h a"
       return String(formatter.string(from: timeDate))
     }
     formatter.dateFormat = "h:mma"

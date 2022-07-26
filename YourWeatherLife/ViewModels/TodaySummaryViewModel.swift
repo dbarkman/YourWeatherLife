@@ -45,7 +45,7 @@ class TodaySummaryViewModel: ObservableObject {
     }
   }
   
-  func configureDay(todayForecast: TGWForecastDay) -> (Today, [TGWForecastHour]) {
+  func configureDay(todayForecast: TGWForecastDay, isToday: Bool = false) -> (Today, [TGWForecastHour]) {
     let dayDate = (todayForecast.date ?? "") + " 00:00"
     let dayOfWeekDate = Dates.shared.makeDateFromString(date: dayDate, format: "yyyy-MM-dd HH:mm")
     var precipitation = false
@@ -121,8 +121,8 @@ class TodaySummaryViewModel: ObservableObject {
     today.sunsetTemp = Formatters.shared.format(temp: sunsetTemp, from: .celsius)
     today.sunriseTime = Dates.shared.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa")
     today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
-    today.dayOfWeek = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEE")
-    today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEE, MM/dd")
+    today.dayOfWeek = isToday ? "Today" : Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE")
+    today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE, MMMM d")
     today.humidity = String(todayForecast.avghumidity)
     today.averageTemp = String(Formatters.shared.format(temp: todayForecast.avgtemp_c, from: .celsius))
     today.visibility = String(Formatters.shared.format(length: todayForecast.avgvis_km, from: .kilometers))
@@ -131,9 +131,9 @@ class TodaySummaryViewModel: ObservableObject {
     today.wind = String(Formatters.shared.format(speed: todayForecast.maxwind_kph, from: .kilometersPerHour))
     today.moonIllumination = todayForecast.moon_illumination ?? ""
     today.moonPhase = todayForecast.moon_phase ?? ""
-    today.moonRiseTime = todayForecast.moonrise ?? ""
-    today.moonSetTime = todayForecast.moonset ?? ""
-    today.uv = String(todayForecast.uv)
+    today.moonRiseTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonrise ?? "00:00", format: "hh:mm aa")
+    today.moonSetTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonset ?? "00:00", format: "hh:mm aa")
+    today.uv = String(Int(todayForecast.uv))
     today.date = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "yyyy-MM-dd")
     return (today, forecastHours)
   }

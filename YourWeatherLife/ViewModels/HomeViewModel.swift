@@ -189,14 +189,13 @@ class HomeViewModel: ObservableObject {
   }
   
   func create336HourForecast() {
-    let dateTimeFormatter = DateFormatter()
-    dateTimeFormatter.dateFormat = "yyyy-MM-dd"
-    let today = dateTimeFormatter.string(from: Date())
+    let priorHour = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
+    let today = Dates.shared.makeStringFromDate(date: priorHour, format: "yyyy-MM-dd HH:mm")
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastHour>
     fetchRequest = TGWForecastHour.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date >= %@ AND location = %@", today, location)
+    fetchRequest.predicate = NSPredicate(format: "dateTime >= %@ AND location = %@", today, location)
     do {
       let forecastHour = try viewContext.fetch(fetchRequest)
       var hours = [HourForecast]()

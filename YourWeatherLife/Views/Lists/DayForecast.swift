@@ -17,29 +17,17 @@ struct DayForecast: View {
   @StateObject private var homeViewModel = HomeViewModel.shared
   
   @State private var showFeedback = false
-
+  
   var body: some View {
     ZStack {
       BackgroundColor()
       List(homeViewModel.forecastDays, id: \.self) { day in
-        NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast").navigationTitle("\(day.displayDate)")) {
-          HStack {
-            Text("\(day.displayDate)")
-              .minimumScaleFactor(0.1)
-              .lineLimit(1)
-            Spacer()
-            AsyncImage(url: URL(string: "https:\(day.conditionIcon)")) { image in
-              image.resizable()
-            } placeholder: {
-              Image("day/113")
-            }
-            .frame(width: 45, height: 45)
-            Text("\(day.condition)")
-              .minimumScaleFactor(0.1)
-            Spacer()
-            Text(" \(day.warmestTemp)/\(day.coldestTemp)")
-          }
-        }
+        ZStack {
+          NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast", navigationTitle: "\(day.displayDate)")) { }
+            .opacity(0)
+          ForecastListItem(displayDate: day.displayDate, warmestTemp: day.warmestTemp, coldestTemp: day.coldestTemp, condition: day.condition, conditionIcon: day.conditionIcon)
+        } //end of ZStack
+        .listRowSeparator(.hidden)
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
@@ -70,8 +58,8 @@ struct DayForecast: View {
   }
 }
 
-//struct DayForecast_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DayForecast()
-//    }
-//}
+struct DayForecast_Previews: PreviewProvider {
+  static var previews: some View {
+    DayForecast()
+  }
+}

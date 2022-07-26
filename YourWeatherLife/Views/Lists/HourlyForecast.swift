@@ -19,18 +19,12 @@ struct HourlyForecast: View {
     ZStack {
       BackgroundColor()
       List(homeViewModel.forecastHours, id: \.self) { hour in
-        NavigationLink(destination: HourDetail(hour: hour).navigationTitle("\(hour.displayDate)")) {
-          HStack {
-            Text("\(hour.displayDate)")
-            AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
-              image.resizable()
-            } placeholder: {
-              Image("day/113")
-            }
-            .frame(width: 45, height: 45)
-            Text("\(hour.temperature) \(hour.condition)")
-          }
-        }
+        ZStack {
+          NavigationLink(destination: HourDetail(hour: hour, navigationTitle: hour.shortDisplayDate)) { }
+            .opacity(0)
+          ForecastListItem(displayDate: hour.displayDate, warmestTemp: hour.temperature, coldestTemp: hour.feelsLike, condition: hour.condition, conditionIcon: hour.conditionIcon, isHour: true)
+        } //end of ZStack
+        .listRowSeparator(.hidden)
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
@@ -56,7 +50,7 @@ struct HourlyForecast: View {
           }
         }
       }
-      .navigationTitle("336 Hour Forecast")
+      .navigationTitle("300+ Hour Forecast")
     }
   }
 }

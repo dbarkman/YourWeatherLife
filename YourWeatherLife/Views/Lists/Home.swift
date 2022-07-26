@@ -230,7 +230,7 @@ struct Home: View {
               .listRowBackground(Color.clear)
 
               ZStack(alignment: .leading) {
-                NavigationLink(destination: DayDetail(dates: [globalViewModel.today]).navigationTitle("Today")) { }
+                NavigationLink(destination: DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")) { }
                   .opacity(0)
                 EventListToday()
               }
@@ -238,7 +238,7 @@ struct Home: View {
               .listRowBackground(Color.clear)
               
               ZStack(alignment: .leading) {
-                NavigationLink(destination: DayDetail(dates: globalViewModel.weekend).navigationTitle("Weekend")) { }
+                NavigationLink(destination: DayDetail(dates: globalViewModel.weekend, parent: "Home", navigationTitle: "This Weekend")) { }
                   .opacity(0)
                 EventListWeekend()
               }
@@ -275,7 +275,7 @@ struct Home: View {
                   .opacity(0)
                 VStack(alignment: .leading) {
                   HStack {
-                    Text("336 Hour Forecast")
+                    Text("300+ Hour Forecast")
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)

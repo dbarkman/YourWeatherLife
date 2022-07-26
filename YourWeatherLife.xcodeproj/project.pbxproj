@@ -12,6 +12,7 @@
 		6327909A2884F9EF00E551CA /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790992884F9EF00E551CA /* CloudKitManager.swift */; };
 		6327909D2886361300E551CA /* Days.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6327909C2886361300E551CA /* Days.swift */; };
 		632790A3288906F800E551CA /* UpdateLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632790A2288906F800E551CA /* UpdateLocation.swift */; };
+		63425DA32890570A00430B43 /* ForecastListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63425DA22890570A00430B43 /* ForecastListItem.swift */; };
 		63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */; };
 		63481AC2286A075600478C11 /* Current.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC1286A075600478C11 /* Current.swift */; };
 		63481AC4286AC2B100478C11 /* TGW_ForecastProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */; };
@@ -107,6 +108,7 @@
 		6327909C2886361300E551CA /* Days.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Days.swift; sourceTree = "<group>"; };
 		632790A2288906F800E551CA /* UpdateLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocation.swift; sourceTree = "<group>"; };
 		632790A9288BE01F00E551CA /* YourWeatherLife 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLife 2.xcdatamodel"; sourceTree = "<group>"; };
+		63425DA22890570A00430B43 /* ForecastListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastListItem.swift; sourceTree = "<group>"; };
 		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
 		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGW_ForecastProvider.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				634BCC6C2860EE500062E105 /* EventListItem.swift */,
 				634BCC6A2860EE500062E105 /* EventListToday.swift */,
 				634BCC6D2860EE500062E105 /* EventListWeekend.swift */,
+				63425DA22890570A00430B43 /* ForecastListItem.swift */,
 			);
 			path = ListItems;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */,
 				634BCC07286028A70062E105 /* LocalPersistenceController.swift in Sources */,
 				63481B0B2876AA6300478C11 /* HourlyForecast.swift in Sources */,
+				63425DA32890570A00430B43 /* ForecastListItem.swift in Sources */,
 				63481ACB286CC1C400478C11 /* GetAllData.swift in Sources */,
 				634BCC662860EE440062E105 /* EventDetail.swift in Sources */,
 				634BCC442860ED010062E105 /* APIsProvider.swift in Sources */,
