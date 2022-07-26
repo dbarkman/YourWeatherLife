@@ -27,6 +27,7 @@ struct Home: View {
 
   @State private var showFeedback = false
   @State private var showUpdateLocation = false
+  @State private var refreshLocation = false
   
   var body: some View {
     
@@ -114,6 +115,10 @@ struct Home: View {
                       Image(systemName: "arrow.triangle.2.circlepath")
                         .symbolRenderingMode(.monochrome)
                         .foregroundColor(Color("AccentColor"))
+                        .onTapGesture {
+                          refreshLocation = true
+                          showUpdateLocation = true
+                        }
                     }
                   } //end of HStack
                   .onTapGesture {
@@ -295,7 +300,7 @@ struct Home: View {
               VStack(alignment: .leading) {
                 Divider()
                   .background(.black)
-                Text("Fictional Events from Your Calendar")
+                Text("Fictional Events from Your Calendar, Coming Next!")
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
@@ -361,7 +366,7 @@ struct Home: View {
         FeedbackModal()
       }
       .sheet(isPresented: $showUpdateLocation) {
-        UpdateLocation()
+        UpdateLocation(refreshLocation: refreshLocation)
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")

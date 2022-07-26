@@ -24,6 +24,8 @@ struct UpdateLocation: View {
   @State private var latitude = ""
   @State private var longitude = ""
   @State private var updateLocationResult = ""
+  
+  @State var refreshLocation = false
 
   var body: some View {
     NavigationView {
@@ -108,7 +110,7 @@ struct UpdateLocation: View {
                     updateLocation()
                   }
                 }
-              if location == 0 {
+              if location == 0 && refreshLocation {
                 Spacer()
                 Text("Refresh Location")
                   .font(.title2)
