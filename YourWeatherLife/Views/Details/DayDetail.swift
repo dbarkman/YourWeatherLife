@@ -18,6 +18,8 @@ struct DayDetail: View {
   
   @State private var showFeedback = false
   @State var dates = [Dates.shared.makeStringFromDate(date: Date(), format: "yyyy-MM-dd")]
+  
+  var parent = "Home"
 
   var body: some View {
     ZStack {
@@ -42,7 +44,7 @@ struct DayDetail: View {
                   AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
                     image.resizable()
                   } placeholder: {
-                    Image("day/113")
+                    Image("night/113")
                   }
                   .frame(width: 45, height: 45)
                   Text("\(hour.temperature) \(hour.condition)")
@@ -55,16 +57,6 @@ struct DayDetail: View {
       } //end of List
       .listStyle(.plain)
     } //end of ZStack
-    .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
-      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-      Mixpanel.mainInstance().track(event: "DayDetail View")
-      globalViewModel.returningFromChildView = true
-      dayDetail.fetchDayDetail(dates: dates)
-    }
     .toolbar {
       ToolbarItem {
         Button(action: {
@@ -76,6 +68,21 @@ struct DayDetail: View {
           FeedbackModal()
         }
       }
+    }
+    .onAppear() {
+      let appearance = UINavigationBarAppearance()
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      UINavigationBar.appearance().standardAppearance = appearance
+      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "DayDetail View")
+      
+      logger.debug("dates: \(dates)")
+      
+      if parent == "Home" {
+        globalViewModel.returningFromChildView = true
+      }
+      dayDetail.fetchDayDetail(dates: dates)
     }
   }
 }

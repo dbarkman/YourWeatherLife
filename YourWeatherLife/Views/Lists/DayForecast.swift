@@ -22,7 +22,7 @@ struct DayForecast: View {
     ZStack {
       BackgroundColor()
       List(homeViewModel.forecastDays, id: \.self) { day in
-        NavigationLink(destination: DayDetail(dates: [day.date]).navigationTitle("\(day.displayDate)")) {
+        NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast").navigationTitle("\(day.displayDate)")) {
           HStack {
             Text("\(day.displayDate)")
               .minimumScaleFactor(0.1)
