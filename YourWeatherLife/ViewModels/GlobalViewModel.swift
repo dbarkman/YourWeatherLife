@@ -19,7 +19,6 @@ class GlobalViewModel: ObservableObject {
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
-  @Published var isShowingDailyEvents = false
   @Published var returningFromChildView = false
   @Published var today = Dates.shared.getTodayDateString(format: "yyyy-MM-dd")
   @Published var weekend = Dates.shared.getThisWeekendDateStrings(format: "yyyy-MM-dd")
@@ -54,44 +53,12 @@ class GlobalViewModel: ObservableObject {
     }
   }
   
-  func countEverything() {
-    let fetchRequest1: NSFetchRequest<DailyEvent>
-    fetchRequest1 = DailyEvent.fetchRequest()
-    fetchRequest1.predicate = NSPredicate(value: true)
-    do {
-      let events = try viewCloudContext.fetch(fetchRequest1)
-      logger.debug("Event count: \(events.count)")
-    } catch {
-      logger.debug("Couldn't get event count.")
-    }
-
-    let fetchRequest2: NSFetchRequest<TGWForecastDay>
-    fetchRequest2 = TGWForecastDay.fetchRequest()
-    fetchRequest2.predicate = NSPredicate(value: true)
-    do {
-      let days = try viewContext.fetch(fetchRequest2)
-      logger.debug("Forecast Day count: \(days.count)")
-    } catch {
-      logger.debug("Couldn't get days count.")
-    }
-
-    let fetchRequest3: NSFetchRequest<TGWForecastHour>
-    fetchRequest3 = TGWForecastHour.fetchRequest()
-    fetchRequest3.predicate = NSPredicate(value: true)
-    do {
-      let hours = try viewContext.fetch(fetchRequest3)
-      logger.debug("Forecast Hour count: \(hours.count)")
-    } catch {
-      logger.debug("Couldn't get hours count.")
-    }
-  }
-  
   func checkInternetConnection(closure: @escaping (Bool) -> Void) {
     if let url = URL(string: "https://weather.solutions/test.html") {
       var request = URLRequest(url: url)
       request.httpMethod = "HEAD"
       request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-      request.timeoutInterval = 2
+      request.timeoutInterval = 3
       let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
         closure(error == nil)
       })
@@ -101,10 +68,19 @@ class GlobalViewModel: ObservableObject {
     }
   }
   
-  //MARK: EditEventPencil
+  func fetchAppVersionNumber() -> String {
+    var appVersion = ""
+    if let buildNumber = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+      appVersion = buildNumber
+    }
+    return appVersion
+  }
   
-  func showDailyEvents() {
-    Mixpanel.mainInstance().track(event: "Showing DailyEvents")
-    isShowingDailyEvents.toggle()
+  func fetchBuildNumber() -> String {
+    var buildNum = ""
+    if let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+      buildNum = buildNumber
+    }
+    return buildNum
   }
 }

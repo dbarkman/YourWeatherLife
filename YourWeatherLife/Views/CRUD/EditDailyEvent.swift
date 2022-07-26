@@ -25,9 +25,11 @@ struct EditDailyEvent: View {
   @State var eventName = ""
   @State var startTimeDate = Dates.shared.roundTimeUp(date: Date())
   @State var endTimeDate = Dates.shared.roundTimeUp(date: Date())
-  @State var daysSelected = [0]
+  @State var daysSelected = [1,2,3,4,5,6,7]
   
   var oldEventName = ""
+  
+  @Binding var returningFromModal: Bool
   
   var body: some View {
     ZStack {
@@ -136,16 +138,18 @@ struct EditDailyEvent: View {
   func saveEvent() {
     eventViewModel.saveEvent(eventName: eventName, startTimeDate: startTimeDate, endTimeDate: endTimeDate, oldEventName: oldEventName, addEvent: addEvent, closure: { success in
       if success {
+        returningFromModal = true
         presentationMode.wrappedValue.dismiss()
       }
     })
   }
 }
 
-struct EditDailyEvent_Previews: PreviewProvider {
-  static var previews: some View {
-    NavigationView {
-      EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
-    }
-  }
-}
+//struct EditDailyEvent_Previews: PreviewProvider {
+//  static var previews: some View {
+//    NavigationView {
+//      EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
+//    }
+//    .accentColor(Color("AccentColor"))
+//  }
+//}

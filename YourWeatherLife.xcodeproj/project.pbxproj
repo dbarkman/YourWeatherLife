@@ -57,7 +57,6 @@
 		634BCC4B2860ED220062E105 /* YWLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC472860ED220062E105 /* YWLError.swift */; };
 		634BCC4C2860ED220062E105 /* HourDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC482860ED220062E105 /* HourDetails.swift */; };
 		634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC5C2860EE2C0062E105 /* BackgroundColor.swift */; };
-		634BCC5F2860EE2C0062E105 /* EditEventPencil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC5D2860EE2C0062E105 /* EditEventPencil.swift */; };
 		634BCC612860EE380062E105 /* EditDailyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC602860EE380062E105 /* EditDailyEvent.swift */; };
 		634BCC662860EE440062E105 /* EventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC622860EE440062E105 /* EventDetail.swift */; };
 		634BCC672860EE440062E105 /* HourDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC632860EE440062E105 /* HourDetail.swift */; };
@@ -107,6 +106,7 @@
 		6327909B2886310F00E551CA /* YourWeatherLifeiCloud 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 2.xcdatamodel"; sourceTree = "<group>"; };
 		6327909C2886361300E551CA /* Days.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Days.swift; sourceTree = "<group>"; };
 		632790A2288906F800E551CA /* UpdateLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLocation.swift; sourceTree = "<group>"; };
+		632790A9288BE01F00E551CA /* YourWeatherLife 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLife 2.xcdatamodel"; sourceTree = "<group>"; };
 		63481ABD2868C4DB00478C11 /* AOWM_Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_Icon.swift; sourceTree = "<group>"; };
 		63481AC1286A075600478C11 /* Current.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Current.swift; sourceTree = "<group>"; };
 		63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TGW_ForecastProvider.swift; sourceTree = "<group>"; };
@@ -157,7 +157,6 @@
 		634BCC472860ED220062E105 /* YWLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YWLError.swift; sourceTree = "<group>"; };
 		634BCC482860ED220062E105 /* HourDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourDetails.swift; sourceTree = "<group>"; };
 		634BCC5C2860EE2C0062E105 /* BackgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundColor.swift; sourceTree = "<group>"; };
-		634BCC5D2860EE2C0062E105 /* EditEventPencil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEventPencil.swift; sourceTree = "<group>"; };
 		634BCC602860EE380062E105 /* EditDailyEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDailyEvent.swift; sourceTree = "<group>"; };
 		634BCC622860EE440062E105 /* EventDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetail.swift; sourceTree = "<group>"; };
 		634BCC632860EE440062E105 /* HourDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourDetail.swift; sourceTree = "<group>"; };
@@ -405,7 +404,6 @@
 			isa = PBXGroup;
 			children = (
 				634BCC5C2860EE2C0062E105 /* BackgroundColor.swift */,
-				634BCC5D2860EE2C0062E105 /* EditEventPencil.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -622,7 +620,6 @@
 				634BCC07286028A70062E105 /* LocalPersistenceController.swift in Sources */,
 				63481B0B2876AA6300478C11 /* HourlyForecast.swift in Sources */,
 				63481ACB286CC1C400478C11 /* GetAllData.swift in Sources */,
-				634BCC5F2860EE2C0062E105 /* EditEventPencil.swift in Sources */,
 				634BCC662860EE440062E105 /* EventDetail.swift in Sources */,
 				634BCC442860ED010062E105 /* APIsProvider.swift in Sources */,
 				63481ACF2870223500478C11 /* Dates.swift in Sources */,
@@ -829,7 +826,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022071102;
+				CURRENT_PROJECT_VERSION = 2022072301;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
@@ -865,7 +862,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2022071102;
+				CURRENT_PROJECT_VERSION = 2022072301;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
@@ -1034,9 +1031,10 @@
 		634BCC08286028A70062E105 /* YourWeatherLife.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				632790A9288BE01F00E551CA /* YourWeatherLife 2.xcdatamodel */,
 				634BCC09286028A70062E105 /* YourWeatherLife.xcdatamodel */,
 			);
-			currentVersion = 634BCC09286028A70062E105 /* YourWeatherLife.xcdatamodel */;
+			currentVersion = 632790A9288BE01F00E551CA /* YourWeatherLife 2.xcdatamodel */;
 			path = YourWeatherLife.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

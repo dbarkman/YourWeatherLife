@@ -32,6 +32,7 @@ struct TGW_ForecastDecoder: Decodable {
       let fd = day.day
       let fdc = fd.condition
       let fa = day.astro
+      day.location = tgw_location.name
       day.maxtemp_c = fd.maxtemp_c
       day.maxtemp_f = fd.maxtemp_f
       day.mintemp_c = fd.mintemp_c
@@ -63,6 +64,7 @@ struct TGW_ForecastDecoder: Decodable {
       let hours = day.hour
       for var hour in hours {
         let fhc = hour.condition
+        hour.location = tgw_location.name
         hour.dateTime = hour.time
         hour.date = hour.time.components(separatedBy: " ").first
         hour.time = (hour.dateTime?.components(separatedBy: " ").last)!
@@ -80,6 +82,7 @@ struct TGW_Forecast: Decodable, Hashable {
 }
 
 struct TGW_ForecastDays: Decodable, Hashable {
+  var location: String?
   var date: String
   var date_epoch: Double
   var day: TGW_Day
@@ -115,6 +118,7 @@ struct TGW_ForecastDays: Decodable, Hashable {
   
   var dictionaryValue: [String: Any] {
     [
+      "location": location!,
       "date": date,
       "date_epoch": date_epoch,
       "maxtemp_c": maxtemp_c!,
@@ -180,6 +184,7 @@ struct TGW_Astro: Decodable, Hashable {
 }
 
 struct TGW_ForecastHours: Decodable, Hashable {
+  var location: String?
   var time_epoch: Double
   var dateTime: String?
   var date: String?
@@ -221,6 +226,7 @@ struct TGW_ForecastHours: Decodable, Hashable {
   
   var dictionaryValue: [String: Any] {
     [
+      "location": location!,
       "time_epoch": time_epoch,
       "dateTime": dateTime!,
       "date": date!,

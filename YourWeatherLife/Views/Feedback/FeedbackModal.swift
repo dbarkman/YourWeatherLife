@@ -14,55 +14,72 @@ struct FeedbackModal: View {
   
   @State private var email = ""
   @State private var feedback = ""
+  @State private var showVersion = false
+  @State private var currentVersion = ""
 
   var body: some View {
     NavigationView {
       ZStack {
         BackgroundColor()
         List {
-          VStack(alignment: .leading) {
-            Text("Thank you so much for taking the time to test this app, I'm David the developer and I really appreciate your help! Please use the form below to ask a question, give feedback, request a feature, ask for help or report a bug.")
-          }
-          .listRowBackground(Color("ListBackground"))
-          VStack(alignment: .leading) {
-            Text("Only include your email if you'd like a reply.")
-            Text("Email:")
-            TextField("optional", text: $email)
-              .textFieldStyle(RoundedBorderTextFieldStyle())
-              .keyboardType(.emailAddress)
-              .disableAutocorrection(true)
-              .autocapitalization(.none)
-              .cornerRadius(5)
-              .background(RoundedRectangle(cornerRadius: 50).fill(Color.red))
-              .environment(\.colorScheme, .light)
-          }
-          .listRowBackground(Color("ListBackground"))
-          VStack(alignment: .leading) {
-            Text("Comment, Question, Request or Bug Report:")
-            TextEditor(text: $feedback)
-              .disabled(feedback.count >= (256))
-              .background(.gray)
-              .cornerRadius(5)
-              .environment(\.colorScheme, .light)
-            Text("\(feedback.count) of 256")
-              .font(.caption2)
-          }
-          .listRowBackground(Color("ListBackground"))
-          VStack(alignment: .leading) {
-            Text("If you would like to forward a screenshot from the app or send any other information, you can email them to support@dbarkman.com.")
-          }
-          .listRowBackground(Color("ListBackground"))
-          VStack(alignment: .leading) {
-            Text("Any information you provide here will only be used to support the development of this app. Provided information will never be sold or given to a third party.")
-              .font(.footnote)
-          }
-          .listRowBackground(Color("ListBackground"))
-          VStack(alignment: .leading) {
-            Button("Send", action: {
-              sendFeedback()
-            })
-            .buttonStyle(BorderlessButtonStyle())
-          }
+          Section() {
+            VStack(alignment: .leading) {
+              Text("Thank you so much for taking the time to test this app, I'm David the developer and I really appreciate your help! Please use the form below to ask a question, give feedback, request a feature, ask for help or report a bug.")
+            }
+            VStack(alignment: .leading) {
+              Text("Only include your email if you'd like a reply.")
+              Text("Email:")
+              TextField("optional", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.emailAddress)
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
+                .cornerRadius(5)
+                .background(RoundedRectangle(cornerRadius: 50).fill(Color.red))
+                .environment(\.colorScheme, .light)
+            }
+            VStack(alignment: .leading) {
+              Text("Comment, Question, Request or Bug Report:")
+              TextEditor(text: $feedback)
+                .disabled(feedback.count >= (256))
+                .background(.gray)
+                .cornerRadius(5)
+                .environment(\.colorScheme, .light)
+              Text("\(feedback.count) of 256")
+                .font(.caption2)
+            }
+            VStack(alignment: .leading) {
+              Text("If you would like to forward a screenshot from the app or send any other information, you can email them to support@yourweather.life.")
+            }
+            VStack(alignment: .leading) {
+              Text("Any information you provide here will only be used to support the development of this app. Provided information will never be sold or given to a third party.")
+                .font(.footnote)
+            }
+            VStack(alignment: .leading) {
+              HStack {
+                Text("Send")
+                  .font(.title2)
+                  .foregroundColor(Color("AccentColor"))
+                  .onTapGesture {
+                    withAnimation() {
+                      sendFeedback()
+                    }
+                }
+                Spacer()
+                Text("ver")
+                  .font(.title2)
+                  .foregroundColor(Color("ListBackground"))
+                  .onTapGesture {
+                    withAnimation() {
+                      showVersion.toggle()
+                    }
+                  }
+              }
+            }
+            if showVersion {
+              Text(currentVersion)
+            }
+          } //end of Section
           .listRowBackground(Color("ListBackground"))
         } //end of list
         .listStyle(.plain)
@@ -73,6 +90,9 @@ struct FeedbackModal: View {
           UINavigationBar.appearance().scrollEdgeAppearance = appearance
           UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
           Mixpanel.mainInstance().track(event: "Feedback View")
+          let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
+          let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
+          currentVersion = "\(appVersion)-\(buildNumber)"
         }
         .toolbar {
           ToolbarItem(placement: .navigationBarTrailing) {
@@ -86,12 +106,14 @@ struct FeedbackModal: View {
         .navigationTitle("Developer Feedback")
       }
     }
+    .accentColor(Color("AccentColor"))
   }
   
   private func sendFeedback() {
     Mixpanel.mainInstance().track(event: "Feedback", properties: [
       "email": email,
-      "feedback": feedback
+      "feedback": feedback,
+      "currentVersion": currentVersion
     ])
     presentationMode.wrappedValue.dismiss()
   }

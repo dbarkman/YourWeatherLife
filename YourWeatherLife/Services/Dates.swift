@@ -129,6 +129,16 @@ struct Dates {
     return timeArray
   }
 
+  func getEventDateTimeAndIsToday(start: String, end: String, date: Date) -> (String, Bool) {
+    let nextStart = getEventHours(start: start, end: end, date: date, startOnly: true)[0]
+    let nextStartDate = makeDateFromTime(time: nextStart, date: date, format: "yyyy-MM-dd HH:mm")
+    var isToday = Calendar.current.isDateInToday(nextStartDate)
+    if !isToday {
+      isToday = Calendar.current.isDateInYesterday(nextStartDate)
+    }
+    return (nextStart, isToday)
+  }
+
   func makeDisplayTimeFromTime(time: String, format: String, full: Bool = false) -> String {
     let date = Date()
     let timeDate = makeDateFromTime(time: time, date: date, format: format)

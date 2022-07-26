@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import Mixpanel
 import OSLog
 
 class HomeViewModel: ObservableObject {
@@ -18,7 +19,8 @@ class HomeViewModel: ObservableObject {
 
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
-  
+
+  @Published var isShowingDailyEvents = false
   @Published var todayEvents = [EventForecast]()
   @Published var todayEventForecastHours = [String: [TGWForecastHour]]()
   @Published var tomorrowEvents = [EventForecast]()
@@ -32,11 +34,8 @@ class HomeViewModel: ObservableObject {
   @Published var showNoLocationAlert = false
 
   private var todayEventsList = [EventForecast]()
-  private var todayEventForecastHoursList = [String: [TGWForecastHour]]()
   private var tomorrowEventsList = [EventForecast]()
-  private var tomorrowEventForecastHoursList = [String: [TGWForecastHour]]()
   private var laterEventsList = [EventForecast]()
-  private var laterEventForecastHoursList = [String: [TGWForecastHour]]()
 
   private init() {
     NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcast), name: .locationUpdatedEvent, object: nil)
@@ -75,24 +74,26 @@ class HomeViewModel: ObservableObject {
     updateEventList()
   }
   private func updateEventList() {
-    viewContext.refreshAllObjects()
-    createUpdateEventList()
+    _ = createUpdateEventList()
   }
 
-  private func createUpdateEventList() {
+  func createUpdateEventList(eventPredicate: String = "") -> EventForecast {
     logger.debug("Creating/updating event list.")
     todayEventsList.removeAll()
     tomorrowEventsList.removeAll()
     laterEventsList.removeAll()
     let fetchRequest: NSFetchRequest<DailyEvent>
     fetchRequest = DailyEvent.fetchRequest()
+    if !eventPredicate.isEmpty {
+      fetchRequest.predicate = NSPredicate(format: "event = %@", eventPredicate)
+    }
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DailyEvent.nextStartDate, ascending: true)]
     var dailyEventList: [DailyEvent] = []
     do {
       dailyEventList = try viewCloudContext.fetch(fetchRequest)
     } catch {
       logger.error("Couldn't fetch DailyEvent. 😭 \(error.localizedDescription)")
-      return
+      return EventForecast()
     }
     for dailyEvent in dailyEventList {
       let eventName = dailyEvent.event ?? ""
@@ -111,16 +112,17 @@ class HomeViewModel: ObservableObject {
         predicate.append("'\(event)',")
       }
       let finalPredicate = predicate.dropLast()
+      let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
       let fetchRequest: NSFetchRequest<TGWForecastHour>
       fetchRequest = TGWForecastHour.fetchRequest()
       fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-      fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)}")
+      fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)} AND location = %@", location)
       var forecastHours: [TGWForecastHour] = []
       do {
         forecastHours = try viewContext.fetch(fetchRequest)
       } catch {
         logger.error("Couldn't fetch TGWForecastHour. 😭 \(error.localizedDescription)")
-        return
+        return EventForecast()
       }
       var hours = [HourForecast]()
       for hour in forecastHours {
@@ -129,16 +131,16 @@ class HomeViewModel: ObservableObject {
       let summary = EventSummaryProvider.shared
       let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
       let event = EventForecast(eventName: eventName, startTime: startTime, endTime: endTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours)
+      if !eventPredicate.isEmpty {
+        return event
+      }
       if !todayEventsList.contains(event) && !tomorrowEventsList.contains(event) {
         if event.when == "Today" { //today
           todayEventsList.append(event)
-          todayEventForecastHoursList[eventName] = forecastHours
         } else if event.when == "Tomorrow" { //tomorrow
           tomorrowEventsList.append(event)
-          tomorrowEventForecastHoursList[eventName] = forecastHours
         } else { //later
           laterEventsList.append(event)
-          laterEventForecastHoursList[eventName] = forecastHours
         }
       }
     }
@@ -152,19 +154,18 @@ class HomeViewModel: ObservableObject {
       self.todayEventForecastHours.removeAll()
       self.tomorrowEventForecastHours.removeAll()
       self.laterEventForecastHours.removeAll()
-      self.todayEventForecastHours = self.todayEventForecastHoursList
-      self.tomorrowEventForecastHours = self.tomorrowEventForecastHoursList
-      self.laterEventForecastHours = self.laterEventForecastHoursList
     }
+    return EventForecast()
   }
   
   func create14DayForecast() {
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = "yyyy-MM-dd"
     let today = dateTimeFormatter.string(from: Date())
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "date >= %@", today)
+    fetchRequest.predicate = NSPredicate(format: "date >= %@ AND location = %@", today, location)
     var forecastDays = [Today]()
     do {
       let forecastDay = try viewContext.fetch(fetchRequest)
@@ -191,10 +192,11 @@ class HomeViewModel: ObservableObject {
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = "yyyy-MM-dd"
     let today = dateTimeFormatter.string(from: Date())
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastHour>
     fetchRequest = TGWForecastHour.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date >= %@", today)
+    fetchRequest.predicate = NSPredicate(format: "date >= %@ AND location = %@", today, location)
     do {
       let forecastHour = try viewContext.fetch(fetchRequest)
       var hours = [HourForecast]()
@@ -207,6 +209,11 @@ class HomeViewModel: ObservableObject {
     } catch {
       logger.error("Couldn't fetch 336 hour forecast. 😭 \(error.localizedDescription)")
     }
+  }
+  
+  func showDailyEvents() {
+    Mixpanel.mainInstance().track(event: "Showing DailyEvents")
+    isShowingDailyEvents.toggle()
   }
   
   func disableiCloudSync() async {

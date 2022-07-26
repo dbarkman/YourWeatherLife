@@ -75,5 +75,6 @@ struct HourDetail_Previews: PreviewProvider {
     NavigationView {
       HourDetail()
     }
+    .accentColor(Color("AccentColor"))
   }
 }

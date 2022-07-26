@@ -14,8 +14,11 @@ struct DailyEvents: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DailyEvents")
   
-  private var viewContext = LocalPersistenceController.shared.container.viewContext
-  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
+//  @Environment(\.managedObjectContext) private var viewContext
+  @Environment(\.managedObjectContext) private var viewCloudContext
+
+//  private var viewContext = LocalPersistenceController.shared.container.viewContext
+//  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
   private var events: FetchedResults<DailyEvent>
@@ -25,6 +28,7 @@ struct DailyEvents: View {
   
   @State private var showFeedback = false
   @State private var showAddEvent = false
+  @State private var returningFromModal = false
   
   var body: some View {
     ZStack {
@@ -35,7 +39,7 @@ struct DailyEvents: View {
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
               let days = individualEvent.days ?? "1234567"
               let daysIntArray = days.compactMap { $0.wholeNumberValue }
-              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.shared.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.shared.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event)) {
+              NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.shared.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.shared.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event, returningFromModal: $returningFromModal)) {
                 HStack {
                   Text(event)
                   Spacer()
@@ -86,8 +90,9 @@ struct DailyEvents: View {
     }
     .sheet(isPresented: $showAddEvent) {
       NavigationView {
-        EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7])
+        EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7], returningFromModal: $returningFromModal)
       }
+      .accentColor(Color("AccentColor"))
     }
   }
 

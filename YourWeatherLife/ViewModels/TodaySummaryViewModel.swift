@@ -27,9 +27,10 @@ class TodaySummaryViewModel: ObservableObject {
     let dateTimeFormatter = DateFormatter()
     dateTimeFormatter.dateFormat = "yyyy-MM-dd"
     let today = dateTimeFormatter.string(from: Date())
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "date = %@", today)
+    fetchRequest.predicate = NSPredicate(format: "date = %@ AND location = %@", today, location)
     do {
       let forecastDay = try viewContext.fetch(fetchRequest)
       if forecastDay.count > 0 {
@@ -77,10 +78,11 @@ class TodaySummaryViewModel: ObservableObject {
     var coldestTime = ""
     var warmestTemps = -999.9
     var warmestTime = ""
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastHour>
     fetchRequest = TGWForecastHour.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date = %@", todayForecast.date ?? "")
+    fetchRequest.predicate = NSPredicate(format: "date = %@ AND location = %@", todayForecast.date ?? "", location)
     var forecastHours: [TGWForecastHour] = []
     do {
       forecastHours = try viewContext.fetch(fetchRequest)

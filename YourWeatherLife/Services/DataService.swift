@@ -54,9 +54,10 @@ struct DataService {
         logger.error("Couldn't fetch DailyEvent. 😭 \(error.localizedDescription)")
       }
       for dailyEvent in dailyEventList {
-        
         let start = dailyEvent.startTime ?? "00:00"
+        let end = dailyEvent.endTime ?? "00:00"
         let now = Date()
+        let today = Calendar.current.component(.weekday, from: now)
         let dayString = dailyEvent.days ?? "123456789" //[2,4,6]
         let days = dayString.compactMap { $0.wholeNumberValue }
         var dates: [Date] = []
@@ -64,6 +65,16 @@ struct DataService {
           var components = DateComponents(weekday: day)
           components.hour = Int(start.prefix(2))
           components.minute = Int(start.suffix(2))
+          let weekday = components.weekday ?? 1
+          if today == weekday {
+            let isToday = Dates.shared.getEventDateTimeAndIsToday(start: start, end: end, date: now)
+            if isToday.1 {
+              dates.removeAll()
+              let todayDate = Dates.shared.makeDateFromString(date: isToday.0, format: "yyyy-MM-dd HH:mm")
+              dates.append(todayDate)
+              break
+            }
+          }
           let nextOccurrence = Calendar.current.nextDate(after: now, matching: components, matchingPolicy: .nextTime) ?? now
           dates.append(nextOccurrence)
         }
@@ -84,7 +95,7 @@ struct DataService {
         let nextStartDate = Dates.shared.makeStringFromDate(date: nextEventDate, format: "yyyy-MM-dd HH:mm")
         dailyEvent.setValue(nextStartDate, forKey: "nextStartDate")
         dailyEvent.setValue(when, forKey: "when")
-
+        
         do {
           try viewCloudContext.save()
         } catch {
@@ -101,8 +112,7 @@ struct DataService {
     do {
       let dailyEvents = try viewCloudContext.fetch(fetchRequest)
       if dailyEvents.isEmpty {
-        let accountStatus = CloudKitManager.shared.accountStatus
-
+        let accountStatus = await CloudKitManager.shared.requestAccountStatus()
         if FileManager.default.ubiquityIdentityToken != nil && accountStatus == .available {
           await checkiCloud()
         } else {

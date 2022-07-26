@@ -15,7 +15,8 @@ struct Home: View {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
   private var viewContext = LocalPersistenceController.shared.container.viewContext
-  
+  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
+
   @Environment(\.scenePhase) var scenePhase
 
   @ObservedObject private var observer = Observer()
@@ -125,7 +126,6 @@ struct Home: View {
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             } //end of Group
-            
             Group {
               if !homeViewModel.todayEvents.isEmpty {
                 VStack(alignment: .leading) {
@@ -138,7 +138,7 @@ struct Home: View {
                     Text("Edit Events")
                       .foregroundColor(Color("AccentColor"))
                       .onTapGesture {
-                        globalViewModel.showDailyEvents()
+                        homeViewModel.showDailyEvents()
                       }
                   }
                 }
@@ -147,7 +147,7 @@ struct Home: View {
               }
               ForEach(homeViewModel.todayEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(event: event)) { }
+                  NavigationLink(destination: EventDetail(eventName: event.eventName)) { }
                     .opacity(0)
                   EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
@@ -165,7 +165,7 @@ struct Home: View {
                     Text("Edit Events")
                       .foregroundColor(Color("AccentColor"))
                       .onTapGesture {
-                        globalViewModel.showDailyEvents()
+                        homeViewModel.showDailyEvents()
                       }
                   }
                 }
@@ -174,7 +174,7 @@ struct Home: View {
               }
               ForEach(homeViewModel.tomorrowEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(event: event)) { }
+                  NavigationLink(destination: EventDetail(eventName: event.eventName)) { }
                     .opacity(0)
                   EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
@@ -192,7 +192,7 @@ struct Home: View {
                     Text("Edit Events")
                       .foregroundColor(Color("AccentColor"))
                       .onTapGesture {
-                        globalViewModel.showDailyEvents()
+                        homeViewModel.showDailyEvents()
                       }
                   }
                 }
@@ -201,7 +201,7 @@ struct Home: View {
               }
               ForEach(homeViewModel.laterEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(event: event)) { }
+                  NavigationLink(destination: EventDetail(eventName: event.eventName)) { }
                     .opacity(0)
                   EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
                 }
@@ -355,7 +355,7 @@ struct Home: View {
         } //end of VStack
         .navigationBarHidden(true)
         
-        NavigationLink(destination: DailyEvents(), isActive: $globalViewModel.isShowingDailyEvents) { }
+        NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext), isActive: $homeViewModel.isShowingDailyEvents) { }
       } //end of ZStack
       .sheet(isPresented: $showFeedback) {
         FeedbackModal()
@@ -365,7 +365,6 @@ struct Home: View {
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
-        globalViewModel.countEverything()
         if globalViewModel.returningFromChildView {
           globalViewModel.returningFromChildView = false
           homeViewModel.awaitUpdateNextStartDate()
@@ -396,6 +395,7 @@ struct Home: View {
         }
       }
     } //end of NavigationView
+    .accentColor(Color("AccentColor"))
   }
 }
 

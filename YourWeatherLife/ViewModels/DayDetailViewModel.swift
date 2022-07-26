@@ -22,6 +22,7 @@ class DayDetailViewModel: ObservableObject {
   private init() { }
   
   @objc func fetchDayDetail(dates: [String]) {
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     var predicate = ""
     for date in dates {
       predicate.append("'\(date)',")
@@ -30,7 +31,7 @@ class DayDetailViewModel: ObservableObject {
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date IN {\(finalPredicate)}")
+    fetchRequest.predicate = NSPredicate(format: "date IN {\(finalPredicate)} AND location = %@", location)
     var forecastDays: [TGWForecastDay] = []
     do {
       forecastDays = try viewContext.fetch(fetchRequest)

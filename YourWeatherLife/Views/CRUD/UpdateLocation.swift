@@ -165,6 +165,7 @@ struct UpdateLocation: View {
         }
       }
     }
+    .accentColor(Color("AccentColor"))
   }
   
   private func updateLocation() {

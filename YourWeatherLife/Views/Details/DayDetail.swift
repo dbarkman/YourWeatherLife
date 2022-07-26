@@ -86,5 +86,6 @@ struct DayDetail_Previews: PreviewProvider {
     NavigationView {
       DayDetail()
     }
+    .accentColor(Color("AccentColor"))
   }
 }

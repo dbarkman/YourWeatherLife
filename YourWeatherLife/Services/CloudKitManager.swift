@@ -14,7 +14,7 @@ class CloudKitManager {
   
   static let shared = CloudKitManager()
 
-  private let container = CKContainer.default()
+  private let container = CKContainer(identifier: "iCloud.com.dbarkman.YourWeatherLife")
   private(set) var accountStatus: CKAccountStatus = .couldNotDetermine
   
   private init() {
@@ -24,11 +24,13 @@ class CloudKitManager {
     setupNotificationHandling()
   }
   
-  private func requestAccountStatus() async {
+  func requestAccountStatus() async -> CKAccountStatus {
     do {
       self.accountStatus = try await container.accountStatus()
+      return self.accountStatus
     } catch {
       logger.error("Error: \(error.localizedDescription)")
+      return .couldNotDetermine
     }
   }
   
@@ -42,7 +44,7 @@ class CloudKitManager {
   }
   private func awaitRequestAccountStatus() {
     Task {
-      await requestAccountStatus()
+      await _ = requestAccountStatus()
       if accountStatus != .available {
         UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")
       }

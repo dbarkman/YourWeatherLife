@@ -28,10 +28,11 @@ class WeekendSummaryViewModel: ObservableObject {
     let sundayDate = Calendar.current.date(byAdding: .day, value: 1, to: saturdayDate) ?? Date()
     let saturday = Dates.shared.makeStringFromDate(date: saturdayDate, format: "yyyy-MM-dd")
     let sunday = Dates.shared.makeStringFromDate(date: sundayDate, format: "yyyy-MM-dd")
+    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
     let fetchRequest: NSFetchRequest<TGWForecastDay>
     fetchRequest = TGWForecastDay.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "date IN {'\(saturday)', '\(sunday)'}")
+    fetchRequest.predicate = NSPredicate(format: "date IN {'\(saturday)', '\(sunday)'} AND location = %@", location)
     var forecastDays: [TGWForecastDay] = []
     do {
       forecastDays = try viewContext.fetch(fetchRequest)
