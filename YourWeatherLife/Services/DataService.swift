@@ -58,7 +58,7 @@ struct DataService {
         let end = dailyEvent.endTime ?? "00:00"
         let now = Date()
         let today = Calendar.current.component(.weekday, from: now)
-        let dayString = dailyEvent.days ?? "123456789" //[2,4,6]
+        let dayString = dailyEvent.days ?? "1234567" //[2,4,6]
         let days = dayString.compactMap { $0.wholeNumberValue }
         var dates: [Date] = []
         for day in days {

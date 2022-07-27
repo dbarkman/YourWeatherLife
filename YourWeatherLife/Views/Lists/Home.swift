@@ -384,6 +384,7 @@ struct Home: View {
             homeViewModel.fetchForecast()
             currentConditions.updateCurrent()
           }
+          homeViewModel.awaitUpdateNextStartDate()
           if UserDefaults.standard.bool(forKey: "userNotLoggedIniCloud") {
             homeViewModel.showiCloudLoginAlert = true
           }
