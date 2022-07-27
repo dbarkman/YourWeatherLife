@@ -14,15 +14,15 @@ struct DailyEvents: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DailyEvents")
   
-//  @Environment(\.managedObjectContext) private var viewContext
+  //  @Environment(\.managedObjectContext) private var viewContext
   @Environment(\.managedObjectContext) private var viewCloudContext
-
-//  private var viewContext = LocalPersistenceController.shared.container.viewContext
-//  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
+  
+  //  private var viewContext = LocalPersistenceController.shared.container.viewContext
+  //  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
   private var events: FetchedResults<DailyEvent>
-
+  
   @StateObject private var globalViewModel = GlobalViewModel.shared
   @StateObject private var eventViewModel = EventViewModel.shared
   
@@ -58,6 +58,32 @@ struct DailyEvents: View {
       } //end of list
       .navigationTitle("Events")
       .listStyle(.plain)
+      .toolbar {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button(action: add) {
+            Label("Add Event", systemImage: "plus")
+          }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          EditButton()
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button(action: {
+            showFeedback.toggle()
+          }) {
+            Label("Feedback", systemImage: "star")
+          }
+          .sheet(isPresented: $showFeedback) {
+            FeedbackModal()
+          }
+        }
+      }
+      .sheet(isPresented: $showAddEvent) {
+        NavigationView {
+          EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7], returningFromModal: $returningFromModal)
+        }
+        .accentColor(Color("AccentColor"))
+      }
     } //end of ZStack
     .onAppear() {
       let appearance = UINavigationBarAppearance()
@@ -66,36 +92,10 @@ struct DailyEvents: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
-        Mixpanel.mainInstance().track(event: "DailyEvents View")
-    }
-    .toolbar {
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button(action: add) {
-          Label("Add Event", systemImage: "plus")
-        }
-      }
-      ToolbarItem(placement: .navigationBarTrailing) {
-        EditButton()
-      }
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button(action: {
-          showFeedback.toggle()
-        }) {
-          Label("Feedback", systemImage: "star")
-        }
-        .sheet(isPresented: $showFeedback) {
-          FeedbackModal()
-        }
-      }
-    }
-    .sheet(isPresented: $showAddEvent) {
-      NavigationView {
-        EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7], returningFromModal: $returningFromModal)
-      }
-      .accentColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "DailyEvents View")
     }
   }
-
+  
   private func add() {
     showAddEvent = true
   }

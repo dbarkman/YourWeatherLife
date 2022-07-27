@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Mixpanel
 import OSLog
 
 class EventViewModel: ObservableObject {
@@ -27,6 +28,7 @@ class EventViewModel: ObservableObject {
   
   func saveEvent(eventName: String, startTimeDate: Date, endTimeDate: Date, oldEventName: String = "", addEvent: Bool = false, closure: @escaping (Bool) -> Void) {
     guard !eventName.isEmpty else {
+      Mixpanel.mainInstance().track(event: "Event Name Blank")
       DispatchQueue.main.async {
         self.eventSaveResult = "Event name cannot be blank"
       }
@@ -34,6 +36,7 @@ class EventViewModel: ObservableObject {
     }
     
     if startTimeDate == endTimeDate {
+      Mixpanel.mainInstance().track(event: "Event Times Equal")
       eventSaveResult = "Times must be 1 hour apart or more"
       return
     }
@@ -46,8 +49,10 @@ class EventViewModel: ObservableObject {
     let event = Event(event: eventName, startTime: Dates.shared.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.shared.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", when: "", days: days)
     var result = EventResult.noResult
     if addEvent {
+      Mixpanel.mainInstance().track(event: "Event Add")
       result = EventProvider.shared.insertEvents(eventList: [event])
     } else {
+      Mixpanel.mainInstance().track(event: "Event Update")
       result = EventProvider.shared.updateEvents(event: event, oldEventName: oldEventName)
     }
     DispatchQueue.main.async {
@@ -55,10 +60,13 @@ class EventViewModel: ObservableObject {
         case .eventSaved:
           closure(true)
         case .eventNotSaved:
+          Mixpanel.mainInstance().track(event: "Event could not be saved")
           self.eventSaveResult = "Event could not be saved"
         case .eventExists:
+          Mixpanel.mainInstance().track(event: "Event already exists")
           self.eventSaveResult = "Event already exists"
         default:
+          Mixpanel.mainInstance().track(event: "Error saving event")
           self.eventSaveResult = "Error saving event"
       }
     }

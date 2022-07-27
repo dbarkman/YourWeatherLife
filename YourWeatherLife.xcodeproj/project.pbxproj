@@ -62,10 +62,10 @@
 		634BCC662860EE440062E105 /* EventDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC622860EE440062E105 /* EventDetail.swift */; };
 		634BCC672860EE440062E105 /* HourDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC632860EE440062E105 /* HourDetail.swift */; };
 		634BCC682860EE440062E105 /* DayDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC642860EE440062E105 /* DayDetail.swift */; };
-		634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6A2860EE500062E105 /* EventListToday.swift */; };
+		634BCC6E2860EE500062E105 /* TodaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6A2860EE500062E105 /* TodaySummary.swift */; };
 		634BCC6F2860EE500062E105 /* EventListCalendarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6B2860EE500062E105 /* EventListCalendarItem.swift */; };
 		634BCC702860EE500062E105 /* EventListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6C2860EE500062E105 /* EventListItem.swift */; };
-		634BCC712860EE500062E105 /* EventListWeekend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6D2860EE500062E105 /* EventListWeekend.swift */; };
+		634BCC712860EE500062E105 /* WeekendSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC6D2860EE500062E105 /* WeekendSummary.swift */; };
 		634BCC742860EE5D0062E105 /* DailyEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC722860EE5D0062E105 /* DailyEvents.swift */; };
 		634BCC752860EE5D0062E105 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC732860EE5D0062E105 /* Home.swift */; };
 		634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCC762860EFC00062E105 /* AppDelegate.swift */; };
@@ -163,10 +163,10 @@
 		634BCC622860EE440062E105 /* EventDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetail.swift; sourceTree = "<group>"; };
 		634BCC632860EE440062E105 /* HourDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourDetail.swift; sourceTree = "<group>"; };
 		634BCC642860EE440062E105 /* DayDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayDetail.swift; sourceTree = "<group>"; };
-		634BCC6A2860EE500062E105 /* EventListToday.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListToday.swift; sourceTree = "<group>"; };
+		634BCC6A2860EE500062E105 /* TodaySummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodaySummary.swift; sourceTree = "<group>"; };
 		634BCC6B2860EE500062E105 /* EventListCalendarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListCalendarItem.swift; sourceTree = "<group>"; };
 		634BCC6C2860EE500062E105 /* EventListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListItem.swift; sourceTree = "<group>"; };
-		634BCC6D2860EE500062E105 /* EventListWeekend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListWeekend.swift; sourceTree = "<group>"; };
+		634BCC6D2860EE500062E105 /* WeekendSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekendSummary.swift; sourceTree = "<group>"; };
 		634BCC722860EE5D0062E105 /* DailyEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyEvents.swift; sourceTree = "<group>"; };
 		634BCC732860EE5D0062E105 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		634BCC762860EFC00062E105 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -353,11 +353,11 @@
 				63481AD42872548B00478C11 /* EventProvider.swift */,
 				63481AD02870AAA800478C11 /* EventSummaryProvider.swift */,
 				63481AC3286AC2B100478C11 /* TGW_ForecastProvider.swift */,
+				634BCC412860ED010062E105 /* GlobalViewModel.swift */,
+				63481B082876A24000478C11 /* HomeViewModel.swift */,
 				634BCCA6286298BE0062E105 /* CurrentConditionsViewModel.swift */,
 				63481AFD28753B1200478C11 /* DayDetailViewModel.swift */,
 				632790972884B95F00E551CA /* EventViewModel.swift */,
-				634BCC412860ED010062E105 /* GlobalViewModel.swift */,
-				63481B082876A24000478C11 /* HomeViewModel.swift */,
 				63481B142877589F00478C11 /* LocationViewModel.swift */,
 				63481ADA2873450700478C11 /* TodaySummaryViewModel.swift */,
 				63481AF9287529D900478C11 /* WeekendSummaryViewModel.swift */,
@@ -434,9 +434,9 @@
 			children = (
 				634BCC6B2860EE500062E105 /* EventListCalendarItem.swift */,
 				634BCC6C2860EE500062E105 /* EventListItem.swift */,
-				634BCC6A2860EE500062E105 /* EventListToday.swift */,
-				634BCC6D2860EE500062E105 /* EventListWeekend.swift */,
 				63425DA22890570A00430B43 /* ForecastListItem.swift */,
+				634BCC6A2860EE500062E105 /* TodaySummary.swift */,
+				634BCC6D2860EE500062E105 /* WeekendSummary.swift */,
 			);
 			path = ListItems;
 			sourceTree = "<group>";
@@ -639,14 +639,14 @@
 				634BCC702860EE500062E105 /* EventListItem.swift in Sources */,
 				634BCC7F286122930062E105 /* CloudPersistenceController.swift in Sources */,
 				634BCC432860ED010062E105 /* GlobalViewModel.swift in Sources */,
-				634BCC712860EE500062E105 /* EventListWeekend.swift in Sources */,
+				634BCC712860EE500062E105 /* WeekendSummary.swift in Sources */,
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
 				634BCCB428681C860062E105 /* AOWM_CurrentConditions.swift in Sources */,
 				63481AC6286AC72400478C11 /* TGW_Forecast.swift in Sources */,
 				63481ABE2868C4DB00478C11 /* AOWM_Icon.swift in Sources */,
 				634BCCB02866D96F0062E105 /* tgw.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
-				634BCC6E2860EE500062E105 /* EventListToday.swift in Sources */,
+				634BCC6E2860EE500062E105 /* TodaySummary.swift in Sources */,
 				634BCC4B2860ED220062E105 /* YWLError.swift in Sources */,
 				63481AFC28752F4800478C11 /* Weekend.swift in Sources */,
 				634BCCA528628C840062E105 /* Formatters.swift in Sources */,

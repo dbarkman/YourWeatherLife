@@ -1,5 +1,5 @@
 //
-//  EventListToday.swift
+//  TodaySummary.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/11/22.
@@ -8,7 +8,7 @@
 import SwiftUI
 import OSLog
 
-struct EventListToday: View {
+struct TodaySummary: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventListToday")
 

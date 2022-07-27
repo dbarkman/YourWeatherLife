@@ -48,17 +48,17 @@ struct Days: View {
           }
         }
       }
-      .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-        Mixpanel.mainInstance().track(event: "EditDailyEvent View")
-        eventViewModel.returningFromChildView = true
-      }
     .listStyle(.plain)
     } //end of ZStack
+    .onAppear() {
+      let appearance = UINavigationBarAppearance()
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      UINavigationBar.appearance().standardAppearance = appearance
+      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "Days View")
+      eventViewModel.returningFromChildView = true
+    }
   }
 }
 

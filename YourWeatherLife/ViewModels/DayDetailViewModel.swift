@@ -11,7 +11,7 @@ import OSLog
 
 class DayDetailViewModel: ObservableObject {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "WeekendSummaryViewModel")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayDetailViewModel")
   
   static let shared = DayDetailViewModel()
   
@@ -84,11 +84,6 @@ class DayDetailViewModel: ObservableObject {
       hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
       hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
     }
-//    if let time = hour.time {
-//      let hourDate = Dates.shared.makeDateFromTime(time: (hour.date ?? "") + " " + time, format: "yyyy-MM-dd HH:mm")
-//      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
-//      hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
-//    }
     return hourForecast
   }
   

@@ -232,7 +232,7 @@ struct Home: View {
               ZStack(alignment: .leading) {
                 NavigationLink(destination: DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")) { }
                   .opacity(0)
-                EventListToday()
+                TodaySummary()
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
@@ -240,7 +240,7 @@ struct Home: View {
               ZStack(alignment: .leading) {
                 NavigationLink(destination: DayDetail(dates: globalViewModel.weekend, parent: "Home", navigationTitle: "This Weekend")) { }
                   .opacity(0)
-                EventListWeekend()
+                WeekendSummary()
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)

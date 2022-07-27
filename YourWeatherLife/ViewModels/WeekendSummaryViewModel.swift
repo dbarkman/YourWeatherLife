@@ -64,12 +64,14 @@ class WeekendSummaryViewModel: ObservableObject {
     }
   }
   
-  private func setPrecipitation(forecastDay: TGWForecastDay) -> (Bool, String, String) {
+  func setPrecipitation(forecastDay: TGWForecastDay) -> (Bool, String, String, Double) {
     var precipitation = false
     var precipitationType = ""
     var precipitationPercent = ""
+    var precipitaionTotal = 0.0
     if forecastDay.daily_will_it_rain == 1 || forecastDay.daily_will_it_snow == 1 {
       precipitation = true
+      precipitaionTotal = forecastDay.totalprecip_mm
       if forecastDay.daily_will_it_rain == 1 {
         precipitationType = "Rain"
         precipitationPercent = "\(forecastDay.daily_chance_of_rain)%"
@@ -83,6 +85,6 @@ class WeekendSummaryViewModel: ObservableObject {
         }
       }
     } //precip
-    return (precipitation, precipitationType, precipitationPercent)
+    return (precipitation, precipitationType, precipitationPercent, precipitaionTotal)
   }
 }

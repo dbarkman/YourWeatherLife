@@ -48,26 +48,7 @@ class TodaySummaryViewModel: ObservableObject {
   func configureDay(todayForecast: TGWForecastDay, isToday: Bool = false) -> (Today, [TGWForecastHour]) {
     let dayDate = (todayForecast.date ?? "") + " 00:00"
     let dayOfWeekDate = Dates.shared.makeDateFromString(date: dayDate, format: "yyyy-MM-dd HH:mm")
-    var precipitation = false
-    var precipitationType = ""
-    var precipitationPercent = ""
-    var precipitaionTotal = 0.0
-    if todayForecast.daily_will_it_rain == 1 || todayForecast.daily_will_it_snow == 1 {
-      precipitation = true
-      precipitaionTotal = todayForecast.totalprecip_mm
-      if todayForecast.daily_will_it_rain == 1 {
-        precipitationType = "Rain"
-        precipitationPercent = "\(todayForecast.daily_chance_of_rain)%"
-      }
-      if todayForecast.daily_will_it_snow == 1 {
-        if !precipitationType.isEmpty {
-          precipitationType += " and Snow"
-        } else {
-          precipitationType = "Snow"
-          precipitationPercent = "\(todayForecast.daily_chance_of_snow)%"
-        }
-      }
-    } //precip
+    let precip = WeekendSummaryViewModel.shared.setPrecipitation(forecastDay: todayForecast)
     var sunriseTemp = 0.0
     let sunriseTime = todayForecast.sunrise
     var sunsetTemp = 0.0
@@ -109,10 +90,10 @@ class TodaySummaryViewModel: ObservableObject {
       }
     }
     var today = Today()
-    today.precipitation = precipitation
-    today.precipitationType = precipitationType
-    today.precipitationPercent = precipitationPercent
-    today.precipitationTotal = String(Formatters.shared.format(length: precipitaionTotal, from: .millimeters))
+    today.precipitation = precip.0 //precipitation
+    today.precipitationType = precip.1 //precipitationType
+    today.precipitationPercent = precip.2 //precipitationPercent
+    today.precipitationTotal = String(Formatters.shared.format(length: precip.3, from: .millimeters))
     today.coldestTemp = Formatters.shared.format(temp: coldestTemp, from: .celsius)
     today.warmestTemp = Formatters.shared.format(temp: warmestTemps, from: .celsius)
     today.coldestTime = Dates.shared.makeDisplayTimeFromTime(time: coldestTime, format: "HH:mm")

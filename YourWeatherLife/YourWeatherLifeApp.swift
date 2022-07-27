@@ -23,17 +23,6 @@ struct YourWeatherLifeApp: App {
     upgradeSteps()
   }
   
-  /*
-   See if currentVersion is set at all, then follow one of three paths
-   1. currentVersion not set at all, version: 2022071102
-      - set location mode and manual data if needed
-      - find current status of CoreData and make changes as necessary
-   2. currentVersion is set but not the latest, version: future
-      - do something
-   3. currentVersion is set, latest version
-      - do nothing
-   */
-  
   private func upgradeSteps() {
     let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
     let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
@@ -41,6 +30,7 @@ struct YourWeatherLifeApp: App {
     logger.debug("App Version: \(appVersion), Build Number: \(buildNumber)")
     guard let currentVersionStored = UserDefaults.standard.object(forKey: "currentVersion") as? String else {
       //update from 2022071102 to current, got shit to do!
+      Mixpanel.mainInstance().track(event: "Update from 2022071102")
       logger.debug("currentVersion not yet set.")
       UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
       
@@ -57,11 +47,9 @@ struct YourWeatherLifeApp: App {
     logger.debug("CurrentVersion: \(currentVersionStored)")
     if currentVersionStored != currentVersion {
       //future released version
+      Mixpanel.mainInstance().track(event: "Upgrade from future version")
       logger.debug("May have some work to do.")
       UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
-    } else {
-      //just opening the already installed app
-      logger.debug("Same version, no update work to do.")
     }
   }
   

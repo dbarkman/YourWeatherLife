@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Mixpanel
 import OSLog
 
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -35,6 +36,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
       if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
         UserDefaults.standard.set(true, forKey: "automaticLocation")
       } else {
+        Mixpanel.mainInstance().track(event: "Location Not Authorized")
         UserDefaults.standard.set(false, forKey: "automaticLocation")
         guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
           UserDefaults.standard.set("98034", forKey: "manualLocationData")

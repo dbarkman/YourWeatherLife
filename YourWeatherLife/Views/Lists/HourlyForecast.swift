@@ -28,16 +28,6 @@ struct HourlyForecast: View {
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
-      .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-        Mixpanel.mainInstance().track(event: "336HourForecast View")
-        globalViewModel.returningFromChildView = true
-        homeViewModel.create336HourForecast()
-      }
       .toolbar {
         ToolbarItem {
           Button(action: {
@@ -51,6 +41,16 @@ struct HourlyForecast: View {
         }
       }
       .navigationTitle("300+ Hour Forecast")
+    }
+    .onAppear() {
+      let appearance = UINavigationBarAppearance()
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      UINavigationBar.appearance().standardAppearance = appearance
+      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "336HourForecast View")
+      globalViewModel.returningFromChildView = true
+      homeViewModel.create336HourForecast()
     }
   }
 }

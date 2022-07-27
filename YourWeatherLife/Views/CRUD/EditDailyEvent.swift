@@ -96,6 +96,23 @@ struct EditDailyEvent: View {
       .listStyle(.plain)
       .navigationBarTitle(addEvent ? "Add Event" : "Edit Event")
     } //end of ZStack
+    .navigationBarBackButtonHidden(true)
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button(action: {
+          presentationMode.wrappedValue.dismiss()
+        }) {
+          Text("Cancel")
+        }
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button(action: {
+          saveEvent()
+        }) {
+          Text("Save")
+        }
+      }
+    }
     .onAppear() {
       let appearance = UINavigationBarAppearance()
       appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
@@ -115,23 +132,6 @@ struct EditDailyEvent: View {
     }
     .onChange(of: selection) { _ in
       eventViewModel.convertDaysSelected(selection: selection)
-    }
-    .navigationBarBackButtonHidden(true)
-    .toolbar {
-      ToolbarItem(placement: .navigationBarLeading) {
-        Button(action: {
-          presentationMode.wrappedValue.dismiss()
-        }) {
-          Text("Cancel")
-        }
-      }
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button(action: {
-          saveEvent()
-        }) {
-          Text("Save")
-        }
-      }
     }
   }
   

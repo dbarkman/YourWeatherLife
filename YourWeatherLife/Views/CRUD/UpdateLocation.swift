@@ -17,7 +17,7 @@ struct UpdateLocation: View {
   @Environment(\.colorScheme) var colorScheme
   
   @StateObject private var locationViewModel = LocationViewModel.shared
-
+  
   @State private var location = 0
   @State private var manualLocation = 0
   @State private var zipcode = ""
@@ -26,7 +26,7 @@ struct UpdateLocation: View {
   @State private var updateLocationResult = ""
   
   @State var refreshLocation = false
-
+  
   var body: some View {
     NavigationView {
       ZStack {
@@ -128,28 +128,6 @@ struct UpdateLocation: View {
         .listStyle(.plain)
         .navigationBarTitle("Update Location")
       } //end of ZStack
-      .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-        Mixpanel.mainInstance().track(event: "EditLocation view")
-        
-        let automaticLocation = UserDefaults.standard.bool(forKey: "automaticLocation")
-        location = automaticLocation ? 0 : 1
-        guard let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") else { return }
-        if manualLocationData.contains(",") {
-          manualLocation = 1
-          if let latitude = manualLocationData.components(separatedBy: ",").first, let longitude = manualLocationData.components(separatedBy: ",").last {
-            self.latitude = latitude
-            self.longitude = longitude
-          }
-        } else {
-          manualLocation = 0
-          zipcode = manualLocationData
-        }
-      }
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(action: {
@@ -164,6 +142,28 @@ struct UpdateLocation: View {
           }) {
             Text("Update")
           }
+        }
+      }
+      .onAppear() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+        Mixpanel.mainInstance().track(event: "UpdateLocation view")
+        
+        let automaticLocation = UserDefaults.standard.bool(forKey: "automaticLocation")
+        location = automaticLocation ? 0 : 1
+        guard let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") else { return }
+        if manualLocationData.contains(",") {
+          manualLocation = 1
+          if let latitude = manualLocationData.components(separatedBy: ",").first, let longitude = manualLocationData.components(separatedBy: ",").last {
+            self.latitude = latitude
+            self.longitude = longitude
+          }
+        } else {
+          manualLocation = 0
+          zipcode = manualLocationData
         }
       }
     }

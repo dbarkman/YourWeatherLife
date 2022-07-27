@@ -28,6 +28,8 @@ class GlobalViewModel: ObservableObject {
       if networkOnline {
         logger.debug("Network online now!")
         NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)
+      } else {
+        Mixpanel.mainInstance().track(event: "Network Offline")
       }
     }
   }

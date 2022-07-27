@@ -83,17 +83,6 @@ struct FeedbackModal: View {
           .listRowBackground(Color("ListBackground"))
         } //end of list
         .listStyle(.plain)
-        .onAppear() {
-          let appearance = UINavigationBarAppearance()
-          appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
-          UINavigationBar.appearance().standardAppearance = appearance
-          UINavigationBar.appearance().scrollEdgeAppearance = appearance
-          UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-          Mixpanel.mainInstance().track(event: "Feedback View")
-          let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
-          let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
-          currentVersion = "\(appVersion)-\(buildNumber)"
-        }
         .toolbar {
           ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
@@ -104,6 +93,17 @@ struct FeedbackModal: View {
           }
         }
         .navigationTitle("Developer Feedback")
+      }
+      .onAppear() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+        Mixpanel.mainInstance().track(event: "Feedback View")
+        let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
+        let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
+        currentVersion = "\(appVersion)-\(buildNumber)"
       }
     }
     .accentColor(Color("AccentColor"))

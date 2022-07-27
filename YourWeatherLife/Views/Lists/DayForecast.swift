@@ -31,16 +31,6 @@ struct DayForecast: View {
         .listRowBackground(Color("ListBackground"))
       } //end of List
       .listStyle(.plain)
-      .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-        Mixpanel.mainInstance().track(event: "14DayForecast View")
-        globalViewModel.returningFromChildView = true
-        homeViewModel.create14DayForecast()
-      }
       .toolbar {
         ToolbarItem {
           Button(action: {
@@ -54,6 +44,16 @@ struct DayForecast: View {
         }
       }
       .navigationTitle("14 Day Forecast")
+    }
+    .onAppear() {
+      let appearance = UINavigationBarAppearance()
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+      UINavigationBar.appearance().standardAppearance = appearance
+      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+      Mixpanel.mainInstance().track(event: "14DayForecast View")
+      globalViewModel.returningFromChildView = true
+      homeViewModel.create14DayForecast()
     }
   }
 }

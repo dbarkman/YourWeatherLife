@@ -1,5 +1,5 @@
 //
-//  EventListWeekend.swift
+//  WeekendSummary.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/11/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventListWeekend: View {
+struct WeekendSummary: View {
   
   @StateObject private var weekend = WeekendSummaryViewModel.shared
   
@@ -99,6 +99,6 @@ struct EventListWeekend: View {
 
 struct EventListWeekend_Previews: PreviewProvider {
   static var previews: some View {
-    EventListWeekend()
+    WeekendSummary()
   }
 }

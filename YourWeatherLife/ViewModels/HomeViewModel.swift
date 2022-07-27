@@ -216,6 +216,7 @@ class HomeViewModel: ObservableObject {
   }
   
   func disableiCloudSync() async {
+    Mixpanel.mainInstance().track(event: "Disable iCloud Sync")
     UserDefaults.standard.set(false, forKey: "userNotLoggedIniCloud")
     UserDefaults.standard.set(true, forKey: "disableiCloudSync")
     await EventProvider.shared.importEventsFromSeed()
