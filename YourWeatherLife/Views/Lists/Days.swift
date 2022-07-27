@@ -15,7 +15,9 @@ struct Days: View {
   @StateObject private var eventViewModel = EventViewModel.shared
 
   @State private var isEditMode: EditMode = .active
-  @Binding var selection: Set<String>
+  @State private var selection: Set<String> = []
+  
+  @Binding var daysSelected: [Int]
 
   let days = [
     "Sunday",
@@ -30,7 +32,7 @@ struct Days: View {
   var body: some View {
     ZStack {
       BackgroundColor()
-      List(days, id: \.self, selection: $selection) { day in
+      List(days, id: \.self, selection: $eventViewModel.selectedSet) { day in
         Text(day)
           .listRowBackground(Color("ListBackground"))
       } //end of List
@@ -42,6 +44,7 @@ struct Days: View {
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(action: {
+            eventViewModel.convertDaysSelected(selection: eventViewModel.selectedSet)
             presentationMode.wrappedValue.dismiss()
           }) {
             Text("Done")
@@ -57,7 +60,7 @@ struct Days: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "Days View")
-      eventViewModel.returningFromChildView = true
+      eventViewModel.returningFromDays = true
     }
   }
 }

@@ -25,7 +25,7 @@ struct UpdateLocation: View {
   @State private var longitude = ""
   @State private var updateLocationResult = ""
   
-  @State var refreshLocation = false
+  @Binding var refreshLocation: Bool
   
   var body: some View {
     NavigationView {
@@ -117,6 +117,7 @@ struct UpdateLocation: View {
                   .foregroundColor(Color("AccentColor"))
                   .onTapGesture {
                     withAnimation() {
+                      refreshLocation = false
                       updateLocation()
                     }
                   }
@@ -201,8 +202,8 @@ struct UpdateLocation: View {
   }
 }
 
-struct EditLocation_Previews: PreviewProvider {
-  static var previews: some View {
-    UpdateLocation()
-  }
-}
+//struct EditLocation_Previews: PreviewProvider {
+//  static var previews: some View {
+//    UpdateLocation()
+//  }
+//}

@@ -365,7 +365,7 @@ struct Home: View {
         FeedbackModal()
       }
       .sheet(isPresented: $showUpdateLocation) {
-        UpdateLocation(refreshLocation: refreshLocation)
+        UpdateLocation(refreshLocation: $refreshLocation)
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")

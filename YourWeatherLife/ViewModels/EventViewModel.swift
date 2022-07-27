@@ -18,7 +18,7 @@ class EventViewModel: ObservableObject {
   @Published var eventSaveResult = ""
   @Published var daysSelected = ""
   @Published var selectedSet: Set<String> = [""]
-  @Published var returningFromChildView = false
+  @Published var returningFromDays = false
 
   private var days = ""
 
@@ -138,10 +138,9 @@ class EventViewModel: ObservableObject {
           logger.error("Could not determine a selected int. 😭")
       }
     }
-    let selectedToDisplay = selected
     DispatchQueue.main.async {
       self.daysSelected = ""
-      self.daysSelected = selectedToDisplay
+      self.daysSelected = selected
       self.selectedSet.removeAll()
       self.selectedSet = selectedSet
     }

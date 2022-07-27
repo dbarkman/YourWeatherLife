@@ -54,10 +54,10 @@ struct EditDailyEvent: View {
               .environment(\.colorScheme, .dark)
               .foregroundColor(.white)
           }
-          NavigationLink(destination: Days(selection: $selection)) {
+          NavigationLink(destination: Days(daysSelected: $daysSelected)) {
             Text("Select Days for Event Forecast")
           }
-          NavigationLink(destination: Days(selection: $selection)) {
+          NavigationLink(destination: Days(daysSelected: $daysSelected)) {
             HStack {
               Image(systemName: "chevron.right")
                 .symbolRenderingMode(.monochrome)
@@ -120,17 +120,11 @@ struct EditDailyEvent: View {
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
       
-      if eventViewModel.returningFromChildView {
-        eventViewModel.returningFromChildView = false
+      if eventViewModel.returningFromDays {
+        eventViewModel.returningFromDays = false
       } else {
         eventViewModel.convertSelectedInts(selectedInts: &daysSelected)
       }
-    }
-    .onChange(of: eventViewModel.selectedSet) { _ in
-      selection = eventViewModel.selectedSet
-    }
-    .onChange(of: selection) { _ in
-      eventViewModel.convertDaysSelected(selection: selection)
     }
   }
   
