@@ -27,8 +27,6 @@ class HomeViewModel: ObservableObject {
   @Published var tomorrowEventForecastHours = [String: [TGWForecastHour]]()
   @Published var laterEvents = [EventForecast]()
   @Published var laterEventForecastHours = [String: [TGWForecastHour]]()
-  @Published var forecastDays = [Today]()
-  @Published var forecastHours = [HourForecast]()
   @Published var showiCloudLoginAlert = false
   @Published var showiCloudFetchAlert = false
   @Published var showNoLocationAlert = false
@@ -126,7 +124,7 @@ class HomeViewModel: ObservableObject {
       }
       var hours = [HourForecast]()
       for hour in forecastHours {
-        hours.append(DayDetailViewModel.shared.configureHour(hour: hour))
+        hours.append(globalViewModel.configureHour(hour: hour))
       }
       let summary = EventSummaryProvider.shared
       let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
@@ -156,58 +154,6 @@ class HomeViewModel: ObservableObject {
       self.laterEventForecastHours.removeAll()
     }
     return EventForecast()
-  }
-  
-  func create14DayForecast() {
-    let dateTimeFormatter = DateFormatter()
-    dateTimeFormatter.dateFormat = "yyyy-MM-dd"
-    let today = dateTimeFormatter.string(from: Date())
-    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastDay>
-    fetchRequest = TGWForecastDay.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "date >= %@ AND location = %@", today, location)
-    var forecastDays = [Today]()
-    do {
-      let forecastDay = try viewContext.fetch(fetchRequest)
-      for day in forecastDay {
-        let todayResult = TodaySummaryViewModel.shared.configureDay(todayForecast: day)
-        var today = todayResult.0
-        let hours = todayResult.1
-        var hoursForecast = [HourForecast]()
-        for hour in hours {
-          hoursForecast.append(DayDetailViewModel.shared.configureHour(hour: hour))
-        }
-        today.hours = hoursForecast
-        forecastDays.append(today)
-      }
-    } catch {
-      logger.error("Couldn't fetch 14 day forecast. 😭 \(error.localizedDescription)")
-    }
-    DispatchQueue.main.async {
-      self.forecastDays = forecastDays
-    }
-  }
-  
-  func create336HourForecast() {
-    let priorHour = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
-    let today = Dates.shared.makeStringFromDate(date: priorHour, format: "yyyy-MM-dd HH:mm")
-    let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastHour>
-    fetchRequest = TGWForecastHour.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
-    fetchRequest.predicate = NSPredicate(format: "dateTime >= %@ AND location = %@", today, location)
-    do {
-      let forecastHour = try viewContext.fetch(fetchRequest)
-      var hours = [HourForecast]()
-      for hour in forecastHour {
-        hours.append(DayDetailViewModel.shared.configureHour(hour: hour))
-      }
-      DispatchQueue.main.async {
-        self.forecastHours = hours
-      }
-    } catch {
-      logger.error("Couldn't fetch 336 hour forecast. 😭 \(error.localizedDescription)")
-    }
   }
   
   func showDailyEvents() {

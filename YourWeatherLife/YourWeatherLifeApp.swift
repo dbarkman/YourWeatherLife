@@ -16,6 +16,8 @@ struct YourWeatherLifeApp: App {
 
 //  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   
+  var globalViewModel = GlobalViewModel.shared
+
   init() {
     Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
     let homeDir = NSHomeDirectory();
@@ -24,8 +26,8 @@ struct YourWeatherLifeApp: App {
   }
   
   private func upgradeSteps() {
-    let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
-    let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
+    let appVersion = globalViewModel.fetchAppVersionNumber()
+    let buildNumber = globalViewModel.fetchBuildNumber()
     let currentVersion = "\(appVersion)-\(buildNumber)"
     logger.debug("App Version: \(appVersion), Build Number: \(buildNumber)")
     guard let currentVersionStored = UserDefaults.standard.object(forKey: "currentVersion") as? String else {

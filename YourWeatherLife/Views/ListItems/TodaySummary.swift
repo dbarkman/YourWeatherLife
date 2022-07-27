@@ -12,7 +12,7 @@ struct TodaySummary: View {
 
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventListToday")
 
-  @StateObject private var today = TodaySummaryViewModel.shared
+  @StateObject private var summary = SummaryViewModel.shared
 
   private let todayViewFontSize = Font.callout
   
@@ -27,12 +27,12 @@ struct TodaySummary: View {
           .padding(.horizontal, 5)
       }
       .padding(.bottom, 1)
-      if today.summary.precipitation {
+      if summary.todaySummary.precipitation {
         HStack {
-          Text("\(today.summary.precipitationType):")
+          Text("\(summary.todaySummary.precipitationType):")
             .font(todayViewFontSize)
             .fontWeight(.semibold)
-          Text("\(today.summary.precipitationPercent) chance")
+          Text("\(summary.todaySummary.precipitationPercent) chance")
             .font(todayViewFontSize)
         } //end of HStack
         .padding(.bottom, 1)
@@ -41,11 +41,11 @@ struct TodaySummary: View {
         Text("Coldest:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(today.summary.coldestTemp)
+        Text(summary.todaySummary.coldestTemp)
           .font(todayViewFontSize)
         Text("at")
           .font(todayViewFontSize)
-        Text(today.summary.coldestTime)
+        Text(summary.todaySummary.coldestTime)
           .font(todayViewFontSize)
       } //end of HStack
       .padding(.bottom, 1)
@@ -53,11 +53,11 @@ struct TodaySummary: View {
         Text("Sunrise:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(today.summary.sunriseTemp)
+        Text(summary.todaySummary.sunriseTemp)
           .font(todayViewFontSize)
         Text("at")
           .font(todayViewFontSize)
-        Text(today.summary.sunriseTime)
+        Text(summary.todaySummary.sunriseTime)
           .font(todayViewFontSize)
       } //end of HStack
       .padding(.bottom, 1)
@@ -65,11 +65,11 @@ struct TodaySummary: View {
         Text("Warmest:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(today.summary.warmestTemp)
+        Text(summary.todaySummary.warmestTemp)
           .font(todayViewFontSize)
         Text("at")
           .font(todayViewFontSize)
-        Text(today.summary.warmestTime)
+        Text(summary.todaySummary.warmestTime)
           .font(todayViewFontSize)
       } //end of HStack
       .padding(.bottom, 1)
@@ -77,11 +77,11 @@ struct TodaySummary: View {
         Text("Sunset:")
           .font(todayViewFontSize)
           .fontWeight(.semibold)
-        Text(today.summary.sunsetTemp)
+        Text(summary.todaySummary.sunsetTemp)
           .font(todayViewFontSize)
         Text("at")
           .font(todayViewFontSize)
-        Text(today.summary.sunsetTime)
+        Text(summary.todaySummary.sunsetTime)
           .font(todayViewFontSize)
       } //end of HStack
     } //end of VStack
@@ -93,7 +93,7 @@ struct TodaySummary: View {
         .padding(.bottom, 10)
     }
     .task() {
-      today.fetchTodaySummary()
+      summary.fetchTodaySummary()
     }
   }
 }

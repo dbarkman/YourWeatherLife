@@ -14,14 +14,14 @@ struct DayForecast: View {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
   
   @StateObject private var globalViewModel = GlobalViewModel.shared
-  @StateObject private var homeViewModel = HomeViewModel.shared
+  @StateObject private var forecastViewModel = ForecastViewModel.shared
   
   @State private var showFeedback = false
   
   var body: some View {
     ZStack {
       BackgroundColor()
-      List(homeViewModel.forecastDays, id: \.self) { day in
+      List(forecastViewModel.forecastDays, id: \.self) { day in
         ZStack {
           NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast", navigationTitle: "\(day.displayDate)")) { }
             .opacity(0)
@@ -53,7 +53,7 @@ struct DayForecast: View {
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "14DayForecast View")
       globalViewModel.returningFromChildView = true
-      homeViewModel.create14DayForecast()
+      forecastViewModel.create14DayForecast()
     }
   }
 }

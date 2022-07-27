@@ -14,6 +14,7 @@ struct EventDetail: View {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "EventDetail")
   
   @StateObject private var globalViewModel = GlobalViewModel.shared
+  @StateObject private var homeViewModel = HomeViewModel.shared
 
   @State private var showFeedback = false
   @State private var showEditEvent = false
@@ -97,11 +98,11 @@ struct EventDetail: View {
       
       logger.debug("EventDetail onAppear")
       
-      event = HomeViewModel.shared.createUpdateEventList(eventPredicate: eventName)
+      event = homeViewModel.createUpdateEventList(eventPredicate: eventName)
     }
     .onChange(of: returningFromModal) { _ in
       if returningFromModal {
-        event = HomeViewModel.shared.createUpdateEventList(eventPredicate: eventName)
+        event = homeViewModel.createUpdateEventList(eventPredicate: eventName)
         returningFromModal = false
       }
     }

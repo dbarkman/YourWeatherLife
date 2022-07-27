@@ -11,14 +11,14 @@ import Mixpanel
 struct HourlyForecast: View {
   
   @StateObject private var globalViewModel = GlobalViewModel.shared
-  @StateObject private var homeViewModel = HomeViewModel.shared
+  @StateObject private var forecastViewModel = ForecastViewModel.shared
 
   @State private var showFeedback = false
 
   var body: some View {
     ZStack {
       BackgroundColor()
-      List(homeViewModel.forecastHours, id: \.self) { hour in
+      List(forecastViewModel.forecastHours, id: \.self) { hour in
         ZStack {
           NavigationLink(destination: HourDetail(hour: hour, navigationTitle: hour.shortDisplayDate)) { }
             .opacity(0)
@@ -50,7 +50,7 @@ struct HourlyForecast: View {
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "336HourForecast View")
       globalViewModel.returningFromChildView = true
-      homeViewModel.create336HourForecast()
+      forecastViewModel.create336HourForecast()
     }
   }
 }

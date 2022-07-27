@@ -12,6 +12,8 @@ struct FeedbackModal: View {
   
   @Environment(\.presentationMode) var presentationMode
   
+  @StateObject private var globalViewModel = GlobalViewModel.shared
+
   @State private var email = ""
   @State private var feedback = ""
   @State private var showVersion = false
@@ -101,8 +103,8 @@ struct FeedbackModal: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "Feedback View")
-        let appVersion = GlobalViewModel.shared.fetchAppVersionNumber()
-        let buildNumber = GlobalViewModel.shared.fetchBuildNumber()
+        let appVersion = globalViewModel.fetchAppVersionNumber()
+        let buildNumber = globalViewModel.fetchBuildNumber()
         currentVersion = "\(appVersion)-\(buildNumber)"
       }
     }
