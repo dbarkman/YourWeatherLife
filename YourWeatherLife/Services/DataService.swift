@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import CloudKit
+import Mixpanel
 import OSLog
 
 struct DataService {
@@ -116,12 +117,14 @@ struct DataService {
         if FileManager.default.ubiquityIdentityToken != nil && accountStatus == .available {
           await checkiCloud()
         } else {
+          Mixpanel.mainInstance().track(event: "userNotLoggedIniCloud")
           UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")
         }
       } else {
         UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
       }
     } catch {
+      Mixpanel.mainInstance().track(event: "initialFetchFailed")
       UserDefaults.standard.set(true, forKey: "initialFetchFailed")
     }
   }
