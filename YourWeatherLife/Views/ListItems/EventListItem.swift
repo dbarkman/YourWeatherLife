@@ -9,8 +9,6 @@ import SwiftUI
 
 struct EventListItem: View {
   
-  @StateObject private var globalViewModel = GlobalViewModel.shared
-
   @State var event: String
   @State var startTime: String
   @State var endTime: String

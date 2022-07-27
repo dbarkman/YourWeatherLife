@@ -17,7 +17,6 @@ class GlobalViewModel: ObservableObject {
   static let shared = GlobalViewModel()
 
   private var viewContext = LocalPersistenceController.shared.container.viewContext
-  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @Published var returningFromChildView = false
   @Published var today = Dates.shared.getTodayDateString(format: "yyyy-MM-dd")

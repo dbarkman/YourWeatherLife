@@ -14,17 +14,12 @@ struct DailyEvents: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DailyEvents")
   
-  //  @Environment(\.managedObjectContext) private var viewContext
   @Environment(\.managedObjectContext) private var viewCloudContext
-  
-  //  private var viewContext = LocalPersistenceController.shared.container.viewContext
-  //  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DailyEvent.startTime, ascending: true)], predicate: NSPredicate(value: true), animation: .default)
   private var events: FetchedResults<DailyEvent>
   
   @StateObject private var globalViewModel = GlobalViewModel.shared
-  @StateObject private var eventViewModel = EventViewModel.shared
   
   @State private var showFeedback = false
   @State private var showAddEvent = false

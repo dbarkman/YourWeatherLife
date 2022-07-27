@@ -14,7 +14,6 @@ struct Home: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "Home")
   
-  private var viewContext = LocalPersistenceController.shared.container.viewContext
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
 
   @Environment(\.scenePhase) var scenePhase

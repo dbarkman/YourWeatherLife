@@ -20,7 +20,6 @@ struct EditDailyEvent: View {
   
   @State private var selection: Set<String> = []
 
-  @State private var showFeedback = false
   @State var addEvent = false
   @State var eventName = ""
   @State var startTimeDate = Dates.shared.roundTimeUp(date: Date())
