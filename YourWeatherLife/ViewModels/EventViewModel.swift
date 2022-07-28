@@ -145,4 +145,31 @@ class EventViewModel: ObservableObject {
       self.selectedSet = selectedSet
     }
   }
+  
+  func convertAndReturnDays(days: [Int]) -> String {
+    var selectedInts = days
+    selectedInts.sort()
+    var selected = ""
+    for select in selectedInts {
+      switch select {
+        case 1:
+          selected.append("Sun, ")
+        case 2:
+          selected.append("Mon, ")
+        case 3:
+          selected.append("Tue, ")
+        case 4:
+          selected.append("Wed, ")
+        case 5:
+          selected.append("Thu, ")
+        case 6:
+          selected.append("Fri, ")
+        case 7:
+          selected.append("Sat, ")
+        default:
+          logger.error("Could not determine a selected int. 😭")
+      }
+    }
+    return String(selected.dropLast(2))
+  }
 }

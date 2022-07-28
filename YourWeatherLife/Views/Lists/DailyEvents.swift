@@ -20,7 +20,8 @@ struct DailyEvents: View {
   private var events: FetchedResults<DailyEvent>
   
   @StateObject private var globalViewModel = GlobalViewModel.shared
-  
+  @StateObject private var eventViewModel = EventViewModel.shared
+
   @State private var showFeedback = false
   @State private var showAddEvent = false
   @State private var returningFromModal = false
@@ -34,14 +35,18 @@ struct DailyEvents: View {
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
               let days = individualEvent.days ?? "1234567"
               let daysIntArray = days.compactMap { $0.wholeNumberValue }
+              let selectedDays = eventViewModel.convertAndReturnDays(days: daysIntArray)
               NavigationLink(destination: EditDailyEvent(eventName: event, startTimeDate: Dates.shared.makeDateFromString(date: start, format: "HH:mm"), endTimeDate: Dates.shared.makeDateFromString(date: end, format: "HH:mm"), daysSelected: daysIntArray, oldEventName: event, returningFromModal: $returningFromModal)) {
                 HStack {
-                  Text(event)
-                  Spacer()
-                  HStack {
-                    Text(Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
-                    Text("-")
-                    Text(Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
+                  VStack(alignment: .leading) {
+                    Text(event)
+                      .fontWeight(.semibold)
+                    Text(selectedDays)
+                    HStack {
+                      Text(Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
+                      Text("-")
+                      Text(Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
+                    }
                   }
                 }
               }
