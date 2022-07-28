@@ -40,6 +40,7 @@ struct EditDailyEvent: View {
             TextField("event name", text: $eventName)
               .textFieldStyle(RoundedBorderTextFieldStyle())
               .environment(\.colorScheme, .light)
+              .autocapitalization(.words)
           }
           HStack {
             Text("Event Start Time:")

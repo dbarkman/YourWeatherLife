@@ -74,7 +74,7 @@ struct DayDetail: View {
             HStack {
               Text("Humidity:")
                 .fontWeight(.semibold)
-              Text("\(day.humidity) %")
+              Text("\(day.humidity)%")
             }
             HStack {
               Text("Max UV:")

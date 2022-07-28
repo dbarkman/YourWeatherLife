@@ -29,7 +29,7 @@ struct DailyEvents: View {
     ZStack {
       BackgroundColor()
       List {
-        Section(header: Text("Repeating Weekday Events")) {
+        Section(header: Text("Recurring Events")) {
           ForEach(events, id: \.self) { individualEvent in
             if let event = individualEvent.event, let start = individualEvent.startTime, let end = individualEvent.endTime {
               let days = individualEvent.days ?? "1234567"
@@ -99,6 +99,7 @@ struct DailyEvents: View {
     offsets.map { events[$0] }.forEach(viewCloudContext.delete)
     do {
       try viewCloudContext.save()
+      Mixpanel.mainInstance().track(event: "Event Deleted")
     } catch {
       logger.error("Could not delete Daily Event")
     }

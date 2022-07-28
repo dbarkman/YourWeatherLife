@@ -146,7 +146,7 @@ class GlobalViewModel: ObservableObject {
     today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
     today.dayOfWeek = isToday ? "Today" : Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE")
     today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE, MMMM d")
-    today.humidity = String(todayForecast.avghumidity)
+    today.humidity = String(Int(todayForecast.avghumidity))
     today.averageTemp = String(Formatters.shared.format(temp: todayForecast.avgtemp_c, from: .celsius))
     today.visibility = String(Formatters.shared.format(length: todayForecast.avgvis_km, from: .kilometers))
     today.condition = todayForecast.condition_text ?? ""

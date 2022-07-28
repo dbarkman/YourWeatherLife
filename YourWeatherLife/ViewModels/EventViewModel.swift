@@ -49,10 +49,10 @@ class EventViewModel: ObservableObject {
     let event = Event(event: eventName, startTime: Dates.shared.makeStringFromDate(date: startTimeDate, format: "HH:mm"), endTime: Dates.shared.makeStringFromDate(date: endTimeDate, format: "HH:mm"), summary: "", nextStartDate: "", when: "", days: days)
     var result = EventResult.noResult
     if addEvent {
-      Mixpanel.mainInstance().track(event: "Event Add")
+      Mixpanel.mainInstance().track(event: "Event Added")
       result = EventProvider.shared.insertEvents(eventList: [event])
     } else {
-      Mixpanel.mainInstance().track(event: "Event Update")
+      Mixpanel.mainInstance().track(event: "Event Updated")
       result = EventProvider.shared.updateEvents(event: event, oldEventName: oldEventName)
     }
     DispatchQueue.main.async {
