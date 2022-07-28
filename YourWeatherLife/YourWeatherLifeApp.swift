@@ -32,12 +32,15 @@ struct YourWeatherLifeApp: App {
     logger.debug("App Version: \(appVersion), Build Number: \(buildNumber)")
     guard let currentVersionStored = UserDefaults.standard.object(forKey: "currentVersion") as? String else {
       //new install or update from 2022071102, let's check
-      guard let _ = UserDefaults.standard.object(forKey: "currentConditionsNextUpdate") as? String else {
+      let defaultEventsLoaded = UserDefaults.standard.bool(forKey: "defaultEventsLoaded")
+      if !defaultEventsLoaded {
         //new install, nothing to do
         Mixpanel.mainInstance().track(event: "New Install")
         logger.debug("New Install")
         UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
         return
+      } else {
+        logger.debug("Not a new install")
       }
       //update from 2022071102 to current, got shit to do!
       Mixpanel.mainInstance().track(event: "Update from 2022071102")
