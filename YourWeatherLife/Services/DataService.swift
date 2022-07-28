@@ -136,12 +136,20 @@ struct DataService {
     let predicate = NSPredicate(value: true)
     let query = CKQuery(recordType: "CD_DailyEvent", predicate: predicate)
     do {
-      let (_, _) = try await privateDatabase.records(matching: query, resultsLimit: 100)
-      UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
+      let (result, _) = try await privateDatabase.records(matching: query, resultsLimit: 100)
+      if result.count > 0 {
+        logger.debug("Events in iCloud")
+        UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
+      } else {
+        logger.debug("No events in iCloud, loading from seed")
+        await EventProvider.shared.importEventsFromSeed()
+      }
     } catch {
       if error.localizedDescription.contains("CD_DailyEvent") || error.localizedDescription.contains("Did not find record type") {
+        logger.debug("Events not yet setup in iCloud, loading from seed")
         await EventProvider.shared.importEventsFromSeed()
       } else {
+        logger.debug("Events in iCloud, nothing to do")
         UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
       }
     }

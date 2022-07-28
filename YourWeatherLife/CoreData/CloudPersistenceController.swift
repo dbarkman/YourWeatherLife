@@ -29,8 +29,8 @@ struct CloudPersistenceController {
       description.url = URL(fileURLWithPath: "/dev/null")
     }
     
-    description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-    description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+//    description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+//    description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
     
     if UserDefaults.standard.bool(forKey: "disableiCloudSync") {
       description.cloudKitContainerOptions = nil

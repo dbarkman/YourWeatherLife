@@ -213,7 +213,17 @@ struct Home: View {
                 .listRowBackground(Color.clear)
               }
               if homeViewModel.todayEvents.isEmpty && homeViewModel.tomorrowEvents.isEmpty && homeViewModel.laterEvents.isEmpty {
-                Text("Your saved events are syncing from iCloud and should display momentarily.")
+                Section() {
+                  Divider()
+                    .background(.black)
+                    .frame(height: 1)
+                  Text("If you have events on another device, using the same iCloud account, they may sync from iCloud momentarily. Otherwise add some events by tapping Add Events.")
+                  Text("Add Events")
+                    .foregroundColor(Color("AccentColor"))
+                    .onTapGesture {
+                      homeViewModel.showDailyEvents()
+                    }
+                }
                   .listRowSeparator(.hidden)
                   .listRowBackground(Color.clear)
               }
@@ -337,6 +347,7 @@ struct Home: View {
           })
           .alert(Text("iCloud Login Error"), isPresented: $homeViewModel.showiCloudLoginAlert, actions: {
             Button("Settings") {
+              UserDefaults.standard.set(false, forKey: "userNotLoggedIniCloud")
               if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(settingsUrl)
               }

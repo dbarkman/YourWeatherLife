@@ -86,6 +86,13 @@ struct FeedbackModal: View {
         } //end of list
         .listStyle(.plain)
         .toolbar {
+          ToolbarItem(placement: .navigationBarLeading) {
+            Button(action: {
+              presentationMode.wrappedValue.dismiss()
+            }) {
+              Text("Cancel")
+            }
+          }
           ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
               sendFeedback()

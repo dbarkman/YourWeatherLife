@@ -125,6 +125,7 @@ struct EditDailyEvent: View {
         eventViewModel.returningFromDays = false
       } else {
         eventViewModel.convertSelectedInts(selectedInts: &daysSelected)
+        eventViewModel.selectedDays = daysSelected
       }
     }
   }
