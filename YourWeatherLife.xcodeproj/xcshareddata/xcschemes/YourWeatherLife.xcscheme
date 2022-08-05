@@ -26,7 +26,18 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "634BCBF9286028A50062E105"
+            BuildableName = "YourWeatherLife.app"
+            BlueprintName = "YourWeatherLife"
+            ReferencedContainer = "container:YourWeatherLife.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -45,6 +56,16 @@
                BlueprintIdentifier = "634BCC18286028A70062E105"
                BuildableName = "YourWeatherLifeUITests.xctest"
                BlueprintName = "YourWeatherLifeUITests"
+               ReferencedContainer = "container:YourWeatherLife.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63F781ED289452B4007F307E"
+               BuildableName = "YourWeatherLife-DatesTests.xctest"
+               BlueprintName = "YourWeatherLife-DatesTests"
                ReferencedContainer = "container:YourWeatherLife.xcodeproj">
             </BuildableReference>
          </TestableReference>

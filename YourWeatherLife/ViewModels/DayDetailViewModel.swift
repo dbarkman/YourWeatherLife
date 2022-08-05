@@ -50,6 +50,7 @@ class DayDetailViewModel: ObservableObject {
       today.hours = hours
       todayArray.append(today)
     }
+    NotificationCenter.default.post(name: .dayDetailViewModelPublished, object: nil)
     DispatchQueue.main.async {
       self.todayArray = todayArray
     }

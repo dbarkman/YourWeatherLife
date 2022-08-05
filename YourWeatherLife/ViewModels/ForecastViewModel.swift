@@ -49,6 +49,7 @@ class ForecastViewModel: ObservableObject {
     } catch {
       logger.error("Couldn't fetch 14 day forecast. 😭 \(error.localizedDescription)")
     }
+    NotificationCenter.default.post(name: .fourteenDayForecastViewModelPublished, object: nil)
     DispatchQueue.main.async {
       self.forecastDays = forecastDays
     }
@@ -62,17 +63,18 @@ class ForecastViewModel: ObservableObject {
     fetchRequest = TGWForecastHour.fetchRequest()
     fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "dateTime >= %@ AND location = %@", today, location)
+    var hours = [HourForecast]()
     do {
       let forecastHour = try viewContext.fetch(fetchRequest)
-      var hours = [HourForecast]()
       for hour in forecastHour {
         hours.append(globalViewModel.configureHour(hour: hour))
       }
-      DispatchQueue.main.async {
-        self.forecastHours = hours
-      }
     } catch {
       logger.error("Couldn't fetch 336 hour forecast. 😭 \(error.localizedDescription)")
+    }
+    NotificationCenter.default.post(name: .threeHundredHourForecastViewModelPublished, object: nil)
+    DispatchQueue.main.async {
+      self.forecastHours = hours
     }
   }
 }
