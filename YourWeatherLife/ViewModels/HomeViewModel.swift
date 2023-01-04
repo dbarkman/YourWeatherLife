@@ -20,7 +20,6 @@ class HomeViewModel: ObservableObject {
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
 
-  @Published var isShowingDailyEvents = false
   @Published var todayEvents = [EventForecast]()
   @Published var todayEventForecastHours = [String: [TGWForecastHour]]()
   @Published var tomorrowEvents = [EventForecast]()
@@ -154,11 +153,6 @@ class HomeViewModel: ObservableObject {
       self.laterEventForecastHours.removeAll()
     }
     return EventForecast()
-  }
-  
-  func showDailyEvents() {
-    Mixpanel.mainInstance().track(event: "Showing DailyEvents")
-    isShowingDailyEvents.toggle()
   }
   
   func disableiCloudSync() async {

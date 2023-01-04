@@ -79,7 +79,7 @@ struct DailyEvents: View {
         }
       }
       .sheet(isPresented: $showAddEvent) {
-        NavigationStack {
+        NavigationView {
           EditDailyEvent(addEvent: true, daysSelected: [1,2,3,4,5,6,7], returningFromModal: $returningFromModal)
         }
         .accentColor(Color("AccentColor"))

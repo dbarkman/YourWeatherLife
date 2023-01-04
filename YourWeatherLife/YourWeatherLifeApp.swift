@@ -63,6 +63,9 @@ struct YourWeatherLifeApp: App {
       Mixpanel.mainInstance().track(event: "Upgrade from future version")
       logger.debug("May have some work to do.")
       UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
+      let nextUpdate = Date(timeIntervalSince1970: 0)
+      UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
+      UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
     }
   }
   

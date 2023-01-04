@@ -10,9 +10,9 @@ import Mixpanel
 import OSLog
 
 struct DayDetail: View {
-
+  
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayDetail")
-
+  
   @StateObject private var globalViewModel = GlobalViewModel.shared
   @StateObject private var dayDetail = DayDetailViewModel.shared
   
@@ -103,23 +103,21 @@ struct DayDetail: View {
         }
         .listRowBackground(Color("ListBackground"))
         Section (header: Text(day.dayOfWeek)) {
-          if let dayHours = day.hours {
-            ForEach(dayHours, id: \.self) { hour in
-              NavigationLink(destination: HourDetail(hour: hour, navigationTitle: parent == "Home" ? "\(day.dayOfWeek), \(hour.timeFull)" : "\(hour.shortDisplayDate)")) {
-                HStack {
-                  VStack(alignment: .leading) {
-                    Text("\(hour.time)")
-                      .fontWeight(.semibold)
-                    Text("\(hour.temperature) \(hour.condition)")
-                  }
-                  Spacer()
-                  AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
-                    image.resizable()
-                  } placeholder: {
-                    Image("day/113")
-                  }
-                  .frame(width: 64, height: 64)
+          ForEach(day.hours, id: \.self) { hour in
+            NavigationLink(destination: HourDetail(hour: hour, navigationTitle: parent == "Home" ? "\(day.dayOfWeek), \(hour.timeFull)" : "\(hour.shortDisplayDate)")) {
+              HStack {
+                VStack(alignment: .leading) {
+                  Text("\(hour.time)")
+                    .fontWeight(.semibold)
+                  Text("\(hour.temperature) \(hour.condition)")
                 }
+                Spacer()
+                AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
+                  image.resizable()
+                } placeholder: {
+                  Image("day/113")
+                }
+                .frame(width: 64, height: 64)
               }
             }
           }
@@ -160,7 +158,7 @@ struct DayDetail: View {
 
 struct DayDetail_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationStack {
+    NavigationView {
       DayDetail(parent: "Self", navigationTitle: "Day")
     }
     .accentColor(Color("AccentColor"))

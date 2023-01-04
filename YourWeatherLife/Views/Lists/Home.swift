@@ -32,7 +32,7 @@ struct Home: View {
     
     UITableView.appearance().backgroundColor = .clear
     
-    return NavigationStack {
+    return NavigationView {
       ZStack {
         BackgroundColor()
         VStack {
@@ -139,11 +139,12 @@ struct Home: View {
                   HStack {
                     Text("Today")
                     Spacer()
-                    Text("Edit Events")
-                      .foregroundColor(Color("AccentColor"))
-                      .onTapGesture {
-                        homeViewModel.showDailyEvents()
-                      }
+                    ZStack(alignment: .trailing) {
+                      NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext)) { }
+                        .opacity(0)
+                      Text("Edit Events")
+                        .foregroundColor(Color("AccentColor"))
+                    }
                   }
                 }
                 .listRowSeparator(.hidden)
@@ -166,11 +167,12 @@ struct Home: View {
                   HStack {
                     Text("Tomorrow")
                     Spacer()
-                    Text("Edit Events")
-                      .foregroundColor(Color("AccentColor"))
-                      .onTapGesture {
-                        homeViewModel.showDailyEvents()
-                      }
+                    ZStack(alignment: .trailing) {
+                      NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext)) { }
+                        .opacity(0)
+                      Text("Edit Events")
+                        .foregroundColor(Color("AccentColor"))
+                    }
                   }
                 }
                 .listRowSeparator(.hidden)
@@ -193,11 +195,12 @@ struct Home: View {
                   HStack {
                     Text("Later")
                     Spacer()
-                    Text("Edit Events")
-                      .foregroundColor(Color("AccentColor"))
-                      .onTapGesture {
-                        homeViewModel.showDailyEvents()
-                      }
+                    ZStack(alignment: .trailing) {
+                      NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext)) { }
+                        .opacity(0)
+                      Text("Edit Events")
+                        .foregroundColor(Color("AccentColor"))
+                    }
                   }
                 }
                 .listRowSeparator(.hidden)
@@ -218,11 +221,12 @@ struct Home: View {
                     .background(.black)
                     .frame(height: 1)
                   Text("If you have events on another device, using the same iCloud account, they may sync from iCloud momentarily. Otherwise add some events by tapping Add Events.")
-                  Text("Add Events")
-                    .foregroundColor(Color("AccentColor"))
-                    .onTapGesture {
-                      homeViewModel.showDailyEvents()
-                    }
+                  ZStack(alignment: .trailing) {
+                    NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext)) { }
+                      .opacity(0)
+                    Text("Add Events")
+                      .foregroundColor(Color("AccentColor"))
+                  }
                 }
                   .listRowSeparator(.hidden)
                   .listRowBackground(Color.clear)
@@ -357,8 +361,6 @@ struct Home: View {
           })
         } //end of VStack
         .navigationBarHidden(true)
-        
-        NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext), isActive: $homeViewModel.isShowingDailyEvents) { }
       } //end of ZStack
       .sheet(isPresented: $showFeedback) {
         FeedbackModal()
@@ -398,7 +400,7 @@ struct Home: View {
           logger.debug("background")
         }
       }
-    } //end of NavigationStack
+    } //end of NavigationView
     .accentColor(Color("AccentColor"))
   }
 }

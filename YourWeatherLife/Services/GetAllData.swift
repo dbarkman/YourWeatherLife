@@ -27,7 +27,7 @@ struct GetAllData {
     }
     if now > nextUpdate {
       logger.debug("Fetching current conditions.")
-      nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
+      nextUpdate = Calendar.current.date(byAdding: .minute, value: 5, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
       return true
     } else {
@@ -47,7 +47,7 @@ struct GetAllData {
     }
     if now > nextUpdate {
       logger.debug("Fetching forecasts.")
-      nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
+      nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
       await TGW_ForecastProvider.shared.fetchForecast()
       NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)

@@ -81,7 +81,7 @@ struct EventDetail: View {
       }
     }
     .sheet(isPresented: $showEditEvent) {
-      NavigationStack {
+      NavigationView {
         let daysIntArray = event.days.compactMap { $0.wholeNumberValue }
         EditDailyEvent(eventName: event.eventName, startTimeDate: Dates.shared.makeDateFromString(date: event.startTime, format: "h:mma"), endTimeDate: Dates.shared.makeDateFromString(date: event.endTime, format: "h:mma"), daysSelected: daysIntArray, oldEventName: event.eventName, returningFromModal: $returningFromModal)
       }
@@ -111,7 +111,7 @@ struct EventDetail: View {
 
 //struct EventDetail_Previews: PreviewProvider {
 //  static var previews: some View {
-//    NavigationStack {
+//    NavigationView {
 //      EventDetail(event: Event, forecastHours: [])
 //    }
 //  .accentColor(Color("AccentColor"))

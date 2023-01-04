@@ -23,7 +23,7 @@ struct Today: Hashable {
   var sunsetTime = ""
   var dayOfWeek = ""
   var displayDate = ""
-  var hours: [HourForecast]?
+  var hours = [HourForecast]()
   var humidity = ""
   var averageTemp = ""
   var visibility = ""
