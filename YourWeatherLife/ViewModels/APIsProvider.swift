@@ -24,7 +24,9 @@ struct APIsProvider {
     let apisEndpoint = APISettings.shared.fetchAPISettings().apisEndpoint
     let signature = CryptoUtilities.shared.signRequest(input: apiKey, secretKey: secretKey)
     
-    if let apisURL = URL(string: urlBase + apisEndpoint) {
+    let urlString = urlBase + apisEndpoint
+    logger.debug("url 1: \(urlString)")
+    if let apisURL = URL(string: urlString) {
       var urlRequest = URLRequest(url: apisURL)
       urlRequest.setValue(apiKey, forHTTPHeaderField: "apiKey")
       urlRequest.setValue(signature, forHTTPHeaderField: "signature")

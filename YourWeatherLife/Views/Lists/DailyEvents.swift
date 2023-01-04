@@ -43,9 +43,9 @@ struct DailyEvents: View {
                       .fontWeight(.semibold)
                     Text(selectedDays)
                     HStack {
-                      Text(Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm"))
+                      Text(Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm", full: true))
                       Text("-")
-                      Text(Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm"))
+                      Text(Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm", full: true))
                     }
                   }
                 }

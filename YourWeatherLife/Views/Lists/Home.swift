@@ -313,18 +313,6 @@ struct Home: View {
               }
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
-              
-              ZStack(alignment: .leading) {
-                EventListCalendarItem(title: "Taco Tuesday Happy Hour on June 21", startTemp: "83°", startTime: "6p", endTemp: "75°", endTime: "9p", aroundSunrise: false, sunriseTemp: "", sunriseTime: "", aroundSunset: true, sunsetTemp: "76°", sunsetTime: "8:15p", precipitation: false, precipitationType: "", precipitationTime: "", precipitationPercent: "", eventWeatherSummary: "Cool and clear with no chance for rain")
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-              
-              ZStack(alignment: .leading) {
-                EventListCalendarItem(title: "Group hike on June 25", startTemp: "65°", startTime: "6:30a", endTemp: "72°", endTime: "9a", aroundSunrise: true, sunriseTemp: "67°", sunriseTime: "7:10a", aroundSunset: false, sunsetTemp: "", sunsetTime: "", precipitation: true, precipitationType: "rain", precipitationTime: "8a", precipitationPercent: "65%", eventWeatherSummary: "Cold and cloudy with a good chance of rain")
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
             } //end of Group
           } //end of List
           .listStyle(.plain)

@@ -50,8 +50,9 @@ class CurrentConditionsViewModel: ObservableObject {
       }
       return
     }
-    let url = await tgw.shared.getCurrentWeatherURL()
-    if let url = URL(string: url) {
+    let urlString = await tgw.shared.getCurrentWeatherURL()
+    logger.debug("url 4: \(urlString)")
+    if let url = URL(string: urlString) {
       let urlRequest = URLRequest(url: url)
       let session = URLSession.shared
       do {

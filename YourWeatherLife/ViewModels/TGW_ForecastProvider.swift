@@ -20,6 +20,7 @@ struct TGW_ForecastProvider {
   
   func fetchForecast() async {
     let url = await tgw.shared.getWeatherForecastURL(days: "14")
+    logger.debug("url 2: \(url)")
     if let url = URL(string: url) {
       let urlRequest = URLRequest(url: url)
       let session = URLSession.shared

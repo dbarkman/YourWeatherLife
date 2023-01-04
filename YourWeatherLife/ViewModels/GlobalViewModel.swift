@@ -75,13 +75,13 @@ class GlobalViewModel: ObservableObject {
     hourForecast.uv = "\(Int(hour.uv))"
     hourForecast.condition = "\(hour.condition_text ?? "")"
     hourForecast.conditionIcon = "\(hour.condition_icon ?? "")"
-    hourForecast.time = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm")
-    hourForecast.timeFull = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", short: true)
+    hourForecast.time = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
+    hourForecast.timeFull = Dates.shared.makeDisplayTimeFromTime(time: hour.time ?? "00:00", format: "HH:mm", full: true)
     hourForecast.date = "\(hour.date ?? "")"
     if let dateTime = hour.dateTime {
       let hourDate = Dates.shared.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
-      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE, M/d, h a")
-      hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h a")
+      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE, M/d, h:mm a")
+      hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h:mm a")
       hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
     }
     return hourForecast
@@ -138,12 +138,12 @@ class GlobalViewModel: ObservableObject {
     today.precipitationTotal = String(Formatters.shared.format(length: precip.3, from: .millimeters))
     today.coldestTemp = Formatters.shared.format(temp: coldestTemp, from: .celsius)
     today.warmestTemp = Formatters.shared.format(temp: warmestTemps, from: .celsius)
-    today.coldestTime = Dates.shared.makeDisplayTimeFromTime(time: coldestTime, format: "HH:mm")
-    today.warmestTime = Dates.shared.makeDisplayTimeFromTime(time: warmestTime, format: "HH:mm")
+    today.coldestTime = Dates.shared.makeDisplayTimeFromTime(time: coldestTime, format: "HH:mm", full: true)
+    today.warmestTime = Dates.shared.makeDisplayTimeFromTime(time: warmestTime, format: "HH:mm", full: true)
     today.sunriseTemp = Formatters.shared.format(temp: sunriseTemp, from: .celsius)
     today.sunsetTemp = Formatters.shared.format(temp: sunsetTemp, from: .celsius)
-    today.sunriseTime = Dates.shared.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa")
-    today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa")
+    today.sunriseTime = Dates.shared.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa", full: true)
+    today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa", full: true)
     today.dayOfWeek = isToday ? "Today" : Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE")
     today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE, MMMM d")
     today.humidity = String(Int(todayForecast.avghumidity))
@@ -154,8 +154,8 @@ class GlobalViewModel: ObservableObject {
     today.wind = String(Formatters.shared.format(speed: todayForecast.maxwind_kph, from: .kilometersPerHour))
     today.moonIllumination = todayForecast.moon_illumination ?? ""
     today.moonPhase = todayForecast.moon_phase ?? ""
-    today.moonRiseTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonrise ?? "00:00", format: "hh:mm aa")
-    today.moonSetTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonset ?? "00:00", format: "hh:mm aa")
+    today.moonRiseTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonrise ?? "00:00", format: "hh:mm aa", full: true)
+    today.moonSetTime = Dates.shared.makeDisplayTimeFromTime(time: todayForecast.moonset ?? "00:00", format: "hh:mm aa", full: true)
     today.uv = String(Int(todayForecast.uv))
     today.date = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "yyyy-MM-dd")
     return (today, forecastHours)
@@ -225,7 +225,9 @@ class GlobalViewModel: ObservableObject {
   }
 
   func checkInternetConnection(closure: @escaping (Bool) -> Void) {
-    if let url = URL(string: "https://weather.solutions/test.html") {
+    let urlString = "https://weather.solutions/test.html"
+    logger.debug("url 3: \(urlString)")
+    if let url = URL(string: urlString) {
       var request = URLRequest(url: url)
       request.httpMethod = "HEAD"
       request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData

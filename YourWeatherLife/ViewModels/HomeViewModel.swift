@@ -103,8 +103,8 @@ class HomeViewModel: ObservableObject {
       let nextStartDateString = String(nextStartDateTime.prefix(10))
       let nextStartDate = Dates.shared.makeDateFromString(date: nextStartDateString, format: "yyyy-MM-dd")
       let eventArray = Dates.shared.getEventHours(start: start, end: end, date: nextStartDate)
-      let startTime = Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm")
-      let endTime = Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm")
+      let startTime = Dates.shared.makeDisplayTimeFromTime(time: start, format: "HH:mm", full: true)
+      let endTime = Dates.shared.makeDisplayTimeFromTime(time: end, format: "HH:mm", full: true)
       var predicate = ""
       for event in eventArray {
         predicate.append("'\(event)',")
