@@ -28,7 +28,7 @@ struct UpdateLocation: View {
   @Binding var refreshLocation: Bool
   
   var body: some View {
-    NavigationView {
+    NavigationStack {
       ZStack {
         BackgroundColor()
         List {

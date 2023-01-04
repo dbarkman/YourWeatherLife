@@ -20,7 +20,7 @@ struct FeedbackModal: View {
   @State private var currentVersion = ""
 
   var body: some View {
-    NavigationView {
+    NavigationStack {
       ZStack {
         BackgroundColor()
         List {

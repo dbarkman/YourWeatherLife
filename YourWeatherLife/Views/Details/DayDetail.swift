@@ -160,7 +160,7 @@ struct DayDetail: View {
 
 struct DayDetail_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       DayDetail(parent: "Self", navigationTitle: "Day")
     }
     .accentColor(Color("AccentColor"))

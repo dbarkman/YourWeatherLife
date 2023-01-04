@@ -32,7 +32,7 @@ struct Home: View {
     
     UITableView.appearance().backgroundColor = .clear
     
-    return NavigationView {
+    return NavigationStack {
       ZStack {
         BackgroundColor()
         VStack {
@@ -398,7 +398,7 @@ struct Home: View {
           logger.debug("background")
         }
       }
-    } //end of NavigationView
+    } //end of NavigationStack
     .accentColor(Color("AccentColor"))
   }
 }
