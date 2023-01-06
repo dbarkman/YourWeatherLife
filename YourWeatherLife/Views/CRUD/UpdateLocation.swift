@@ -68,7 +68,7 @@ struct UpdateLocation: View {
                   TextField("zip/postal code", text: $zipcode)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .environment(\.colorScheme, .light)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.numbersAndPunctuation)
                 }
               }
               if manualLocation == 1 {

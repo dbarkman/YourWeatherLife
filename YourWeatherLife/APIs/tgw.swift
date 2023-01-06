@@ -62,19 +62,19 @@ struct tgw {
   private func getAutomaticLocation() async -> String {
     let locationManager = LocationViewModel.shared.locationManager
     if let location = locationManager.location {
-      let geocoder = CLGeocoder()
-      do {
-        let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
-        if reverseGeocodeLocation.count > 0 {
-          return reverseGeocodeLocation[0].postalCode ?? "98034"
-        }
+//      let geocoder = CLGeocoder()
+//      do {
+//        let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
+//        if reverseGeocodeLocation.count > 0 {
+//          return reverseGeocodeLocation[0].postalCode ?? "98034"
+//        }
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
         return "\(latitude),\(longitude)"
-      } catch {
-        print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
-        return "98034"
-      }
+//      } catch {
+//        print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
+//        return "98034"
+//      }
     } else {
       return "98034"
     }

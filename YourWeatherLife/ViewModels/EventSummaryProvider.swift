@@ -34,7 +34,7 @@ class EventSummaryProvider {
   var rainArray = [Int]()
   var snowArray = [Int]()
 
-  func creatSummary(hoursForecast: [TGWForecastHour]) -> String {
+  func creatSummary(hoursForecast: [ForecastHour]) -> String {
     var countI = 0
     var countD = 0.0
     var averageTemp = 0.0

@@ -29,8 +29,8 @@ class ForecastViewModel: ObservableObject {
     dateTimeFormatter.dateFormat = "yyyy-MM-dd"
     let today = dateTimeFormatter.string(from: Date())
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastDay>
-    fetchRequest = TGWForecastDay.fetchRequest()
+    let fetchRequest: NSFetchRequest<ForecastDay>
+    fetchRequest = ForecastDay.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "date >= %@ AND location = %@", today, location)
     var forecastDays = [Today]()
     do {
@@ -59,9 +59,9 @@ class ForecastViewModel: ObservableObject {
     let priorHour = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
     let today = Dates.shared.makeStringFromDate(date: priorHour, format: "yyyy-MM-dd HH:mm")
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastHour>
-    fetchRequest = TGWForecastHour.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
+    let fetchRequest: NSFetchRequest<ForecastHour>
+    fetchRequest = ForecastHour.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastHour.time_epoch, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "dateTime >= %@ AND location = %@", today, location)
     var hours = [HourForecast]()
     do {

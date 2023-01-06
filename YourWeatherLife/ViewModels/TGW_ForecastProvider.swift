@@ -76,7 +76,7 @@ struct TGW_ForecastProvider {
   private func newBatchInsertHoursRequest(with forecastHoursArray: [TGW_ForecastHours]) -> NSBatchInsertRequest {
     var index = 0
     let total = forecastHoursArray.count
-    let batchInsertRequest = NSBatchInsertRequest(entity: TGWForecastHour.entity(), dictionaryHandler: { dictionary in
+    let batchInsertRequest = NSBatchInsertRequest(entity: ForecastHour.entity(), dictionaryHandler: { dictionary in
       guard index < total else { return true }
       dictionary.addEntries(from: forecastHoursArray[index].dictionaryValue)
       index += 1
@@ -109,7 +109,7 @@ struct TGW_ForecastProvider {
   private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {
     var index = 0
     let total = forecastDaysArray.count
-    let batchInsertRequest = NSBatchInsertRequest(entity: TGWForecastDay.entity(), dictionaryHandler: { dictionary in
+    let batchInsertRequest = NSBatchInsertRequest(entity: ForecastDay.entity(), dictionaryHandler: { dictionary in
       guard index < total else { return true }
       dictionary.addEntries(from: forecastDaysArray[index].dictionaryValue)
       index += 1

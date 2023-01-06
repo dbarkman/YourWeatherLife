@@ -13,11 +13,11 @@ import Mixpanel
 struct YourWeatherLifeApp: App {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "YourWeatherLifeApp")
-
-//  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  
+  //  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   
   var globalViewModel = GlobalViewModel.shared
-
+  
   init() {
     Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
     let homeDir = NSHomeDirectory();
@@ -29,44 +29,7 @@ struct YourWeatherLifeApp: App {
     let appVersion = globalViewModel.fetchAppVersionNumber()
     let buildNumber = globalViewModel.fetchBuildNumber()
     let currentVersion = "\(appVersion)-\(buildNumber)"
-    logger.debug("App Version: \(appVersion), Build Number: \(buildNumber)")
-    guard let currentVersionStored = UserDefaults.standard.object(forKey: "currentVersion") as? String else {
-      //new install or update from 2022071102, let's check
-      let defaultEventsLoaded = UserDefaults.standard.bool(forKey: "defaultEventsLoaded")
-      if !defaultEventsLoaded {
-        //new install, nothing to do
-        Mixpanel.mainInstance().track(event: "New Install")
-        logger.debug("New Install")
-        UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
-        return
-      } else {
-        logger.debug("Not a new install")
-      }
-      //update from 2022071102 to current, got shit to do!
-      Mixpanel.mainInstance().track(event: "Update from 2022071102")
-      logger.debug("update from 2022071102")
-      UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
-      
-      Task {
-        await updateiCloudAccountStatus()
-        updateLocationMethod()
-        let nextUpdate = Date(timeIntervalSince1970: 0)
-        UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
-        UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
-      }
-
-      return
-    }
-    logger.debug("CurrentVersion: \(currentVersionStored)")
-    if currentVersionStored != currentVersion {
-      //future released version
-      Mixpanel.mainInstance().track(event: "Upgrade from future version")
-      logger.debug("May have some work to do.")
-      UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
-      let nextUpdate = Date(timeIntervalSince1970: 0)
-      UserDefaults.standard.set(nextUpdate, forKey: "currentConditionsNextUpdate")
-      UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
-    }
+    logger.debug("App Version: \(appVersion)-\(buildNumber)")
   }
   
   private func updateiCloudAccountStatus() async {
@@ -75,7 +38,7 @@ struct YourWeatherLifeApp: App {
       UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")
     }
   }
-
+  
   private func updateLocationMethod() {
     let authorizationStatus = LocationViewModel.shared.authorizationStatus
     if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
@@ -88,9 +51,15 @@ struct YourWeatherLifeApp: App {
       }
     }
   }
+
   var body: some Scene {
     WindowGroup {
-      Home()
+      if UserDefaults.standard.string(forKey: "currentVersion") != nil && UserDefaults.standard.string(forKey: "currentVersion") != "1.1-2023010501" {
+        AppCrashing()
+      } else {
+        Home()
+      }
     }
   }
+
 }

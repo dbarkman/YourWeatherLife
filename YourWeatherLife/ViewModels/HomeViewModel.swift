@@ -21,11 +21,11 @@ class HomeViewModel: ObservableObject {
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
 
   @Published var todayEvents = [EventForecast]()
-  @Published var todayEventForecastHours = [String: [TGWForecastHour]]()
+  @Published var todayEventForecastHours = [String: [ForecastHour]]()
   @Published var tomorrowEvents = [EventForecast]()
-  @Published var tomorrowEventForecastHours = [String: [TGWForecastHour]]()
+  @Published var tomorrowEventForecastHours = [String: [ForecastHour]]()
   @Published var laterEvents = [EventForecast]()
-  @Published var laterEventForecastHours = [String: [TGWForecastHour]]()
+  @Published var laterEventForecastHours = [String: [ForecastHour]]()
   @Published var showiCloudLoginAlert = false
   @Published var showiCloudFetchAlert = false
   @Published var showNoLocationAlert = false
@@ -110,15 +110,15 @@ class HomeViewModel: ObservableObject {
       }
       let finalPredicate = predicate.dropLast()
       let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-      let fetchRequest: NSFetchRequest<TGWForecastHour>
-      fetchRequest = TGWForecastHour.fetchRequest()
-      fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
+      let fetchRequest: NSFetchRequest<ForecastHour>
+      fetchRequest = ForecastHour.fetchRequest()
+      fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastHour.time_epoch, ascending: true)]
       fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)} AND location = %@", location)
-      var forecastHours: [TGWForecastHour] = []
+      var forecastHours: [ForecastHour] = []
       do {
         forecastHours = try viewContext.fetch(fetchRequest)
       } catch {
-        logger.error("Couldn't fetch TGWForecastHour. 😭 \(error.localizedDescription)")
+        logger.error("Couldn't fetch ForecastHour. 😭 \(error.localizedDescription)")
         return EventForecast()
       }
       var hours = [HourForecast]()

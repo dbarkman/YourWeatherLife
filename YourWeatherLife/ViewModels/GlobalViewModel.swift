@@ -54,7 +54,7 @@ class GlobalViewModel: ObservableObject {
     }
   }
   
-  func configureHour(hour: TGWForecastHour) -> HourForecast {
+  func configureHour(hour: ForecastHour) -> HourForecast {
     var hourForecast = HourForecast()
     hourForecast.temperature = Formatters.shared.format(temp: hour.temp_c, from: .celsius)
     hourForecast.feelsLike = Formatters.shared.format(temp: hour.feelslike_c, from: .celsius)
@@ -87,7 +87,7 @@ class GlobalViewModel: ObservableObject {
     return hourForecast
   }
   
-  func configureDay(todayForecast: TGWForecastDay, isToday: Bool = false) -> (Today, [TGWForecastHour]) {
+  func configureDay(todayForecast: ForecastDay, isToday: Bool = false) -> (Today, [ForecastHour]) {
     let dayDate = (todayForecast.date ?? "") + " 00:00"
     let dayOfWeekDate = Dates.shared.makeDateFromString(date: dayDate, format: "yyyy-MM-dd HH:mm")
     let precip = setPrecipitation(forecastDay: todayForecast)
@@ -102,15 +102,15 @@ class GlobalViewModel: ObservableObject {
     var warmestTemps = -999.9
     var warmestTime = ""
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastHour>
-    fetchRequest = TGWForecastHour.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastHour.time_epoch, ascending: true)]
+    let fetchRequest: NSFetchRequest<ForecastHour>
+    fetchRequest = ForecastHour.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastHour.time_epoch, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "date = %@ AND location = %@", todayForecast.date ?? "", location)
-    var forecastHours: [TGWForecastHour] = []
+    var forecastHours: [ForecastHour] = []
     do {
       forecastHours = try viewContext.fetch(fetchRequest)
     } catch {
-      logger.error("Couldn't fetch TGWForecastHour. 😭 \(error.localizedDescription)")
+      logger.error("Couldn't fetch ForecastHour. 😭 \(error.localizedDescription)")
       return (Today(), [])
     }
     for hour in forecastHours {
@@ -161,7 +161,7 @@ class GlobalViewModel: ObservableObject {
     return (today, forecastHours)
   }
   
-  func setPrecipitation(forecastDay: TGWForecastDay) -> (Bool, String, String, Double) {
+  func setPrecipitation(forecastDay: ForecastDay) -> (Bool, String, String, Double) {
     var precipitation = false
     var precipitationType = ""
     var precipitationPercent = ""

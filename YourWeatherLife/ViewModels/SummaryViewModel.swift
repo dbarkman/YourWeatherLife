@@ -35,8 +35,8 @@ class SummaryViewModel: ObservableObject {
     dateTimeFormatter.dateFormat = "yyyy-MM-dd"
     let today = dateTimeFormatter.string(from: Date())
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastDay>
-    fetchRequest = TGWForecastDay.fetchRequest()
+    let fetchRequest: NSFetchRequest<ForecastDay>
+    fetchRequest = ForecastDay.fetchRequest()
     fetchRequest.predicate = NSPredicate(format: "date = %@ AND location = %@", today, location)
     do {
       let forecastDay = try viewContext.fetch(fetchRequest)
@@ -58,15 +58,15 @@ class SummaryViewModel: ObservableObject {
     let saturday = Dates.shared.makeStringFromDate(date: saturdayDate, format: "yyyy-MM-dd")
     let sunday = Dates.shared.makeStringFromDate(date: sundayDate, format: "yyyy-MM-dd")
     let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
-    let fetchRequest: NSFetchRequest<TGWForecastDay>
-    fetchRequest = TGWForecastDay.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
+    let fetchRequest: NSFetchRequest<ForecastDay>
+    fetchRequest = ForecastDay.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastDay.date, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "date IN {'\(saturday)', '\(sunday)'} AND location = %@", location)
-    var forecastDays: [TGWForecastDay] = []
+    var forecastDays: [ForecastDay] = []
     do {
       forecastDays = try viewContext.fetch(fetchRequest)
     } catch {
-      logger.error("Couldn't fetch TGWForecastDay. 😭 \(error.localizedDescription)")
+      logger.error("Couldn't fetch ForecastDay. 😭 \(error.localizedDescription)")
     }
     if forecastDays.count > 1 {
       let saturdayLow = forecastDays[0].mintemp_c

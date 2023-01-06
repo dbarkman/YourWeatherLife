@@ -29,15 +29,15 @@ class DayDetailViewModel: ObservableObject {
       predicate.append("'\(date)',")
     }
     let finalPredicate = predicate.dropLast()
-    let fetchRequest: NSFetchRequest<TGWForecastDay>
-    fetchRequest = TGWForecastDay.fetchRequest()
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \TGWForecastDay.date, ascending: true)]
+    let fetchRequest: NSFetchRequest<ForecastDay>
+    fetchRequest = ForecastDay.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastDay.date, ascending: true)]
     fetchRequest.predicate = NSPredicate(format: "date IN {\(finalPredicate)} AND location = %@", location)
-    var forecastDays: [TGWForecastDay] = []
+    var forecastDays: [ForecastDay] = []
     do {
       forecastDays = try viewContext.fetch(fetchRequest)
     } catch {
-      logger.error("Couldn't fetch TGWForecastDay. 😭 \(error.localizedDescription)")
+      logger.error("Couldn't fetch ForecastDay. 😭 \(error.localizedDescription)")
     }
     var todayArray = [Today]()
     for day in forecastDays {

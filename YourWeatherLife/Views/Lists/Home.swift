@@ -374,6 +374,13 @@ struct Home: View {
           globalViewModel.returningFromChildView = false
           homeViewModel.awaitUpdateNextStartDate()
         }
+        guard let _ = UserDefaults.standard.string(forKey: "currentVersion") else {
+          let appVersion = globalViewModel.fetchAppVersionNumber()
+          let buildNumber = globalViewModel.fetchBuildNumber()
+          let currentVersion = "\(appVersion)-\(buildNumber)"
+          UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
+          return
+        }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
       }
