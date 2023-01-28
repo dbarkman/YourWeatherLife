@@ -21,6 +21,8 @@ struct EventDetail: View {
   @State var event = EventForecast()
   @State var eventName = ""
   @State var returningFromModal = false
+  
+  var dailyEvent = true
 
 //    if event == "Taco Tuesday" {
 //      let hourDetails1 = HourDetails(id: UUID(), current: "83° and Sunny", winds: "Winds 2 mph from the southwest", precip: "15% humidity, no chance of rain")
@@ -98,7 +100,11 @@ struct EventDetail: View {
       
       logger.debug("EventDetail onAppear")
       
-      event = homeViewModel.createUpdateEventList(eventPredicate: eventName)
+      if dailyEvent {
+        event = homeViewModel.createUpdateEventList(eventPredicate: eventName)
+      } else {
+        event = homeViewModel.fetchImportedEvents(eventPredicate: eventName)
+      }
     }
     .onChange(of: returningFromModal) { _ in
       if returningFromModal {

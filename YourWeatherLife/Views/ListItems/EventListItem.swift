@@ -24,7 +24,7 @@ struct EventListItem: View {
             .fontWeight(.semibold)
 //          .minimumScaleFactor(0.1)
           HStack {
-            if when != "Today" && when != "Tomorrow" {
+            if when != "Today" && when != "Tomorrow" && !when.isEmpty {
               Text(when + ":")
             }
             Text(startTime)

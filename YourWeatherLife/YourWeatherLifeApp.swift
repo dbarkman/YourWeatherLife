@@ -29,7 +29,7 @@ struct YourWeatherLifeApp: App {
     let appVersion = globalViewModel.fetchAppVersionNumber()
     let buildNumber = globalViewModel.fetchBuildNumber()
     let currentVersion = "\(appVersion)-\(buildNumber)"
-    logger.debug("App Version: \(appVersion)-\(buildNumber)")
+    logger.debug("App Version: \(currentVersion)")
   }
   
   private func updateiCloudAccountStatus() async {

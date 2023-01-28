@@ -234,6 +234,51 @@ struct Home: View {
             } //end of Group
             
             Group {
+              VStack(alignment: .leading) {
+                Divider()
+                  .background(.black)
+                  .frame(height: 1)
+                Text("Events Imported from your Calendar")
+              }
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
+              
+              ForEach(homeViewModel.importEvents, id: \.self) { event in
+                ZStack(alignment: .leading) {
+                  NavigationLink(destination: EventDetail(eventName: event.eventName, dailyEvent: false)) { }
+                    .opacity(0)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
+                    .padding([.leading, .trailing, .top], 10)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+
+              ZStack(alignment: .leading) {
+                NavigationLink(destination: CalendarEvents()) { }
+                  .opacity(0)
+                VStack(alignment: .leading) {
+                  HStack {
+                    Text("Import Calendar Events")
+                      .font(.title2)
+                    Image(systemName: "chevron.right")
+                      .symbolRenderingMode(.monochrome)
+                      .foregroundColor(Color("AccentColor"))
+                      .padding(.horizontal, 5)
+                  }
+                  .padding(.bottom, 1)
+                }
+                .padding([.leading, .trailing, .top], 10)
+                .padding(.bottom, 20)
+                .overlay {
+                  RoundedRectangle(cornerRadius: 10)
+                    .stroke(.gray, lineWidth: 2)
+                    .padding(.bottom, 10)
+                }
+              }
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
+              
               VStack {
                 Divider()
                   .background(.black)
