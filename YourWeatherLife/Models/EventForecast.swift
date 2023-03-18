@@ -17,4 +17,5 @@ struct EventForecast: Hashable {
   var when = ""
   var days = "1234567"
   var forecastHours = [HourForecast]()
+  var identifier = ""
 }

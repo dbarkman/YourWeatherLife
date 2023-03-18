@@ -20,54 +20,45 @@ struct CalendarEventProvider {
   
   private init() { }
   
-  func insertCalendarEvents(calendarEventList: [EKEvent]) {
-//    let fetchRequest: NSFetchRequest<CalendarEvent>
-//    fetchRequest = CalendarEvent.fetchRequest()
-    for calendarEvent in calendarEventList {
-      let id = calendarEvent.eventIdentifier ?? ""
-//      fetchRequest.predicate = NSPredicate(format: "identifier = %@", id)
-//      do {
-//        let calendarEvents = try viewCloudContext.fetch(fetchRequest)
-//        if calendarEvents.count == 0 {
-          let newCalendarEvent = CalendarEvent(context: viewCloudContext)
-          newCalendarEvent.identifier = calendarEvent.eventIdentifier
-          do {
-            try viewCloudContext.save()
-          } catch {
-            logger.error("Could not save Calendar Event: \(calendarEvent.title)")
-          }
-//        } else {
-//          logger.error("Calendar Event: \(calendarEvent.title), already exists")
-//          updateCalendarEvent(calendarEvent: calendarEvent)
-//          continue
-//        }
-//      } catch {
-//        logger.error("Could not fetch Calendar Events: 😭 \(error.localizedDescription)")
-//      }
+  func insertCalendarEvents(selectedEvents: [String], eventIdsByName: [String:String]) {
+    //make an array of ids
+    var calendarEventIdsList: [String] = []
+    for event in selectedEvents {
+      let calendarEventIdentifier = eventIdsByName[event] ?? ""
+      calendarEventIdsList.append(calendarEventIdentifier)
     }
-  }
-  
-  func updateCalendarEvent(calendarEvent: EKEvent) {
-    let fetchRequest: NSFetchRequest<CalendarEvent>
-    fetchRequest = CalendarEvent.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "id = %@", calendarEvent.calendarItemIdentifier)
+    
+    //grab all events in the db
+    //if not in selectedEvents, remove
+    var eventsToProcess = [CalendarEvent]()
+    let fetchRequest = NSFetchRequest<CalendarEvent>(entityName: "CalendarEvent")
     do {
-      let calendarEvents = try viewCloudContext.fetch(fetchRequest)
-      for calEvent in calendarEvents {
-        calEvent.setValue(calendarEvent.title, forKey: "title")
-        calEvent.setValue(calendarEvent.startDate, forKey: "startDate")
-        calEvent.setValue(calendarEvent.endDate, forKey: "endDate")
-        calEvent.setValue(calendarEvent.isAllDay, forKey: "isAllDay")
-        calEvent.setValue(calendarEvent.timeZone?.description, forKey: "timeZone")
-        calEvent.setValue(calendarEvent.location, forKey: "location")
+      eventsToProcess = try viewCloudContext.fetch(fetchRequest)
+      for eventToProcess in eventsToProcess {
+        if let identifier = eventToProcess.identifier {
+          if !calendarEventIdsList.contains(identifier) {
+            viewCloudContext.delete(eventToProcess)
+          }
+        }
+      }
+      try viewCloudContext.save()
+    } catch {
+      print("Fetch or delete activity failed 😭")
+    }
+    
+    //process all events in selectedEvents
+    //just try to add each one
+    for eventId in calendarEventIdsList {
+      if !eventsToProcess.contains(where: { $0.identifier == eventId }) {
+        let newCalendarEvent = CalendarEvent(context: viewCloudContext)
+        newCalendarEvent.identifier = eventId
         do {
           try viewCloudContext.save()
         } catch {
-          logger.error("Could not update Calendar Event: \(calendarEvent.title)")
+          logger.error("Could not save Calendar Event: \(eventId)")
         }
       }
-    } catch {
-      logger.error("Could not fetch Calendar Events: 😭 \(error.localizedDescription)")
     }
   }
+  
 }

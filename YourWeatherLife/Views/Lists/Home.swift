@@ -245,21 +245,20 @@ struct Home: View {
               
               ForEach(homeViewModel.importEvents, id: \.self) { event in
                 ZStack(alignment: .leading) {
-                  NavigationLink(destination: EventDetail(eventName: event.eventName, dailyEvent: false)) { }
+                  NavigationLink(destination: EventDetail(eventName: event.identifier, dailyEvent: false)) { }
                     .opacity(0)
                   EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
-                    .padding([.leading, .trailing, .top], 10)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
               }
 
               ZStack(alignment: .leading) {
-                NavigationLink(destination: CalendarEvents()) { }
+                NavigationLink(destination: CalendarEvents().environment(\.managedObjectContext, viewCloudContext)) { }
                   .opacity(0)
                 VStack(alignment: .leading) {
                   HStack {
-                    Text("Import Calendar Events")
+                    Text(homeViewModel.importEvents.count > 0 ? "Manage Imported Calendar Events" : "Import Calendar Events")
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
@@ -370,6 +369,7 @@ struct Home: View {
             if globalViewModel.networkOnline {
               homeViewModel.fetchForecast()
               currentConditions.updateCurrent()
+              homeViewModel.updateEventList()
             }
           }
           .alert(Text("Location Unavailable"), isPresented: $homeViewModel.showNoLocationAlert, actions: {

@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import CoreData
 import EventKit
 import Mixpanel
 import OSLog
 
 struct CalendarEvents: View {
   
-  @Environment(\.presentationMode) var presentationMode
-  
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "CalendarEvents")
+  
+  @Environment(\.presentationMode) var presentationMode
   
   @StateObject private var eventStoreViewModel = EventStoreViewModel.shared
   @StateObject private var calendarEventViewModel = CalendarEventViewModel.shared
@@ -29,6 +30,9 @@ struct CalendarEvents: View {
       BackgroundColor()
       
       List {
+        Text("events occuring within the next 14 days")
+          .font(.callout)
+          .listRowBackground(Color("ListBackground"))
         ForEach(eventStoreViewModel.eventSets) { section in
           Section(header: Text(section.calendar)) {
             ForEach(section.events, id: \.self) { event in
@@ -37,7 +41,8 @@ struct CalendarEvents: View {
                   if let index = selectedEvents.firstIndex(where: { $0 == event }) {
                     selectedEvents.remove(at: index)
                   } else {
-                    selectedEvents.append(event)                  }
+                    selectedEvents.append(event)
+                  }
                 }) {
                   HStack {
                     Image(systemName: selectedEvents.contains(event) ? "checkmark.circle.fill" : "circle")
@@ -57,14 +62,8 @@ struct CalendarEvents: View {
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(action: {
-            var calendarEventList: [EKEvent] = []
-            for event in selectedEvents {
-              let calendarEventIdentifier = eventStoreViewModel.eventIdsByName[event] ?? ""
-              if let calendarEvent = eventStoreViewModel.store.event(withIdentifier: calendarEventIdentifier) {
-                calendarEventList.append(calendarEvent)
-              }
-            }
-            CalendarEventProvider.shared.insertCalendarEvents(calendarEventList: calendarEventList)
+            UserDefaults.standard.set(Array(selectedEvents), forKey: "selectedEvents")
+            CalendarEventProvider.shared.insertCalendarEvents(selectedEvents: selectedEvents, eventIdsByName: eventStoreViewModel.eventIdsByName)
             _ = homeViewModel.fetchImportedEvents()
             presentationMode.wrappedValue.dismiss()
           }) {
@@ -102,7 +101,13 @@ struct CalendarEvents: View {
         EventStoreViewModel.shared.requestAccess()
       } else if authStatus == .authorized {
         eventStoreViewModel.fetchEvents()
-        calendarEventViewModel.fetchCalendarEvents()
+//        calendarEventViewModel.fetchCalendarEvents()
+      }
+      
+      DispatchQueue.main.async {
+        if let selectedEvents = UserDefaults.standard.object(forKey: "selectedEvents") as? [String] {
+          self.selectedEvents = selectedEvents
+        }
       }
     }
   }

@@ -73,7 +73,7 @@ class HomeViewModel: ObservableObject {
   @objc private func overrideUpdateEventList() {
     updateEventList()
   }
-  private func updateEventList() {
+  func updateEventList() {
     _ = createUpdateEventList()
     _ = fetchImportedEvents()
   }
@@ -165,9 +165,9 @@ class HomeViewModel: ObservableObject {
     let fetchRequest: NSFetchRequest<CalendarEvent>
     fetchRequest = CalendarEvent.fetchRequest()
     if !eventPredicate.isEmpty {
-      fetchRequest.predicate = NSPredicate(format: "title = %@", eventPredicate)
+      fetchRequest.predicate = NSPredicate(format: "identifier = %@", eventPredicate)
     }
-    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \CalendarEvent.startDate, ascending: true)]
+//    fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \CalendarEvent.startDate, ascending: true)]
     var dailyEventList: [CalendarEvent] = []
     do {
       dailyEventList = try viewCloudContext.fetch(fetchRequest)
@@ -176,8 +176,10 @@ class HomeViewModel: ObservableObject {
       return EventForecast()
     }
     for dailyEvent in dailyEventList {
+      logger.log("event id: \(dailyEvent)")
       if let identifier = dailyEvent.identifier, let calendarEvent = EventStoreViewModel.shared.store.event(withIdentifier: identifier), calendarEvent.endDate > Date() {
         let eventName = calendarEvent.title ?? ""
+        logger.log("event: \(eventName)")
         let start = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "HH:mm")
         let end = Dates.shared.makeStringFromDate(date: calendarEvent.endDate ?? Date(), format: "HH:mm")
         let when = ""
@@ -213,7 +215,7 @@ class HomeViewModel: ObservableObject {
         }
         let summary = EventSummaryProvider.shared
         let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-        let event = EventForecast(eventName: eventName, startTime: startDisplayTime, endTime: endDisplayTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours)
+        let event = EventForecast(eventName: eventName, startTime: startDisplayTime, endTime: endDisplayTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours, identifier: identifier)
         if !eventPredicate.isEmpty {
           return event
         }

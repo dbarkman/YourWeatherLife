@@ -28,18 +28,18 @@ class CalendarEventViewModel: ObservableObject {
     let today = Date()
     let fetchRequest: NSFetchRequest<CalendarEvent>
     fetchRequest = CalendarEvent.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "startDate >= %@", today as CVarArg)
+//    fetchRequest.predicate = NSPredicate(format: "startDate >= %@", today as CVarArg)
     do {
       let calendarEvents = try viewCloudContext.fetch(fetchRequest)
       var eventsTitles: Set<String> = []
       for calendarEvent in calendarEvents {
-        let title = calendarEvent.title ?? ""
-        let startDate = calendarEvent.startDate ?? Date()
-        var date = Dates.shared.makeStringFromDate(date: startDate, format: "EEEE, MMMM d' at 'h:mm a")
-        if calendarEvent.isAllDay {
-          date = Dates.shared.makeStringFromDate(date: startDate, format: "EEEE, MMMM d")
-        }
-        eventsTitles.insert("\(title) on \(date)")
+//        let title = calendarEvent.title ?? ""
+//        let startDate = calendarEvent.startDate ?? Date()
+//        var date = Dates.shared.makeStringFromDate(date: startDate, format: "EEEE, MMMM d' at 'h:mm a")
+//        if calendarEvent.isAllDay {
+//          date = Dates.shared.makeStringFromDate(date: startDate, format: "EEEE, MMMM d")
+//        }
+//        eventsTitles.insert("\(title) on \(date)")
       }
       DispatchQueue.main.async {
         self.selectedCalendarEvents = eventsTitles
