@@ -234,6 +234,50 @@ struct Home: View {
             } //end of Group
             
             Group {
+              VStack(alignment: .leading) {
+                Divider()
+                  .background(.black)
+                  .frame(height: 1)
+                Text("Events Imported from your Calendar")
+              }
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
+              
+              ForEach(homeViewModel.importEvents, id: \.self) { event in
+                ZStack(alignment: .leading) {
+                  NavigationLink(destination: EventDetail(eventName: event.identifier, dailyEvent: false)) { }
+                    .opacity(0)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when, calendarEvent: true)
+                }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+              }
+
+              ZStack(alignment: .leading) {
+                NavigationLink(destination: CalendarEvents().environment(\.managedObjectContext, viewCloudContext)) { }
+                  .opacity(0)
+                VStack(alignment: .leading) {
+                  HStack {
+                    Text(homeViewModel.importEvents.count > 0 ? "Manage Imported Calendar Events" : "Import Calendar Events")
+                      .font(.title2)
+                    Image(systemName: "chevron.right")
+                      .symbolRenderingMode(.monochrome)
+                      .foregroundColor(Color("AccentColor"))
+                      .padding(.horizontal, 5)
+                  }
+                  .padding(.bottom, 1)
+                }
+                .padding([.leading, .trailing, .top], 10)
+                .padding(.bottom, 20)
+                .overlay {
+                  RoundedRectangle(cornerRadius: 10)
+                    .stroke(.gray, lineWidth: 2)
+                    .padding(.bottom, 10)
+                }
+              }
+              .listRowSeparator(.hidden)
+              .listRowBackground(Color.clear)
+              
               VStack {
                 Divider()
                   .background(.black)
@@ -308,16 +352,6 @@ struct Home: View {
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             } //end of Group
-            
-            Group {
-              VStack(alignment: .leading) {
-                Divider()
-                  .background(.black)
-                Text("Fictional Events from Your Calendar, Coming Next!")
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-            } //end of Group
           } //end of List
           .listStyle(.plain)
           .refreshable {
@@ -325,6 +359,7 @@ struct Home: View {
             if globalViewModel.networkOnline {
               homeViewModel.fetchForecast()
               currentConditions.updateCurrent()
+              homeViewModel.updateEventList()
             }
           }
           .alert(Text("Location Unavailable"), isPresented: $homeViewModel.showNoLocationAlert, actions: {
@@ -383,6 +418,7 @@ struct Home: View {
         }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
+        logger.debug("entered foreground")
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {

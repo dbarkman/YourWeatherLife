@@ -12,6 +12,16 @@ struct Dates {
   static let shared = Dates()
   
   private init() { }
+  
+  func userFormatDayFirst() -> Bool {
+    var dayFirst = false
+    if let userFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd", options: 0, locale: Locale.current) {
+      if userFormat.starts(with: "d") {
+        dayFirst = true
+      }
+    }
+    return dayFirst
+  }
 
   private func makeFutureDateFromTime(time: String, date: Date, makeFuture: Bool = true) -> Date {
     var dateString = ""

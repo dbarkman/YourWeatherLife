@@ -80,8 +80,9 @@ class GlobalViewModel: ObservableObject {
     hourForecast.date = "\(hour.date ?? "")"
     if let dateTime = hour.dateTime {
       let hourDate = Dates.shared.makeDateFromString(date: dateTime, format: "yyyy-MM-dd HH:mm")
-      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE, M/d, h:mm a")
-      hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, M/d, h:mm a")
+      let monthDayFormat = Dates.shared.userFormatDayFirst() ? "d/M" : "M/d"
+      hourForecast.displayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE, \(monthDayFormat), h:mm a")
+      hourForecast.shortDisplayDate = Dates.shared.makeStringFromDate(date: hourDate, format: "EEE, \(monthDayFormat), h:mm a")
       hourForecast.dayOfWeek = Dates.shared.makeStringFromDate(date: hourDate, format: "EEEE")
     }
     return hourForecast
@@ -145,7 +146,8 @@ class GlobalViewModel: ObservableObject {
     today.sunriseTime = Dates.shared.makeDisplayTimeFromTime(time: sunriseTime ?? "00:00", format: "hh:mm aa", full: true)
     today.sunsetTime = Dates.shared.makeDisplayTimeFromTime(time: sunsetTime ?? "00:00", format: "hh:mm aa", full: true)
     today.dayOfWeek = isToday ? "Today" : Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE")
-    today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE, MMMM d")
+    let monthDayFormat = Dates.shared.userFormatDayFirst() ? "d MMMM" : "MMMM d"
+    today.displayDate = Dates.shared.makeStringFromDate(date: dayOfWeekDate, format: "EEEE, \(monthDayFormat)")
     today.humidity = String(Int(todayForecast.avghumidity))
     today.averageTemp = String(Formatters.shared.format(temp: todayForecast.avgtemp_c, from: .celsius))
     today.visibility = String(Formatters.shared.format(length: todayForecast.avgvis_km, from: .kilometers))

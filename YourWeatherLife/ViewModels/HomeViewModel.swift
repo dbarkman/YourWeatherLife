@@ -11,15 +11,15 @@ import Mixpanel
 import OSLog
 
 class HomeViewModel: ObservableObject {
-
+  
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "HomeViewModel")
   
   static let shared = HomeViewModel()
   var globalViewModel = GlobalViewModel.shared
-
+  
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
-
+  
   @Published var todayEvents = [EventForecast]()
   @Published var todayEventForecastHours = [String: [ForecastHour]]()
   @Published var tomorrowEvents = [EventForecast]()
@@ -29,11 +29,14 @@ class HomeViewModel: ObservableObject {
   @Published var showiCloudLoginAlert = false
   @Published var showiCloudFetchAlert = false
   @Published var showNoLocationAlert = false
-
+  @Published var importEvents = [EventForecast]()
+  @Published var importEventForecastHours = [String: [ForecastHour]]()
+  
   private var todayEventsList = [EventForecast]()
   private var tomorrowEventsList = [EventForecast]()
   private var laterEventsList = [EventForecast]()
-
+  private var importEventsList = [EventForecast]()
+  
   private init() {
     NotificationCenter.default.addObserver(self, selector: #selector(overrideFetchForcast), name: .locationUpdatedEvent, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(objcUpdateNextStartDate), name: .forecastInsertedEvent, object: nil)
@@ -70,10 +73,11 @@ class HomeViewModel: ObservableObject {
   @objc private func overrideUpdateEventList() {
     updateEventList()
   }
-  private func updateEventList() {
+  func updateEventList() {
     _ = createUpdateEventList()
+    _ = fetchImportedEvents()
   }
-
+  
   func createUpdateEventList(eventPredicate: String = "") -> EventForecast {
     logger.debug("Creating/updating event list.")
     todayEventsList.removeAll()
@@ -151,6 +155,102 @@ class HomeViewModel: ObservableObject {
       self.todayEventForecastHours.removeAll()
       self.tomorrowEventForecastHours.removeAll()
       self.laterEventForecastHours.removeAll()
+    }
+    return EventForecast()
+  }
+  
+  func fetchImportedEvents(eventPredicate: String = "") -> EventForecast {
+    logger.debug("Fetching imported events with: \(eventPredicate).")
+    importEventsList.removeAll()
+    let fetchRequest: NSFetchRequest<CalendarEvent>
+    fetchRequest = CalendarEvent.fetchRequest()
+    if !eventPredicate.isEmpty {
+      fetchRequest.predicate = NSPredicate(format: "identifier = %@", eventPredicate)
+    }
+    var dailyEventList: [CalendarEvent] = []
+    do {
+      dailyEventList = try viewCloudContext.fetch(fetchRequest)
+    } catch {
+      logger.error("Couldn't fetch DailyEvent. 😭 \(error.localizedDescription)")
+      return EventForecast()
+    }
+    for dailyEvent in dailyEventList {
+      let today = Date()
+      if let identifier = dailyEvent.identifier {
+        if let calendarEvent = EventStoreViewModel.shared.store.event(withIdentifier: identifier) {
+          if var endDate = calendarEvent.endDate {
+            if endDate < today {
+              if let occurrenceDate = calendarEvent.occurrenceDate {
+                let components = Calendar.current.dateComponents([.month, .day], from: occurrenceDate)
+                let month = components.month ?? 0
+                let day = components.day ?? 0
+                let year = Dates.shared.makeStringFromDate(date: today, format: "yyyy")
+                if month == 0 || day == 0 {
+                  continue
+                } else {
+                  endDate = Dates.shared.makeDateFromString(date: "\(year)-\(month)-\(day)", format: "yyyy-MM-dd")
+                }
+              } else {
+                continue
+              }
+            } //going on from here is fine, no else needed
+            
+            let eventName = calendarEvent.title ?? ""
+            logger.debug("event: \(eventName)")
+            let start = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "HH:mm")
+            let end = Dates.shared.makeStringFromDate(date: calendarEvent.endDate ?? Date(), format: "HH:mm")
+            let days = "1234567"
+            let nextStartDateTime = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "MM-dd-yyyy")
+            let nextStartDateString = String(nextStartDateTime.prefix(10))
+            let nextStartDate = Dates.shared.makeDateFromString(date: nextStartDateString, format: "yyyy-MM-dd")
+            let dayFormat = Dates.shared.userFormatDayFirst() ? "EEEE, d MMMM" : "EEEE, MMMM d"
+            let when = Dates.shared.makeStringFromDate(date: nextStartDate, format: dayFormat)
+            let eventArray = Dates.shared.getEventHours(start: start, end: end, date: nextStartDate)
+            let startTime = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "HH:mm")
+            let endTime = Dates.shared.makeStringFromDate(date: calendarEvent.endDate ?? Date(), format: "HH:mm")
+            let startDisplayTime = Dates.shared.makeDisplayTimeFromTime(time: startTime, format: "HH:mm", full: true)
+            let endDisplayTime = Dates.shared.makeDisplayTimeFromTime(time: endTime, format: "HH:mm", full: true)
+            
+            var predicate = ""
+            for event in eventArray {
+              predicate.append("'\(event)',")
+            }
+            let finalPredicate = predicate.dropLast()
+            let location = UserDefaults.standard.string(forKey: "currentConditionsLocation") ?? "Kirkland"
+            let fetchRequest: NSFetchRequest<ForecastHour>
+            fetchRequest = ForecastHour.fetchRequest()
+            fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \ForecastHour.time_epoch, ascending: true)]
+            fetchRequest.predicate = NSPredicate(format: "dateTime IN {\(finalPredicate)} AND location = %@", location)
+            var forecastHours: [ForecastHour] = []
+            do {
+              forecastHours = try viewContext.fetch(fetchRequest)
+            } catch {
+              logger.error("Couldn't fetch ForecastHour. 😭 \(error.localizedDescription)")
+              return EventForecast()
+            }
+            var hours = [HourForecast]()
+            for hour in forecastHours {
+              hours.append(globalViewModel.configureHour(hour: hour))
+            }
+            
+            let summary = EventSummaryProvider.shared
+            let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
+            let event = EventForecast(eventName: eventName, startTime: startDisplayTime, endTime: endDisplayTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours, identifier: identifier)
+            if !eventPredicate.isEmpty {
+              return event
+            }
+            importEventsList.append(event)
+            
+          } else {
+            continue
+          }
+        }
+      }
+    }
+    DispatchQueue.main.async {
+      self.importEvents.removeAll()
+      self.importEvents = self.importEventsList
+      self.importEventForecastHours.removeAll()
     }
     return EventForecast()
   }
