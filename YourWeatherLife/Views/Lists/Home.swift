@@ -247,7 +247,7 @@ struct Home: View {
                 ZStack(alignment: .leading) {
                   NavigationLink(destination: EventDetail(eventName: event.identifier, dailyEvent: false)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when, calendarEvent: true)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -352,16 +352,6 @@ struct Home: View {
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             } //end of Group
-            
-            Group {
-              VStack(alignment: .leading) {
-                Divider()
-                  .background(.black)
-                Text("Fictional Events from Your Calendar, Coming Next!")
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-            } //end of Group
           } //end of List
           .listStyle(.plain)
           .refreshable {
@@ -428,6 +418,7 @@ struct Home: View {
         }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
+        logger.debug("entered foreground")
       }
       .onChange(of: scenePhase) { newPhase in
         if newPhase == .active {

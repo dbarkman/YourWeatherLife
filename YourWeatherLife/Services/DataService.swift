@@ -113,13 +113,14 @@ struct DataService {
     do {
       let dailyEvents = try viewCloudContext.fetch(fetchRequest)
       if dailyEvents.isEmpty {
-        let accountStatus = await CloudKitManager.shared.requestAccountStatus()
-        if FileManager.default.ubiquityIdentityToken != nil && accountStatus == .available {
-          await checkiCloud()
-        } else {
-          Mixpanel.mainInstance().track(event: "userNotLoggedIniCloud")
-          UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")
-        }
+        await EventProvider.shared.importEventsFromSeed()
+//        let accountStatus = await CloudKitManager.shared.requestAccountStatus()
+//        if FileManager.default.ubiquityIdentityToken != nil && accountStatus == .available {
+//          await checkiCloud()
+//        } else {
+//          Mixpanel.mainInstance().track(event: "userNotLoggedIniCloud")
+//          UserDefaults.standard.set(true, forKey: "userNotLoggedIniCloud")
+//        }
       } else {
         UserDefaults.standard.set(true, forKey: "defaultEventsLoaded")
       }

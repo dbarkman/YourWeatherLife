@@ -30,7 +30,7 @@ struct CalendarEvents: View {
       BackgroundColor()
       
       List {
-        Text("events occuring within the next 14 days")
+        Text("Events occuring within the next 14 days")
           .font(.callout)
           .listRowBackground(Color("ListBackground"))
         ForEach(eventStoreViewModel.eventSets) { section in

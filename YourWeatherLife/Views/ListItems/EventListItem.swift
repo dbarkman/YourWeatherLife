@@ -14,6 +14,7 @@ struct EventListItem: View {
   @State var endTime: String
   @State var summary: String
   @State var when: String
+  @State var calendarEvent: Bool = false
   
   var body: some View {
     VStack(alignment: .leading) {
@@ -22,18 +23,32 @@ struct EventListItem: View {
           Text(event)
             .font(.body)
             .fontWeight(.semibold)
-//          .minimumScaleFactor(0.1)
-          HStack {
-            if when != "Today" && when != "Tomorrow" && !when.isEmpty {
-              Text(when + ":")
+          if calendarEvent {
+            VStack(alignment: .leading) {
+              Text(when)
+              HStack {
+                Text(startTime)
+                  .font(.callout)
+                Text(" - ")
+                  .font(.callout)
+                  .padding(.horizontal, -5)
+                Text(endTime)
+                  .font(.callout)
+              }
             }
-            Text(startTime)
-              .font(.callout)
-            Text(" - ")
-              .font(.callout)
-              .padding(.horizontal, -5)
-            Text(endTime)
-              .font(.callout)
+          } else {
+            HStack {
+              if when != "Today" && when != "Tomorrow" && !when.isEmpty {
+                Text(when + ":")
+              }
+              Text(startTime)
+                .font(.callout)
+              Text(" - ")
+                .font(.callout)
+                .padding(.horizontal, -5)
+              Text(endTime)
+                .font(.callout)
+            }
           }
         }
         Spacer()
