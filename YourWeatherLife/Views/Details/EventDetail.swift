@@ -70,14 +70,12 @@ struct EventDetail: View {
     }
     .onAppear() {
       let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")
-      
-      logger.debug("EventDetail onAppear")
       
       if dailyEvent {
         event = homeViewModel.createUpdateEventList(eventPredicate: eventName)

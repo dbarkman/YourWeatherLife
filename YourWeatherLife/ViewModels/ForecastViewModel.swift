@@ -17,7 +17,6 @@ class ForecastViewModel: ObservableObject {
   var globalViewModel = GlobalViewModel.shared
 
   private var viewContext = LocalPersistenceController.shared.container.viewContext
-//  private var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   @Published var forecastDays = [Today]()
   @Published var forecastHours = [HourForecast]()

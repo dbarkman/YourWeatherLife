@@ -126,7 +126,6 @@ struct Home: View {
                 } //end of VStack
                 .padding(.horizontal, 10)
               } //end of HStack
-//              .padding(.bottom, 20)
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             } //end of Group

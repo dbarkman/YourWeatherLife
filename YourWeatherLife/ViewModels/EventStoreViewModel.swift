@@ -35,7 +35,7 @@ class EventStoreViewModel: ObservableObject {
       self.calendarSets.removeAll()
       let calendars = self.store.calendars(for: .event)
       for calendar in calendars {
-        self.logger.debug("title: \(calendar.title)")
+        self.logger.debug("Calendar: \(calendar.title)")
         let sectionHeader = calendar.source.title
         if let sectionIndex = self.calendarSets.firstIndex(where: { $0.title == sectionHeader }) {
           self.calendarSets[sectionIndex].calendars.append(calendar)

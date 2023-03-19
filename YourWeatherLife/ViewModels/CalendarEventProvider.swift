@@ -21,15 +21,12 @@ struct CalendarEventProvider {
   private init() { }
   
   func insertCalendarEvents(selectedEvents: [String], eventIdsByName: [String:String]) {
-    //make an array of ids
     var calendarEventIdsList: [String] = []
     for event in selectedEvents {
       let calendarEventIdentifier = eventIdsByName[event] ?? ""
       calendarEventIdsList.append(calendarEventIdentifier)
     }
     
-    //grab all events in the db
-    //if not in selectedEvents, remove
     var eventsToProcess = [CalendarEvent]()
     let fetchRequest = NSFetchRequest<CalendarEvent>(entityName: "CalendarEvent")
     do {
@@ -46,8 +43,6 @@ struct CalendarEventProvider {
       print("Fetch or delete activity failed 😭")
     }
     
-    //process all events in selectedEvents
-    //just try to add each one
     for eventId in calendarEventIdsList {
       if !eventsToProcess.contains(where: { $0.identifier == eventId }) {
         let newCalendarEvent = CalendarEvent(context: viewCloudContext)

@@ -59,7 +59,7 @@ struct DataService {
         let end = dailyEvent.endTime ?? "00:00"
         let now = Date()
         let today = Calendar.current.component(.weekday, from: now)
-        let dayString = dailyEvent.days ?? "1234567" //[2,4,6]
+        let dayString = dailyEvent.days ?? "1234567"
         let days = dayString.compactMap { $0.wholeNumberValue }
         var dates: [Date] = []
         for day in days {
@@ -108,7 +108,6 @@ struct DataService {
   }
   
   private func checkCoreData() async {
-    logger.debug("dbark - In DataService, checkLocal")
     let fetchRequest = NSFetchRequest<DailyEvent>(entityName: "DailyEvent")
     do {
       let dailyEvents = try viewCloudContext.fetch(fetchRequest)
@@ -131,7 +130,6 @@ struct DataService {
   }
   
   private func checkiCloud() async {
-    logger.debug("dbark - In DataService, checkServer")
     let cloudContainer = CKContainer(identifier: "iCloud.com.dbarkman.YourWeatherLife")
     let privateDatabase = cloudContainer.privateCloudDatabase
     let predicate = NSPredicate(value: true)

@@ -133,9 +133,9 @@ class GlobalViewModel: ObservableObject {
       }
     }
     var today = Today()
-    today.precipitation = precip.0 //precipitation
-    today.precipitationType = precip.1 //precipitationType
-    today.precipitationPercent = precip.2 //precipitationPercent
+    today.precipitation = precip.0
+    today.precipitationType = precip.1
+    today.precipitationPercent = precip.2
     today.precipitationTotal = String(Formatters.shared.format(length: precip.3, from: .millimeters))
     today.coldestTemp = Formatters.shared.format(temp: coldestTemp, from: .celsius)
     today.warmestTemp = Formatters.shared.format(temp: warmestTemps, from: .celsius)

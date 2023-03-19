@@ -86,7 +86,6 @@
 		63D0FFC82978E21F00ECE7A2 /* Calendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC72978E21F00ECE7A2 /* Calendars.swift */; };
 		63D0FFCA2978E3A300ECE7A2 /* EventStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */; };
 		63D0FFCC2978E3CE00ECE7A2 /* CalendarEventProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFCB2978E3CE00ECE7A2 /* CalendarEventProvider.swift */; };
-		63D0FFCE2978E40100ECE7A2 /* CalendarEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFCD2978E40100ECE7A2 /* CalendarEventViewModel.swift */; };
 		63D0FFD22979F8CA00ECE7A2 /* CalendarSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFD12979F8CA00ECE7A2 /* CalendarSet.swift */; };
 		63D0FFD42981F2B600ECE7A2 /* EventSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFD32981F2B600ECE7A2 /* EventSet.swift */; };
 		63F029622877EDB700CD1553 /* FeedbackModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F029612877EDB700CD1553 /* FeedbackModal.swift */; };
@@ -199,7 +198,6 @@
 		63D0FFC72978E21F00ECE7A2 /* Calendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendars.swift; sourceTree = "<group>"; };
 		63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStoreViewModel.swift; sourceTree = "<group>"; };
 		63D0FFCB2978E3CE00ECE7A2 /* CalendarEventProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventProvider.swift; sourceTree = "<group>"; };
-		63D0FFCD2978E40100ECE7A2 /* CalendarEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventViewModel.swift; sourceTree = "<group>"; };
 		63D0FFCF2978E48100ECE7A2 /* YourWeatherLifeiCloud 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 4.xcdatamodel"; sourceTree = "<group>"; };
 		63D0FFD02978E5D800ECE7A2 /* YourWeatherLife 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLife 4.xcdatamodel"; sourceTree = "<group>"; };
 		63D0FFD12979F8CA00ECE7A2 /* CalendarSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSet.swift; sourceTree = "<group>"; };
@@ -397,7 +395,6 @@
 				63481ADA2873450700478C11 /* SummaryViewModel.swift */,
 				63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */,
 				63D0FFCB2978E3CE00ECE7A2 /* CalendarEventProvider.swift */,
-				63D0FFCD2978E40100ECE7A2 /* CalendarEventViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -680,7 +677,6 @@
 				634BCC07286028A70062E105 /* LocalPersistenceController.swift in Sources */,
 				63481B0B2876AA6300478C11 /* HourlyForecast.swift in Sources */,
 				63425DA32890570A00430B43 /* ForecastListItem.swift in Sources */,
-				63D0FFCE2978E40100ECE7A2 /* CalendarEventViewModel.swift in Sources */,
 				63481ACB286CC1C400478C11 /* GetAllData.swift in Sources */,
 				634BCC662860EE440062E105 /* EventDetail.swift in Sources */,
 				634BCC442860ED010062E105 /* APIsProvider.swift in Sources */,

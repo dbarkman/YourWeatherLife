@@ -15,7 +15,6 @@ struct Days: View {
   @StateObject private var eventViewModel = EventViewModel.shared
 
   @State private var isEditMode: EditMode = .active
-  @State private var selection: Set<String> = []
   
   @Binding var daysSelected: [Int]
 
@@ -55,7 +54,7 @@ struct Days: View {
     } //end of ZStack
     .onAppear() {
       let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))

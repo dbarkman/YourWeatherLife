@@ -18,11 +18,9 @@ struct CalendarEvents: View {
   @Environment(\.presentationMode) var presentationMode
   
   @StateObject private var eventStoreViewModel = EventStoreViewModel.shared
-  @StateObject private var calendarEventViewModel = CalendarEventViewModel.shared
   @StateObject private var homeViewModel = HomeViewModel.shared
 
   @State private var showCalendars = false
-  @State private var returningFromCalendars = false
   @State private var selectedEvents: [String] = []
 
   var body: some View {
@@ -101,7 +99,6 @@ struct CalendarEvents: View {
         EventStoreViewModel.shared.requestAccess()
       } else if authStatus == .authorized {
         eventStoreViewModel.fetchEvents()
-//        calendarEventViewModel.fetchCalendarEvents()
       }
       
       DispatchQueue.main.async {

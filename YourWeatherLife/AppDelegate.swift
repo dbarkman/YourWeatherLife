@@ -19,15 +19,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     let homeDir = NSHomeDirectory();
     logger.debug("home location: \(homeDir)")
     
-//    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
-
-//    NSUbiquitousKeyValueStore.default.set("Earth", forKey: "planet")
-//    if let planet = NSUbiquitousKeyValueStore.default.string(forKey: "planet") {
-//      print("Planet is: \(planet)")
-//    } else {
-//      print("Planet could not be found. 😭")
-//    }
-    
     return true
   }
 }

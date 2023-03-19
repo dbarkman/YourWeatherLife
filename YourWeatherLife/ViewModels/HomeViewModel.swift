@@ -160,7 +160,7 @@ class HomeViewModel: ObservableObject {
   }
   
   func fetchImportedEvents(eventPredicate: String = "") -> EventForecast {
-    logger.debug("Fetching imported events with: \(eventPredicate).")
+    logger.debug("Fetching imported events with predicate: \(eventPredicate).")
     importEventsList.removeAll()
     let fetchRequest: NSFetchRequest<CalendarEvent>
     fetchRequest = CalendarEvent.fetchRequest()

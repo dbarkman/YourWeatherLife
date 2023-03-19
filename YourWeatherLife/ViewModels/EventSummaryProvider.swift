@@ -71,9 +71,6 @@ class EventSummaryProvider {
     let heatIndex = countD > 0 ? heatIndexAverage / countD : 0
     let wind = countD > 0 ? windAverage / countD : 0
     
-//    let uv = countD > 0 ? Int(averageUV / countD) : 0
-//    if uv > 5 { uvDescription = ", UV index: \(uv)" }
-    
     setTempDescriptionSummary(temp: temp)
     setConditionDescription()
     setWindDescription(windSpeed: wind)

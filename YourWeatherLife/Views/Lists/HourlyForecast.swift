@@ -44,7 +44,7 @@ struct HourlyForecast: View {
     }
     .onAppear() {
       let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))//.opacity(0.9))
+      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
