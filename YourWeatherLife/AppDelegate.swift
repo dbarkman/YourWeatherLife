@@ -5,10 +5,9 @@
 //  Created by David Barkman on 6/20/22.
 //
 
-import Foundation
-import OSLog
 import UIKit
-import Mixpanel
+import OSLog
+import FirebaseCore
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   
@@ -19,6 +18,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     let homeDir = NSHomeDirectory();
     logger.debug("home location: \(homeDir)")
     
+    //future notifications framework
+    if UserDefaults.standard.string(forKey: "distinctId") == nil {
+      Task {
+        await AsyncAPI.shared.saveToken(token: "", debug: 0)
+      }
+    }
+    
+    FirebaseApp.configure()
+    
+    Review.requestReview()
+
     return true
   }
 }

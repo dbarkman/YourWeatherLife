@@ -76,6 +76,7 @@ struct EventDetail: View {
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")
+      Review.eventDetailViewed()
       
       if dailyEvent {
         event = homeViewModel.createUpdateEventList(eventPredicate: eventName)

@@ -91,13 +91,17 @@ struct DayDetail: View {
                 .fontWeight(.semibold)
               Text("\(day.moonPhase)")
             }
-            HStack {
-              Text("Moonrise:")
-                .fontWeight(.semibold)
-              Text("\(day.moonRiseTime)")
-              Text("Moonset:")
-                .fontWeight(.semibold)
-              Text("\(day.moonSetTime)")
+            VStack(alignment: .leading) {
+              HStack {
+                Text("Moonrise:")
+                  .fontWeight(.semibold)
+                Text("\(day.moonRiseTime)")
+              }
+              HStack {
+                Text("Moonset:")
+                  .fontWeight(.semibold)
+                Text("\(day.moonSetTime)")
+              }
             }
           }
         }

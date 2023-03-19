@@ -151,7 +151,7 @@ struct UpdateLocation: View {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-        Mixpanel.mainInstance().track(event: "UpdateLocation view")
+        Mixpanel.mainInstance().track(event: "UpdateLocation View")
         
         let automaticLocation = UserDefaults.standard.bool(forKey: "automaticLocation")
         location = automaticLocation ? 0 : 1
@@ -177,6 +177,7 @@ struct UpdateLocation: View {
         updateLocationResult = "Location permission must be granted in order to use automatic location."
         return
       }
+      Mixpanel.mainInstance().track(event: "Location by GPS")
       UserDefaults.standard.set(true, forKey: "automaticLocation")
     } else {
       UserDefaults.standard.set(false, forKey: "automaticLocation")
@@ -188,12 +189,14 @@ struct UpdateLocation: View {
           updateLocationResult = "Zip/Postal Code is too short."
           return
         }
+        Mixpanel.mainInstance().track(event: "Location by Zip/Postal Code")
         UserDefaults.standard.set(zipcode, forKey: "manualLocationData")
       } else {
         if latitude.isEmpty || longitude.isEmpty {
           updateLocationResult = "Both latitude and longitude must be entered."
           return
         }
+        Mixpanel.mainInstance().track(event: "Location by Lat/Long")
         UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "manualLocationData")
       }
     }

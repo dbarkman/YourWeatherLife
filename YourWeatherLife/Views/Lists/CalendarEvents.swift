@@ -93,7 +93,8 @@ struct CalendarEvents: View {
       UINavigationBar.appearance().standardAppearance = appearance
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-      Mixpanel.mainInstance().track(event: "CalendarEvents")
+      Mixpanel.mainInstance().track(event: "CalendarEvents View")
+      Review.calendarEventsViewed()
       let authStatus = EKEventStore.authorizationStatus(for: .event)
       if authStatus == .notDetermined {
         EventStoreViewModel.shared.requestAccess()

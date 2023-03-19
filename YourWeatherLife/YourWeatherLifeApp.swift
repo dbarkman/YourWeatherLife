@@ -14,10 +14,10 @@ struct YourWeatherLifeApp: App {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "YourWeatherLifeApp")
   
-  //  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
   
   init() {
-    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d")
+    Mixpanel.initialize(token: "f8ba28b7e92443cbc4c9bc9cda390d8d", trackAutomaticEvents: true)
   }
   
   var body: some Scene {

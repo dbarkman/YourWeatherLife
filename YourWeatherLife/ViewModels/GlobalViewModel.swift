@@ -227,6 +227,7 @@ class GlobalViewModel: ObservableObject {
   }
 
   func checkInternetConnection(closure: @escaping (Bool) -> Void) {
+    Mixpanel.mainInstance().track(event: "Checking Network Connection")
     let urlString = "https://weather.solutions/test.html"
     logger.debug("url 3: \(urlString)")
     if let url = URL(string: urlString) {

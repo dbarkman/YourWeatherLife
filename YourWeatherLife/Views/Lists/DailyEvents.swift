@@ -104,7 +104,7 @@ struct DailyEvents: View {
     offsets.map { events[$0] }.forEach(viewCloudContext.delete)
     do {
       try viewCloudContext.save()
-      Mixpanel.mainInstance().track(event: "Event Deleted")
+      Mixpanel.mainInstance().track(event: "Daily Event Deleted")
     } catch {
       logger.error("Could not delete Daily Event")
     }

@@ -59,12 +59,13 @@ class DayDetailViewModelTests: XCTestCase {
       XCTAssertFalse(today.moonSetTime.isEmpty)
       XCTAssertFalse(today.uv.isEmpty)
       XCTAssertFalse(today.date.isEmpty)
-      XCTAssertEqual(today.hours?.count, 24)
+      XCTAssertEqual(today.hours.count, 24)
       if today.precipitation {
         XCTAssertFalse(today.precipitationType.isEmpty)
         XCTAssertFalse(today.precipitationPercent.isEmpty)
       }
-      if let hours = today.hours, hours.count > 0 {
+      let hours = today.hours
+      if hours.count > 0 {
         let hour = hours[0]
         XCTAssertFalse(hour.temperature.isEmpty)
         XCTAssertFalse(hour.feelsLike.isEmpty)

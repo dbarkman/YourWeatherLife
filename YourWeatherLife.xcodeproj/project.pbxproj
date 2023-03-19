@@ -81,7 +81,13 @@
 		634BCCB02866D96F0062E105 /* tgw.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAF2866D96F0062E105 /* tgw.swift */; };
 		634BCCB22866DF090062E105 /* aowm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCB12866DF090062E105 /* aowm.swift */; };
 		634BCCB428681C860062E105 /* AOWM_CurrentConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCB328681C860062E105 /* AOWM_CurrentConditions.swift */; };
-		6369B6362966873300EA03FB /* AppCrashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6369B6352966873300EA03FB /* AppCrashing.swift */; };
+		639D8D9D29C7A2B400333DA8 /* AsyncAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */; };
+		639D8D9F29C7AE1100333DA8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D8D9E29C7AE1000333DA8 /* Review.swift */; };
+		639D8DA129C7B62400333DA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */; };
+		639D8DA329C7BB2B00333DA8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 639D8DA229C7BB2B00333DA8 /* GoogleService-Info.plist */; };
+		639D8DA629C7BBA200333DA8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA529C7BBA200333DA8 /* FirebaseAnalytics */; };
+		639D8DA829C7BBA200333DA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA729C7BBA200333DA8 /* FirebaseCrashlytics */; };
+		639D8DAA29C7BBA200333DA8 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA929C7BBA200333DA8 /* FirebasePerformance */; };
 		63D0FFC62978E21100ECE7A2 /* CalendarEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */; };
 		63D0FFC82978E21F00ECE7A2 /* Calendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC72978E21F00ECE7A2 /* Calendars.swift */; };
 		63D0FFCA2978E3A300ECE7A2 /* EventStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */; };
@@ -193,7 +199,10 @@
 		634BCCB328681C860062E105 /* AOWM_CurrentConditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AOWM_CurrentConditions.swift; sourceTree = "<group>"; };
 		6369B63229667FB900EA03FB /* YourWeatherLifeiCloud 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 3.xcdatamodel"; sourceTree = "<group>"; };
 		6369B6332966811C00EA03FB /* YourWeatherLife 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLife 3.xcdatamodel"; sourceTree = "<group>"; };
-		6369B6352966873300EA03FB /* AppCrashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCrashing.swift; sourceTree = "<group>"; };
+		639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAPI.swift; sourceTree = "<group>"; };
+		639D8D9E29C7AE1000333DA8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		639D8DA229C7BB2B00333DA8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvents.swift; sourceTree = "<group>"; };
 		63D0FFC72978E21F00ECE7A2 /* Calendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendars.swift; sourceTree = "<group>"; };
 		63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStoreViewModel.swift; sourceTree = "<group>"; };
@@ -214,7 +223,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				634BCC7A2860F1610062E105 /* Mixpanel in Frameworks */,
+				639D8DA829C7BBA200333DA8 /* FirebaseCrashlytics in Frameworks */,
+				639D8DAA29C7BBA200333DA8 /* FirebasePerformance in Frameworks */,
 				634BCC2F2860E4E20062E105 /* CloudKit.framework in Frameworks */,
+				639D8DA629C7BBA200333DA8 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,12 +304,12 @@
 		634BCBFC286028A50062E105 /* YourWeatherLife */ = {
 			isa = PBXGroup;
 			children = (
-				6369B6342966870500EA03FB /* Temp */,
 				634BCC302860E52F0062E105 /* Info.plist */,
 				634BCC01286028A70062E105 /* Assets.xcassets */,
 				634BCC762860EFC00062E105 /* AppDelegate.swift */,
 				634BCC2C2860E4D60062E105 /* YourWeatherLife.entitlements */,
 				634BCBFD286028A50062E105 /* YourWeatherLifeApp.swift */,
+				639D8DA229C7BB2B00333DA8 /* GoogleService-Info.plist */,
 				634BCC312860EB9C0062E105 /* Views */,
 				634BCC332860EBAE0062E105 /* ViewModels */,
 				634BCC322860EBA50062E105 /* Models */,
@@ -308,6 +320,7 @@
 				63481B012875E0E400478C11 /* Enums */,
 				634BCC362860EBD10062E105 /* WeatherSolutions */,
 				634BCC03286028A70062E105 /* Preview Content */,
+				639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */,
 			);
 			path = YourWeatherLife;
 			sourceTree = "<group>";
@@ -411,6 +424,8 @@
 				634BCCA428628C840062E105 /* Formatters.swift */,
 				63481ACA286CC1C400478C11 /* GetAllData.swift */,
 				63481AD62872849500478C11 /* Observer.swift */,
+				639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */,
+				639D8D9E29C7AE1000333DA8 /* Review.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -498,14 +513,6 @@
 			path = APIs;
 			sourceTree = "<group>";
 		};
-		6369B6342966870500EA03FB /* Temp */ = {
-			isa = PBXGroup;
-			children = (
-				6369B6352966873300EA03FB /* AppCrashing.swift */,
-			);
-			path = Temp;
-			sourceTree = "<group>";
-		};
 		63F029602877ED9300CD1553 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
@@ -532,6 +539,7 @@
 				634BCBF6286028A50062E105 /* Sources */,
 				634BCBF7286028A50062E105 /* Frameworks */,
 				634BCBF8286028A50062E105 /* Resources */,
+				639D8DAB29C7BCCA00333DA8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -540,6 +548,9 @@
 			name = YourWeatherLife;
 			packageProductDependencies = (
 				634BCC792860F1610062E105 /* Mixpanel */,
+				639D8DA529C7BBA200333DA8 /* FirebaseAnalytics */,
+				639D8DA729C7BBA200333DA8 /* FirebaseCrashlytics */,
+				639D8DA929C7BBA200333DA8 /* FirebasePerformance */,
 			);
 			productName = YourWeatherLife;
 			productReference = 634BCBFA286028A50062E105 /* YourWeatherLife.app */;
@@ -615,6 +626,7 @@
 			mainGroup = 634BCBF1286028A50062E105;
 			packageReferences = (
 				634BCC782860F1610062E105 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+				639D8DA429C7BBA200333DA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 634BCBFB286028A50062E105 /* Products */;
 			projectDirPath = "";
@@ -635,7 +647,9 @@
 				63481AD32871ED7F00478C11 /* seedData.json in Resources */,
 				634BCC05286028A70062E105 /* Preview Assets.xcassets in Resources */,
 				634BCC02286028A70062E105 /* Assets.xcassets in Resources */,
+				639D8DA129C7B62400333DA8 /* LaunchScreen.storyboard in Resources */,
 				634BCC3A2860ECBB0062E105 /* weatherSolutions.plist in Resources */,
+				639D8DA329C7BB2B00333DA8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,11 +669,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		639D8DAB29C7BCCA00333DA8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		634BCBF6286028A50062E105 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639D8D9D29C7A2B400333DA8 /* AsyncAPI.swift in Sources */,
 				63481AC4286AC2B100478C11 /* TGW_ForecastProvider.swift in Sources */,
 				63481B032875E0F900478C11 /* WindDirection.swift in Sources */,
 				634BCC612860EE380062E105 /* EditDailyEvent.swift in Sources */,
@@ -709,7 +746,6 @@
 				634BCCA528628C840062E105 /* Formatters.swift in Sources */,
 				63F029622877EDB700CD1553 /* FeedbackModal.swift in Sources */,
 				63481ADB2873450700478C11 /* SummaryViewModel.swift in Sources */,
-				6369B6362966873300EA03FB /* AppCrashing.swift in Sources */,
 				634BCCAD28629EA70062E105 /* TGW_CurrentConditions.swift in Sources */,
 				63481B172877616E00478C11 /* LocationUpdatedEvent.swift in Sources */,
 				6327909D2886361300E551CA /* Days.swift in Sources */,
@@ -725,6 +761,7 @@
 				63FBEC8D287A9D5C0010A42E /* NextStartDateUpdated.swift in Sources */,
 				634BCBFE286028A50062E105 /* YourWeatherLifeApp.swift in Sources */,
 				634BCC402860ECDE0062E105 /* CryptoUtilities.swift in Sources */,
+				639D8D9F29C7AE1100333DA8 /* Review.swift in Sources */,
 				63481B0528768C5800478C11 /* EventForecast.swift in Sources */,
 				63481AC2286A075600478C11 /* Current.swift in Sources */,
 				634BCC0A286028A70062E105 /* YourWeatherLife.xcdatamodeld in Sources */,
@@ -893,6 +930,7 @@
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2023031801;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
@@ -905,6 +943,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -945,6 +984,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -974,7 +1014,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dbarkman.YourWeatherLifeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -994,7 +1034,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dbarkman.YourWeatherLifeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1087,8 +1127,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mixpanel/mixpanel-swift";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.6;
+			};
+		};
+		639D8DA429C7BBA200333DA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1098,6 +1146,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 634BCC782860F1610062E105 /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
 			productName = Mixpanel;
+		};
+		639D8DA529C7BBA200333DA8 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639D8DA429C7BBA200333DA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		639D8DA729C7BBA200333DA8 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639D8DA429C7BBA200333DA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		639D8DA929C7BBA200333DA8 /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639D8DA429C7BBA200333DA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
 		};
 /* End XCSwiftPackageProductDependency section */
 
