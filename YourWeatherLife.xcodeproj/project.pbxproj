@@ -672,6 +672,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		639D8DAB29C7BCCA00333DA8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -929,7 +930,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2023031801;
+				CURRENT_PROJECT_VERSION = 2023031901;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
@@ -937,6 +938,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YourWeatherLife/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Calendar access needed if you want to see weather forecasts based on your upcoming events.";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Contacts access may be needed to access your contacts data to choose the correct display name or avatar for a contact in a calendar.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";
@@ -971,13 +973,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2023031801;
+				CURRENT_PROJECT_VERSION = 2023031901;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YourWeatherLife/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Your Weather";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "Calendar access needed if you want to see weather forecasts based on your upcoming events.";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Contacts access may be needed to access your contacts data to choose the correct display name or avatar for a contact in a calendar.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location needed in order to provide localized weather forecasts.";

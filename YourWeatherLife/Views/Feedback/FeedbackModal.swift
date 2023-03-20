@@ -22,7 +22,7 @@ struct FeedbackModal: View {
   @FocusState private var isFocused: Bool
   
   var body: some View {
-    NavigationView {
+    NavigationStack {
       ZStack {
         BackgroundColor()
         List {

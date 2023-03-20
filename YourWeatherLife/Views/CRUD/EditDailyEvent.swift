@@ -142,7 +142,7 @@ struct EditDailyEvent: View {
 
 //struct EditDailyEvent_Previews: PreviewProvider {
 //  static var previews: some View {
-//    NavigationView {
+//    NavigationStack {
 //      EditDailyEvent(eventName: "", startTimeDate: Date(), endTimeDate: Date()).environment(\.colorScheme, .dark)
 //    }
 //    .accentColor(Color("AccentColor"))

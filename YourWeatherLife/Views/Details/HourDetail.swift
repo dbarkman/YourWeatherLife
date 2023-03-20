@@ -131,7 +131,7 @@ struct HourDetail: View {
 
 struct HourDetail_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       HourDetail(navigationTitle: "Hour")
     }
     .accentColor(Color("AccentColor"))
