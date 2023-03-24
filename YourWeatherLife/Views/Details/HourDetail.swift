@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct HourDetail: View {
 
@@ -125,6 +126,7 @@ struct HourDetail: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "HourDetail View")
+      Analytics.logEvent("View", parameters: ["view_name": "HourDetail"])
     }
   }
 }

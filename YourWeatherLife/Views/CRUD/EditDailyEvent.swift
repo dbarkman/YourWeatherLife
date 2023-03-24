@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct EditDailyEvent: View {
   
@@ -120,7 +121,8 @@ struct EditDailyEvent: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
-      
+      Analytics.logEvent("View", parameters: ["view_name": "EditDailyEvent"])
+
       if eventViewModel.returningFromDays {
         eventViewModel.returningFromDays = false
       } else {

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Mixpanel
+import FirebaseAnalytics
 
 struct HourlyForecast: View {
   
@@ -50,6 +51,7 @@ struct HourlyForecast: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "336HourForecast View")
+        Analytics.logEvent("View", parameters: ["view_name": "336HourForecast"])
         Review.hourForecastViewed()
         globalViewModel.returningFromChildView = true
         forecastViewModel.create336HourForecast()

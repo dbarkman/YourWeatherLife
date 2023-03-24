@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Mixpanel
+import FirebaseAnalytics
 
 struct Days: View {
   
@@ -59,6 +60,7 @@ struct Days: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "Days View")
+      Analytics.logEvent("View", parameters: ["view_name": "Days"])
       eventViewModel.returningFromDays = true
     }
   }

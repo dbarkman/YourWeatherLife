@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct UpdateLocation: View {
   
@@ -152,7 +153,8 @@ struct UpdateLocation: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "UpdateLocation View")
-        
+        Analytics.logEvent("View", parameters: ["view_name": "UpdateLocation"])
+
         let automaticLocation = UserDefaults.standard.bool(forKey: "automaticLocation")
         location = automaticLocation ? 0 : 1
         guard let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") else { return }

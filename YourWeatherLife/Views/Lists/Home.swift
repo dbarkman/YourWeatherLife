@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct Home: View {
   
@@ -334,6 +335,7 @@ struct Home: View {
       }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
+        Analytics.logEvent("View", parameters: ["view_name": "Home"])
         if globalViewModel.returningFromChildView {
           globalViewModel.returningFromChildView = false
           homeViewModel.awaitUpdateNextStartDate()

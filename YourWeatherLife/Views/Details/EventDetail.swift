@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct EventDetail: View {
   
@@ -77,6 +78,7 @@ struct EventDetail: View {
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")
+      Analytics.logEvent("View", parameters: ["view_name": "EventDetail"])
       Review.eventDetailViewed()
       
       if dailyEvent {

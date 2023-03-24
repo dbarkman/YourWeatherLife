@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import EventKit
+import FirebaseAnalytics
 
 struct Calendars: View {
   
@@ -78,6 +79,7 @@ struct Calendars: View {
       }
       
       Mixpanel.mainInstance().track(event: "Calendars View")
+      Analytics.logEvent("View", parameters: ["view_name": "Calendars"])
     }
   }
 }

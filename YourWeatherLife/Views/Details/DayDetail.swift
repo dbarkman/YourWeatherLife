@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct DayDetail: View {
   
@@ -152,7 +153,8 @@ struct DayDetail: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "DayDetail View")
-        
+        Analytics.logEvent("View", parameters: ["view_name": "DayDetail"])
+
         if parent == "Home" {
           globalViewModel.returningFromChildView = true
         }

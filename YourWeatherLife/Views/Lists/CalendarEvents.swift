@@ -10,6 +10,7 @@ import CoreData
 import EventKit
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct CalendarEvents: View {
   
@@ -94,6 +95,7 @@ struct CalendarEvents: View {
       UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "CalendarEvents View")
+      Analytics.logEvent("View", parameters: ["view_name": "CalendarEvents"])
       Review.calendarEventsViewed()
       let authStatus = EKEventStore.authorizationStatus(for: .event)
       if authStatus == .notDetermined {
