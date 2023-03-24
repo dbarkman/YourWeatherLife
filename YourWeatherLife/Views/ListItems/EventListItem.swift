@@ -15,6 +15,7 @@ struct EventListItem: View {
   @State var summary: String
   @State var when: String
   @State var calendarEvent: Bool = false
+  @State var isAllDay: Bool = false
   
   var body: some View {
     VStack(alignment: .leading) {
@@ -26,14 +27,16 @@ struct EventListItem: View {
           if calendarEvent {
             VStack(alignment: .leading) {
               Text(when)
-              HStack {
-                Text(startTime)
-                  .font(.callout)
-                Text(" - ")
-                  .font(.callout)
-                  .padding(.horizontal, -5)
-                Text(endTime)
-                  .font(.callout)
+              if !isAllDay {
+                HStack {
+                  Text(startTime)
+                    .font(.callout)
+                  Text(" - ")
+                    .font(.callout)
+                    .padding(.horizontal, -5)
+                  Text(endTime)
+                    .font(.callout)
+                }
               }
             }
           } else {

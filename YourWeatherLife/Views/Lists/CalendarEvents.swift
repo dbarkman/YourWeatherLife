@@ -61,7 +61,7 @@ struct CalendarEvents: View {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(action: {
             UserDefaults.standard.set(Array(selectedEvents), forKey: "selectedEvents")
-            CalendarEventProvider.shared.insertCalendarEvents(selectedEvents: selectedEvents, eventIdsByName: eventStoreViewModel.eventIdsByName)
+            CalendarEventProvider.shared.insertCalendarEvents(selectedEvents: selectedEvents, eventIdsByName: eventStoreViewModel.eventIdsByName, eventsById: eventStoreViewModel.eventsById)
             _ = homeViewModel.fetchImportedEvents()
             presentationMode.wrappedValue.dismiss()
           }) {

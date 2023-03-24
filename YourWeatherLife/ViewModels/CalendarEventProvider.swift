@@ -20,7 +20,7 @@ struct CalendarEventProvider {
   
   private init() { }
   
-  func insertCalendarEvents(selectedEvents: [String], eventIdsByName: [String:String]) {
+  func insertCalendarEvents(selectedEvents: [String], eventIdsByName: [String:String], eventsById: [String:EKEvent]) {
     var calendarEventIdsList: [String] = []
     for event in selectedEvents {
       let calendarEventIdentifier = eventIdsByName[event] ?? ""
@@ -47,6 +47,8 @@ struct CalendarEventProvider {
       if !eventsToProcess.contains(where: { $0.identifier == eventId }) {
         let newCalendarEvent = CalendarEvent(context: viewCloudContext)
         newCalendarEvent.identifier = eventId
+        newCalendarEvent.startDate = eventsById[eventId]?.startDate
+        newCalendarEvent.endDate = eventsById[eventId]?.endDate
         do {
           try viewCloudContext.save()
         } catch {

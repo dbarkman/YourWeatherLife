@@ -41,6 +41,7 @@ struct EventDetail: View {
         }
         .listRowBackground(Color("ListBackground"))
       } // end of List
+      .overlay(event.forecastHours.isEmpty ? Text("No Data Available") : nil, alignment: .center)
       .navigationTitle(event.eventName)
       .listStyle(.plain)
     } //end of ZStack

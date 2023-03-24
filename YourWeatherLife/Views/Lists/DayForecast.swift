@@ -19,42 +19,44 @@ struct DayForecast: View {
   @State private var showFeedback = false
   
   var body: some View {
-    ZStack {
-      BackgroundColor()
-      List(forecastViewModel.forecastDays, id: \.self) { day in
-        ZStack {
-          NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast", navigationTitle: "\(day.displayDate)")) { }
-            .opacity(0)
-          ForecastListItem(displayDate: day.displayDate, warmestTemp: day.warmestTemp, coldestTemp: day.coldestTemp, condition: day.condition, conditionIcon: day.conditionIcon)
-        } //end of ZStack
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color("ListBackground"))
-      } //end of List
-      .listStyle(.plain)
-      .toolbar {
-        ToolbarItem {
-          Button(action: {
-            showFeedback.toggle()
-          }) {
-            Label("Feedback", systemImage: "star")
-          }
-          .sheet(isPresented: $showFeedback) {
-            FeedbackModal()
+    NavigationStack {
+      ZStack {
+        BackgroundColor()
+        List(forecastViewModel.forecastDays, id: \.self) { day in
+          ZStack {
+            NavigationLink(destination: DayDetail(dates: [day.date], parent: "DayForecast", navigationTitle: "\(day.displayDate)")) { }
+              .opacity(0)
+            ForecastListItem(displayDate: day.displayDate, warmestTemp: day.warmestTemp, coldestTemp: day.coldestTemp, condition: day.condition, conditionIcon: day.conditionIcon)
+          } //end of ZStack
+          .listRowSeparator(.hidden)
+          .listRowBackground(Color("ListBackground"))
+        } //end of List
+        .listStyle(.plain)
+        .toolbar {
+          ToolbarItem {
+            Button(action: {
+              showFeedback.toggle()
+            }) {
+              Label("Feedback", systemImage: "star")
+            }
+            .sheet(isPresented: $showFeedback) {
+              FeedbackModal()
+            }
           }
         }
+        .navigationTitle("14 Day Forecast")
       }
-      .navigationTitle("14 Day Forecast")
-    }
-    .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
-      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-      Mixpanel.mainInstance().track(event: "14DayForecast View")
-      Review.dayForecastViewed()
-      globalViewModel.returningFromChildView = true
-      forecastViewModel.create14DayForecast()
+      .onAppear() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+        Mixpanel.mainInstance().track(event: "14DayForecast View")
+        Review.dayForecastViewed()
+        globalViewModel.returningFromChildView = true
+        forecastViewModel.create14DayForecast()
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import CoreData
 import CloudKit
 import Mixpanel
 import OSLog
+import FirebaseCrashlytics
 
 struct DataService {
   
@@ -68,6 +69,8 @@ struct DataService {
           components.minute = Int(start.suffix(2))
           let weekday = components.weekday ?? 1
           if today == weekday {
+            let keysAndValues = ["start": start, "end": end, "date": now] as [String : Any]
+            Crashlytics.crashlytics().setCustomKeysAndValues(keysAndValues)
             let isToday = Dates.shared.getEventDateTimeAndIsToday(start: start, end: end, date: now)
             if isToday.1 {
               dates.removeAll()

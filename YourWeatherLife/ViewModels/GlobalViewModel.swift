@@ -18,6 +18,7 @@ class GlobalViewModel: ObservableObject {
 
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   
+  @Published var selectedTab = 2
   @Published var returningFromChildView = false
   @Published var today = Dates.shared.getTodayDateString(format: "yyyy-MM-dd")
   @Published var weekend = Dates.shared.getThisWeekendDateStrings(format: "yyyy-MM-dd")

@@ -22,7 +22,8 @@ struct YourWeatherLifeApp: App {
   
   var body: some Scene {
     WindowGroup {
-      Home()
+      Tabs()
+//      Home()
     }
   }
 

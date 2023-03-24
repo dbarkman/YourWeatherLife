@@ -129,6 +129,7 @@ struct Home: View {
               .listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
             } //end of Group
+            
             Group {
               if !homeViewModel.todayEvents.isEmpty {
                 VStack(alignment: .leading) {
@@ -219,7 +220,10 @@ struct Home: View {
                   Divider()
                     .background(.black)
                     .frame(height: 1)
-                  Text("If you have events on another device, using the same iCloud account, they may sync from iCloud momentarily. Otherwise add some events by tapping Add Events.")
+                  HStack {
+                    Spacer()
+                    Text("No events to show, add some\revents by tapping Add Events. 👇")
+                  }
                   ZStack(alignment: .trailing) {
                     NavigationLink(destination: DailyEvents().environment(\.managedObjectContext, viewCloudContext)) { }
                       .opacity(0)
@@ -246,7 +250,7 @@ struct Home: View {
                 ZStack(alignment: .leading) {
                   NavigationLink(destination: EventDetail(eventName: event.identifier, dailyEvent: false)) { }
                     .opacity(0)
-                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when, calendarEvent: true)
+                  EventListItem(event: event.eventName, startTime: event.startTime, endTime: event.endTime, summary: event.summary, when: event.when, calendarEvent: true, isAllDay: event.isAllDay)
                 }
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -258,80 +262,6 @@ struct Home: View {
                 VStack(alignment: .leading) {
                   HStack {
                     Text(homeViewModel.importEvents.count > 0 ? "Manage Imported Calendar Events" : "Import Calendar Events")
-                      .font(.title2)
-                    Image(systemName: "chevron.right")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color("AccentColor"))
-                      .padding(.horizontal, 5)
-                  }
-                  .padding(.bottom, 1)
-                }
-                .padding([.leading, .trailing, .top], 10)
-                .padding(.bottom, 20)
-                .overlay {
-                  RoundedRectangle(cornerRadius: 10)
-                    .stroke(.gray, lineWidth: 2)
-                    .padding(.bottom, 10)
-                }
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-              
-              VStack {
-                Divider()
-                  .background(.black)
-                  .frame(height: 1)
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-
-              ZStack(alignment: .leading) {
-                NavigationLink(destination: DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")) { }
-                  .opacity(0)
-                TodaySummary()
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-              
-              ZStack(alignment: .leading) {
-                NavigationLink(destination: DayDetail(dates: globalViewModel.weekend, parent: "Home", navigationTitle: "This Weekend")) { }
-                  .opacity(0)
-                WeekendSummary()
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-              
-              ZStack(alignment: .leading) {
-                NavigationLink(destination: DayForecast()) { }
-                  .opacity(0)
-                VStack(alignment: .leading) {
-                  HStack {
-                    Text("14 Day Forecast")
-                      .font(.title2)
-                    Image(systemName: "chevron.right")
-                      .symbolRenderingMode(.monochrome)
-                      .foregroundColor(Color("AccentColor"))
-                      .padding(.horizontal, 5)
-                  }
-                  .padding(.bottom, 1)
-                }
-                .padding([.leading, .trailing, .top], 10)
-                .padding(.bottom, 20)
-                .overlay {
-                  RoundedRectangle(cornerRadius: 10)
-                    .stroke(.gray, lineWidth: 2)
-                    .padding(.bottom, 10)
-                }
-              }
-              .listRowSeparator(.hidden)
-              .listRowBackground(Color.clear)
-              
-              ZStack(alignment: .leading) {
-                NavigationLink(destination: HourlyForecast()) { }
-                  .opacity(0)
-                VStack(alignment: .leading) {
-                  HStack {
-                    Text("300+ Hour Forecast")
                       .font(.title2)
                     Image(systemName: "chevron.right")
                       .symbolRenderingMode(.monochrome)
