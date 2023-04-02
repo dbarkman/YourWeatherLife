@@ -47,10 +47,12 @@ struct EventDetail: View {
       .listStyle(.plain)
     } //end of ZStack
     .toolbar {
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button("Edit", action: {
-          showEditEvent = true
-        })
+      if dailyEvent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button("Edit", action: {
+            showEditEvent = true
+          })
+        }
       }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button(action: {
@@ -71,10 +73,10 @@ struct EventDetail: View {
       .accentColor(Color("AccentColor"))
     }
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//      let appearance = UINavigationBarAppearance()
+//      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+//      UINavigationBar.appearance().standardAppearance = appearance
+//      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")

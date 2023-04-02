@@ -7,10 +7,13 @@
 
 import SwiftUI
 import Mixpanel
+import OSLog
 import FirebaseAnalytics
 
 struct HourlyForecast: View {
   
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
+
   @StateObject private var globalViewModel = GlobalViewModel.shared
   @StateObject private var forecastViewModel = ForecastViewModel.shared
 
@@ -45,10 +48,10 @@ struct HourlyForecast: View {
         .navigationTitle("300+ Hour Forecast")
       }
       .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        let appearance = UINavigationBarAppearance()
+//        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+//        UINavigationBar.appearance().standardAppearance = appearance
+//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "336HourForecast View")
         Analytics.logEvent("View", parameters: ["view_name": "336HourForecast"])

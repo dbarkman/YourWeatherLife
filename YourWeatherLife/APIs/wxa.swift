@@ -1,5 +1,5 @@
 //
-//  tgw.swift
+//  wxa.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/24/22.
@@ -8,15 +8,15 @@
 import Foundation
 import CoreLocation
 
-struct tgw {
+struct wxa {
   
-  static let shared = tgw()
+  static let shared = wxa()
   
   private init() { }
   
   func getCurrentWeatherURL() async -> String {
-    let apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    let urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
+    let apiKey = APISettings.shared.fetchAPISettings().wxaApiKey
+    let urlBase = APISettings.shared.fetchAPISettings().wxaUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {
@@ -26,8 +26,8 @@ struct tgw {
   }
   
   func getWeatherForecastURL(days: String) async -> String {
-    let apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    let urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
+    let apiKey = APISettings.shared.fetchAPISettings().wxaApiKey
+    let urlBase = APISettings.shared.fetchAPISettings().wxaUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {

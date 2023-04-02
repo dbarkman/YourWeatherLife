@@ -50,7 +50,7 @@ class CurrentConditionsViewModel: ObservableObject {
       }
       return
     }
-    let urlString = await tgw.shared.getCurrentWeatherURL()
+    let urlString = await wxa.shared.getCurrentWeatherURL()
     logger.debug("url 4: \(urlString)")
     if let url = URL(string: urlString) {
       let urlRequest = URLRequest(url: url)
@@ -70,10 +70,10 @@ class CurrentConditionsViewModel: ObservableObject {
     
     let jsonDecoder = JSONDecoder()
     do {
-      let tgwDecoder = try jsonDecoder.decode(TGW_CurrentConditionsDecoder.self, from: data)
-      saveCurrentConditions(current: tgwDecoder.current)
+      let wxaDecoder = try jsonDecoder.decode(WXA_CurrentConditionsDecoder.self, from: data)
+      saveCurrentConditions(current: wxaDecoder.current)
       DispatchQueue.main.async {
-        self.current = tgwDecoder.current
+        self.current = wxaDecoder.current
       }
       logger.debug("Updated current conditions! 🎉")
     } catch {

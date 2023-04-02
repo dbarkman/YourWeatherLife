@@ -22,24 +22,6 @@ struct DataService {
   
   private init() { }
   
-  private func fetchAPIsFromCloud() async {
-    await APIsProvider.shared.fetchAPIs()
-  }
-  
-  private func fetchPrimaryAPIFromLocal () async -> API {
-    let api = API()
-    api.apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    api.urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
-    return api
-  }
-  
-  private func fetchAPIFromLocalBy(shortName: String) -> API {
-    let api = API()
-    api.apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    api.urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
-    return api
-  }
-  
   func updateNextStartDate() async {
     logger.debug("Updating Next Start Dates")
     if !UserDefaults.standard.bool(forKey: "defaultEventsLoaded") {

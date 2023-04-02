@@ -1,5 +1,5 @@
 //
-//  DayForecast.swift
+//  DailyForecast.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 7/6/22.
@@ -10,7 +10,7 @@ import Mixpanel
 import OSLog
 import FirebaseAnalytics
 
-struct DayForecast: View {
+struct DailyForecast: View {
   
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "DayForecast")
   
@@ -48,10 +48,10 @@ struct DayForecast: View {
         .navigationTitle("14 Day Forecast")
       }
       .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        let appearance = UINavigationBarAppearance()
+//        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+//        UINavigationBar.appearance().standardAppearance = appearance
+//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "14DayForecast View")
         Analytics.logEvent("View", parameters: ["view_name": "14DayForecast"])
@@ -65,6 +65,6 @@ struct DayForecast: View {
 
 struct DayForecast_Previews: PreviewProvider {
   static var previews: some View {
-    DayForecast()
+    DailyForecast()
   }
 }

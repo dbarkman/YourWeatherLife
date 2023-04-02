@@ -49,7 +49,7 @@ struct GetAllData {
       logger.debug("Fetching forecasts.")
       nextUpdate = Calendar.current.date(byAdding: .minute, value: 10, to: Date()) ?? Date()
       UserDefaults.standard.set(nextUpdate, forKey: "forecastsNextUpdate")
-      await TGW_ForecastProvider.shared.fetchForecast()
+      await WXA_ForecastProvider.shared.fetchForecast()
       NotificationCenter.default.post(name: .forecastInsertedEvent, object: nil)
       logger.debug("Days and Hours imported successfully! - location 🎉")
     } else {

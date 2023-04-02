@@ -1,5 +1,5 @@
 //
-//  TGW_Forecast.swift
+//  WXA_Forecast.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/27/22.
@@ -8,31 +8,31 @@
 import Foundation
 import OSLog
 
-struct TGW_ForecastDecoder: Decodable {
+struct WXA_ForecastDecoder: Decodable {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastDecoder")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "WXA_ForecastDecoder")
 
   private enum RootCodingKeys: String, CodingKey {
     case location, current, forecast
   }
   
-  private(set) var tgw_location: TGW_Location
-  private(set) var tgw_current: TGW_Current
-  private(set) var tgw_forecast: TGW_Forecast
-  private(set) var tgw_forecastHours = [TGW_ForecastHours]()
-  private(set) var tgw_forecastDays = [TGW_ForecastDays]()
+  private(set) var wxa_location: WXA_Location
+  private(set) var wxa_current: WXA_Current
+  private(set) var wxa_forecast: WXA_Forecast
+  private(set) var wxa_forecastHours = [WXA_ForecastHours]()
+  private(set) var wxa_forecastDays = [WXA_ForecastDays]()
   
   init(from decoder: Decoder) throws {
     let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
-    tgw_location = try rootContainer.decode(TGW_Location.self, forKey: .location)
-    tgw_current = try rootContainer.decode(TGW_Current.self, forKey: .current)
-    tgw_forecast = try rootContainer.decode(TGW_Forecast.self, forKey: .forecast)
+    wxa_location = try rootContainer.decode(WXA_Location.self, forKey: .location)
+    wxa_current = try rootContainer.decode(WXA_Current.self, forKey: .current)
+    wxa_forecast = try rootContainer.decode(WXA_Forecast.self, forKey: .forecast)
     
-    for var day in tgw_forecast.forecastday {
+    for var day in wxa_forecast.forecastday {
       let fd = day.day
       let fdc = fd.condition
       let fa = day.astro
-      day.location = tgw_location.name
+      day.location = wxa_location.name
       day.maxtemp_c = fd.maxtemp_c
       day.maxtemp_f = fd.maxtemp_f
       day.mintemp_c = fd.mintemp_c
@@ -60,32 +60,32 @@ struct TGW_ForecastDecoder: Decodable {
       day.moonset = fa.moonset
       day.moon_phase = fa.moon_phase
       day.moon_illumination = fa.moon_illumination
-      tgw_forecastDays.append(day)
+      wxa_forecastDays.append(day)
       let hours = day.hour
       for var hour in hours {
         let fhc = hour.condition
-        hour.location = tgw_location.name
+        hour.location = wxa_location.name
         hour.dateTime = hour.time
         hour.date = hour.time.components(separatedBy: " ").first
         hour.time = (hour.dateTime?.components(separatedBy: " ").last)!
         hour.condition_text = fhc.text
         hour.condition_icon = fhc.icon
         hour.condition_code = fhc.code
-        tgw_forecastHours.append(hour)
+        wxa_forecastHours.append(hour)
       }
     }
   }
 }
 
-struct TGW_Forecast: Decodable, Hashable {
-  var forecastday: [TGW_ForecastDays]
+struct WXA_Forecast: Decodable, Hashable {
+  var forecastday: [WXA_ForecastDays]
 }
 
-struct TGW_ForecastDays: Decodable, Hashable {
+struct WXA_ForecastDays: Decodable, Hashable {
   var location: String?
   var date: String
   var date_epoch: Double
-  var day: TGW_Day
+  var day: WXA_Day
   var maxtemp_c: Double?
   var maxtemp_f: Double?
   var mintemp_c: Double?
@@ -107,14 +107,14 @@ struct TGW_ForecastDays: Decodable, Hashable {
   var condition_icon: String?
   var condition_code: Int?
   var uv: Double?
-  var astro: TGW_Astro
+  var astro: WXA_Astro
   var sunrise: String?
   var sunset: String?
   var moonrise: String?
   var moonset: String?
   var moon_phase: String?
   var moon_illumination: String?
-  var hour: [TGW_ForecastHours]
+  var hour: [WXA_ForecastHours]
   
   var dictionaryValue: [String: Any] {
     [
@@ -152,7 +152,7 @@ struct TGW_ForecastDays: Decodable, Hashable {
   }
 }
 
-struct TGW_Day: Decodable, Hashable {
+struct WXA_Day: Decodable, Hashable {
   var maxtemp_c: Double
   var maxtemp_f: Double
   var mintemp_c: Double
@@ -170,11 +170,11 @@ struct TGW_Day: Decodable, Hashable {
   var daily_chance_of_rain: Int
   var daily_will_it_snow: Int
   var daily_chance_of_snow: Int
-  var condition: TGW_Condition
+  var condition: WXA_Condition
   var uv: Double
 }
 
-struct TGW_Astro: Decodable, Hashable {
+struct WXA_Astro: Decodable, Hashable {
   var sunrise: String
   var sunset: String
   var moonrise: String
@@ -183,7 +183,7 @@ struct TGW_Astro: Decodable, Hashable {
   var moon_illumination: String
 }
 
-struct TGW_ForecastHours: Decodable, Hashable {
+struct WXA_ForecastHours: Decodable, Hashable {
   var location: String?
   var time_epoch: Double
   var dateTime: String?
@@ -192,7 +192,7 @@ struct TGW_ForecastHours: Decodable, Hashable {
   var temp_c: Double
   var temp_f: Double
   var is_day: Int
-  var condition: TGW_Condition
+  var condition: WXA_Condition
   var condition_text: String?
   var condition_icon: String?
   var condition_code: Int?

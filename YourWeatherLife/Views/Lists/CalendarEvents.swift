@@ -89,10 +89,10 @@ struct CalendarEvents: View {
       Text("By default, all calendars are selected. Tap Calendars above to limit the selection.")
     })
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//      let appearance = UINavigationBarAppearance()
+//      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
+//      UINavigationBar.appearance().standardAppearance = appearance
+//      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "CalendarEvents View")
       Analytics.logEvent("View", parameters: ["view_name": "CalendarEvents"])

@@ -18,38 +18,27 @@ struct Tabs: View {
           Label("Hourly", systemImage: "clock")
         }
         .tag(0)
-        .toolbar(.visible, for: .tabBar)
-        .toolbarBackground(Color("NavigationBackground"), for: .tabBar)
-      DayForecast()
+      DailyForecast()
         .tabItem {
           Label("Daily", systemImage: "calendar")
         }
         .tag(1)
-        .toolbar(.visible, for: .tabBar)
-        .toolbarBackground(Color("NavigationBackground"), for: .tabBar)
       Home()
         .tabItem {
           Label("Events", systemImage: "calendar.badge.clock")
         }
         .tag(2)
-        .toolbar(.visible, for: .tabBar)
-        .toolbarBackground(Color("NavigationBackground"), for: .tabBar)
       DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")
         .tabItem {
           Label("Today", systemImage: "sun.and.horizon")
         }
         .tag(3)
-        .toolbar(.visible, for: .tabBar)
-        .toolbarBackground(Color("NavigationBackground"), for: .tabBar)
       DayDetail(dates: globalViewModel.weekend, parent: "Home", navigationTitle: "This Weekend")
         .tabItem {
           Label("Weekend", systemImage: "beach.umbrella")
         }
         .tag(4)
-        .toolbar(.visible, for: .tabBar)
-        .toolbarBackground(Color("NavigationBackground"), for: .tabBar)
     }
-    .toolbarColorScheme(.dark, for: .tabBar)
   }
 }
 

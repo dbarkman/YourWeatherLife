@@ -13,13 +13,13 @@ struct APISettings {
   
   private init() { }
   
-  func fetchAPISettings() -> WeatherSolutions {
-    var apiSettings = WeatherSolutions()
-    if  let path = Bundle.main.path(forResource: "weatherSolutions", ofType: "plist"),
+  func fetchAPISettings() -> API {
+    var apiSettings = API()
+    if  let path = Bundle.main.path(forResource: "api", ofType: "plist"),
         let xml = FileManager.default.contents(atPath: path)
     {
       do {
-        let api = try PropertyListDecoder().decode(WeatherSolutions.self, from: xml)
+        let api = try PropertyListDecoder().decode(API.self, from: xml)
         apiSettings = api
       } catch {
         print("API settings decoding problem. 😭 \(error.localizedDescription)")

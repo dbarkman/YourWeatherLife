@@ -1,5 +1,5 @@
 //
-//  TGW_ForecastProvider.swift
+//  WXA_ForecastProvider.swift
 //  YourWeatherLife
 //
 //  Created by David Barkman on 6/27/22.
@@ -10,16 +10,16 @@ import CoreData
 import Mixpanel
 import OSLog
 
-struct TGW_ForecastProvider {
+struct WXA_ForecastProvider {
   
-  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "TGW_ForecastProvider")
+  let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "WXA_ForecastProvider")
   
-  static let shared = TGW_ForecastProvider()
+  static let shared = WXA_ForecastProvider()
   
   private init() { }
   
   func fetchForecast() async {
-    let url = await tgw.shared.getWeatherForecastURL(days: "14")
+    let url = await wxa.shared.getWeatherForecastURL(days: "14")
     logger.debug("url 2: \(url)")
     if let url = URL(string: url) {
       let urlRequest = URLRequest(url: url)
@@ -40,9 +40,9 @@ struct TGW_ForecastProvider {
 
       do {
         let jsonDecoder = JSONDecoder()
-        let forecastDecoder = try jsonDecoder.decode(TGW_ForecastDecoder.self, from: encodedData)
-        let forecastDaysArray = forecastDecoder.tgw_forecastDays
-        let forecastHoursArray = forecastDecoder.tgw_forecastHours
+        let forecastDecoder = try jsonDecoder.decode(WXA_ForecastDecoder.self, from: encodedData)
+        let forecastDaysArray = forecastDecoder.wxa_forecastDays
+        let forecastHoursArray = forecastDecoder.wxa_forecastHours
         
         await importForecastHours(from: forecastHoursArray)
         await importForecastDays(from: forecastDaysArray)
@@ -52,7 +52,7 @@ struct TGW_ForecastProvider {
     }
   }
   
-  private func importForecastHours(from forecastHoursArray: [TGW_ForecastHours]) async {
+  private func importForecastHours(from forecastHoursArray: [WXA_ForecastHours]) async {
     guard !forecastHoursArray.isEmpty else { return }
     
     let taskContext = newTaskContext()
@@ -73,7 +73,7 @@ struct TGW_ForecastProvider {
     }
   }
   
-  private func newBatchInsertHoursRequest(with forecastHoursArray: [TGW_ForecastHours]) -> NSBatchInsertRequest {
+  private func newBatchInsertHoursRequest(with forecastHoursArray: [WXA_ForecastHours]) -> NSBatchInsertRequest {
     var index = 0
     let total = forecastHoursArray.count
     let batchInsertRequest = NSBatchInsertRequest(entity: ForecastHour.entity(), dictionaryHandler: { dictionary in
@@ -85,7 +85,7 @@ struct TGW_ForecastProvider {
     return batchInsertRequest
   }
   
-  private func importForecastDays(from forecastDaysArray: [TGW_ForecastDays]) async {
+  private func importForecastDays(from forecastDaysArray: [WXA_ForecastDays]) async {
     guard !forecastDaysArray.isEmpty else { return }
     
     let taskContext = newTaskContext()
@@ -106,7 +106,7 @@ struct TGW_ForecastProvider {
     }
   }
   
-  private func newBatchInsertDaysRequest(with forecastDaysArray: [TGW_ForecastDays]) -> NSBatchInsertRequest {
+  private func newBatchInsertDaysRequest(with forecastDaysArray: [WXA_ForecastDays]) -> NSBatchInsertRequest {
     var index = 0
     let total = forecastDaysArray.count
     let batchInsertRequest = NSBatchInsertRequest(entity: ForecastDay.entity(), dictionaryHandler: { dictionary in
