@@ -82,6 +82,7 @@
 		639D8DA629C7BBA200333DA8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA529C7BBA200333DA8 /* FirebaseAnalytics */; };
 		639D8DA829C7BBA200333DA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA729C7BBA200333DA8 /* FirebaseCrashlytics */; };
 		639D8DAA29C7BBA200333DA8 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA929C7BBA200333DA8 /* FirebasePerformance */; };
+		63AD80FB29DE2E1C003C651E /* Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD80FA29DE2E1C003C651E /* Messaging.swift */; };
 		63D0FFC62978E21100ECE7A2 /* CalendarEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */; };
 		63D0FFC82978E21F00ECE7A2 /* Calendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC72978E21F00ECE7A2 /* Calendars.swift */; };
 		63D0FFCA2978E3A300ECE7A2 /* EventStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */; };
@@ -192,6 +193,7 @@
 		639D8D9E29C7AE1000333DA8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		639D8DA229C7BB2B00333DA8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		63AD80FA29DE2E1C003C651E /* Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messaging.swift; sourceTree = "<group>"; };
 		63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvents.swift; sourceTree = "<group>"; };
 		63D0FFC72978E21F00ECE7A2 /* Calendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendars.swift; sourceTree = "<group>"; };
 		63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStoreViewModel.swift; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 				63481AD62872849500478C11 /* Observer.swift */,
 				639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */,
 				639D8D9E29C7AE1000333DA8 /* Review.swift */,
+				63AD80FA29DE2E1C003C651E /* Messaging.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -740,6 +743,7 @@
 				6358645C29CD654C00D8387B /* Tabs.swift in Sources */,
 				634BCC402860ECDE0062E105 /* CryptoUtilities.swift in Sources */,
 				639D8D9F29C7AE1100333DA8 /* Review.swift in Sources */,
+				63AD80FB29DE2E1C003C651E /* Messaging.swift in Sources */,
 				63481B0528768C5800478C11 /* EventForecast.swift in Sources */,
 				63481AC2286A075600478C11 /* Current.swift in Sources */,
 				634BCC0A286028A70062E105 /* YourWeatherLife.xcdatamodeld in Sources */,

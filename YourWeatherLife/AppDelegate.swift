@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import OSLog
+import Mixpanel
 import FirebaseCore
+import OSLog
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   
@@ -18,17 +19,74 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     let homeDir = NSHomeDirectory();
     logger.debug("home location: \(homeDir)")
     
-    //future notifications framework
-    if UserDefaults.standard.string(forKey: "distinctId") == nil {
-      Task {
-        await AsyncAPI.shared.saveToken(token: "", debug: 0)
-      }
-    }
-    
+    AppDelegate.register(in: application, using: self)
+
     FirebaseApp.configure()
     
     Review.requestReview()
 
     return true
+  }
+
+  static func register(in application: UIApplication, using notificationDelegate: UNUserNotificationCenterDelegate? = nil) {
+    let center = UNUserNotificationCenter.current()
+    center.delegate = notificationDelegate
+    center.requestAuthorization(options: [.sound, .alert], completionHandler: { granted, error in
+      if error != nil {
+        print("Notification request error: \(error?.localizedDescription ?? "")")
+      } else if granted {
+        DispatchQueue.main.async {
+          application.registerForRemoteNotifications()
+        }
+      } else {
+        if !UserDefaults.standard.bool(forKey: "notNewInstall") {
+          Mixpanel.mainInstance().track(event: "Notifications Not Authorized")
+          UserDefaults.standard.set(true, forKey: "notNewInstall")
+          UserDefaults.standard.set(false, forKey: "sendPush")
+        }
+      }
+    })
+  }
+  
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    UNUserNotificationCenter.current().getNotificationSettings { settings in
+      guard settings.authorizationStatus == .authorized else { return }
+      if settings.alertSetting == .enabled {
+        if !UserDefaults.standard.bool(forKey: "notNewInstall") {
+          Mixpanel.mainInstance().track(event: "Notifications Authorized")
+          UserDefaults.standard.set(true, forKey: "notNewInstall")
+          UserDefaults.standard.set(true, forKey: "sendPush")
+        }
+        let token = deviceToken.reduce("") { $0 + String(format: "%02x", $1) }
+        UserDefaults.standard.set(token, forKey: "apnsToken")
+        
+        self.logger.debug("APNs token: \(token)")
+        
+        var debug = 0
+#if DEBUG
+        debug = 1
+#endif
+        
+        Task {
+          await AsyncAPI.shared.saveToken(token: token, debug: debug)
+        }
+      }
+    }
+  }
+  
+  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    logger.error("APNs error: \(error)")
+  }
+  
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
+    NotificationCenter.default.post(name: .notificationReceivedEvent, object: nil)
+    return .noData
+  }
+  
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+    return [.banner, .sound]
   }
 }
