@@ -15,7 +15,7 @@ class GlobalViewModel: ObservableObject {
   let logger = Logger(subsystem: "com.dbarkman.YourWeatherLife", category: "GlobalViewModel")
   
   static let shared = GlobalViewModel()
-
+  
   private var viewContext = LocalPersistenceController.shared.container.viewContext
   
   @Published var selectedTab = 2
@@ -40,7 +40,7 @@ class GlobalViewModel: ObservableObject {
         self.networkOnline = connected
       }
     })
-
+    
     if !UserDefaults.standard.bool(forKey: "automaticLocation") {
       guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
         let authorizationStatus = LocationViewModel.shared.authorizationStatus
@@ -187,7 +187,7 @@ class GlobalViewModel: ObservableObject {
     } //precip
     return (precipitation, precipitationType, precipitationPercent, precipitaionTotal)
   }
-
+  
   private func getWindDirectionFull(windDirection: String) -> String {
     switch windDirection {
       case "N":
@@ -226,7 +226,7 @@ class GlobalViewModel: ObservableObject {
         return ""
     }
   }
-
+  
   func checkInternetConnection(closure: @escaping (Bool) -> Void) {
     Mixpanel.mainInstance().track(event: "Checking Network Connection")
     let urlString = "https://weather.solutions/test.html"
@@ -260,4 +260,18 @@ class GlobalViewModel: ObservableObject {
     }
     return buildNum
   }
+  
+  func fetchOsVersion() -> String {
+    let os = ProcessInfo.processInfo.operatingSystemVersion
+    let osVersion = String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
+    return osVersion
+  }
+  
+  func fetchDevice() -> String {
+    if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulatorModelIdentifier }
+    var sysinfo = utsname()
+    uname(&sysinfo) // ignore return value
+    return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+  }
+  
 }

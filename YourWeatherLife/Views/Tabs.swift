@@ -28,16 +28,21 @@ struct Tabs: View {
           Label("Events", systemImage: "calendar.badge.clock")
         }
         .tag(2)
-      DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")
-        .tabItem {
-          Label("Today", systemImage: "sun.and.horizon")
-        }
-        .tag(3)
+//      DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")
+//        .tabItem {
+//          Label("Today", systemImage: "sun.and.horizon")
+//        }
+//        .tag(3)
       DayDetail(dates: globalViewModel.weekend, parent: "Home", navigationTitle: "This Weekend")
         .tabItem {
           Label("Weekend", systemImage: "beach.umbrella")
         }
         .tag(4)
+      Alerts()
+        .tabItem {
+          Label("alerts", systemImage: "exclamationmark.triangle.fill")
+        }
+        .tag(5)
     }
   }
 }

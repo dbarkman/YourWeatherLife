@@ -14,9 +14,29 @@ struct wxa {
   
   private init() { }
   
+  private var apiKey = APISettings.shared.fetchAPISettings().wxaApiKey
+  private var urlBase = APISettings.shared.fetchAPISettings().wxaUrlBase
+
+  func getNWSPointsURL() async -> String {
+    let url = "https://api.weather.gov/points/"
+    return url
+  }
+  
+  func getNWSPointsURLwithLocation() async -> String {
+    let location = await getLocation()
+    let url = "https://api.weather.gov/points/" + location
+    return url
+  }
+  
+  func getSearchURL() async -> String {
+    var url = ""
+    if !urlBase.isEmpty && !apiKey.isEmpty {
+      url = urlBase + "/search.json" + "?key=" + apiKey
+    }
+    return url
+  }
+  
   func getCurrentWeatherURL() async -> String {
-    let apiKey = APISettings.shared.fetchAPISettings().wxaApiKey
-    let urlBase = APISettings.shared.fetchAPISettings().wxaUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {
@@ -26,8 +46,6 @@ struct wxa {
   }
   
   func getWeatherForecastURL(days: String) async -> String {
-    let apiKey = APISettings.shared.fetchAPISettings().wxaApiKey
-    let urlBase = APISettings.shared.fetchAPISettings().wxaUrlBase
     var url = ""
     let location = await getLocation()
     if !urlBase.isEmpty && !apiKey.isEmpty {
@@ -62,19 +80,9 @@ struct wxa {
   private func getAutomaticLocation() async -> String {
     let locationManager = LocationViewModel.shared.locationManager
     if let location = locationManager.location {
-//      let geocoder = CLGeocoder()
-//      do {
-//        let reverseGeocodeLocation = try await geocoder.reverseGeocodeLocation(location)
-//        if reverseGeocodeLocation.count > 0 {
-//          return reverseGeocodeLocation[0].postalCode ?? "98034"
-//        }
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
         return "\(latitude),\(longitude)"
-//      } catch {
-//        print("Couldn't reverse geocode location. 😭 \(error.localizedDescription)")
-//        return "98034"
-//      }
     } else {
       return "98034"
     }

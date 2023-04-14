@@ -21,6 +21,8 @@ struct UpdateLocation: View {
   
   @State private var location = 0
   @State private var manualLocation = 0
+  @State private var city = ""
+  @State private var state = ""
   @State private var zipcode = ""
   @State private var latitude = ""
   @State private var longitude = ""
@@ -57,13 +59,30 @@ struct UpdateLocation: View {
                 })
               }
             } else if location == 1 {
-              Text("Will you provide zip/postal code or latitude and longitude coordinates?")
+              Text("Will you provide city, state/region, zip/postal code or latitude and longitude coordinates?")
               Picker("", selection: $manualLocation) {
-                Text("Zip/Postal Code").tag(0)
-                Text("Lat/Long").tag(1)
+                Text("City, State").tag(0)
+                Text("Zip/Postal Code").tag(1)
+                Text("Lat/Long").tag(2)
               }
               .pickerStyle(.segmented)
               if manualLocation == 0 {
+                HStack {
+                  Text("City:")
+                  TextField("city", text: $city)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .environment(\.colorScheme, .light)
+                    .keyboardType(.numbersAndPunctuation)
+                }
+                HStack {
+                  Text("State/Region:")
+                  TextField("state/region", text: $state)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .environment(\.colorScheme, .light)
+                    .keyboardType(.numbersAndPunctuation)
+                }
+              }
+              if manualLocation == 1 {
                 HStack {
                   Text("Zip/Postal Code:")
                   TextField("zip/postal code", text: $zipcode)
@@ -72,7 +91,7 @@ struct UpdateLocation: View {
                     .keyboardType(.numbersAndPunctuation)
                 }
               }
-              if manualLocation == 1 {
+              if manualLocation == 2 {
                 HStack {
                   Text("Latitude:")
                   TextField("latitude", text: $latitude)
@@ -147,10 +166,6 @@ struct UpdateLocation: View {
         }
       }
       .onAppear() {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-//        UINavigationBar.appearance().standardAppearance = appearance
-//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "UpdateLocation View")
         Analytics.logEvent("View", parameters: ["view_name": "UpdateLocation"])
@@ -158,14 +173,22 @@ struct UpdateLocation: View {
         let automaticLocation = UserDefaults.standard.bool(forKey: "automaticLocation")
         location = automaticLocation ? 0 : 1
         guard let manualLocationData = UserDefaults.standard.string(forKey: "manualLocationData") else { return }
-        if manualLocationData.contains(",") {
-          manualLocation = 1
+        let manualLocation = UserDefaults.standard.integer(forKey: "manualLocation")
+        self.manualLocation = manualLocation
+        if manualLocation == 0 {
+          if !manualLocationData.contains(",") {
+            city = "Kirkland"
+            state = "WA"
+          } else {
+            city = manualLocationData.components(separatedBy: ",").first ?? "Kirkland"
+            state = manualLocationData.components(separatedBy: ",").last ?? "WA"
+          }
+        } else if manualLocation == 2 {
           if let latitude = manualLocationData.components(separatedBy: ",").first, let longitude = manualLocationData.components(separatedBy: ",").last {
             self.latitude = latitude
             self.longitude = longitude
           }
         } else {
-          manualLocation = 0
           zipcode = manualLocationData
         }
       }
@@ -181,9 +204,22 @@ struct UpdateLocation: View {
       }
       Mixpanel.mainInstance().track(event: "Location by GPS")
       UserDefaults.standard.set(true, forKey: "automaticLocation")
+      Task {
+        await AsyncAPI.shared.getZoneId()
+        let token = UserDefaults.standard.string(forKey: "apnsToken") ?? ""
+        let debug = UserDefaults.standard.integer(forKey: "apnsDebug")
+        await AsyncAPI.shared.saveToken(token: token, debug: debug)
+      }
     } else {
       UserDefaults.standard.set(false, forKey: "automaticLocation")
       if manualLocation == 0 {
+        if city.isEmpty || state.isEmpty {
+          updateLocationResult = "Both city and state/region must be entered."
+          return
+        }
+        Mixpanel.mainInstance().track(event: "Location by City, State")
+        UserDefaults.standard.set("\(city),\(state)", forKey: "manualLocationData")
+      } else if manualLocation == 1 {
         if zipcode.isEmpty {
           updateLocationResult = "Zip/Postal Code cannot be empty."
           return
@@ -193,13 +229,20 @@ struct UpdateLocation: View {
         }
         Mixpanel.mainInstance().track(event: "Location by Zip/Postal Code")
         UserDefaults.standard.set(zipcode, forKey: "manualLocationData")
-      } else {
+      } else if manualLocation == 2 {
         if latitude.isEmpty || longitude.isEmpty {
           updateLocationResult = "Both latitude and longitude must be entered."
           return
         }
         Mixpanel.mainInstance().track(event: "Location by Lat/Long")
         UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "manualLocationData")
+      }
+      UserDefaults.standard.set(manualLocation, forKey: "manualLocation")
+      Task {
+        await AsyncAPI.shared.getZoneId()
+        let token = UserDefaults.standard.string(forKey: "apnsToken") ?? ""
+        let debug = UserDefaults.standard.integer(forKey: "apnsDebug")
+        await AsyncAPI.shared.saveToken(token: token, debug: debug)
       }
     }
     NotificationCenter.default.post(name: .locationUpdatedEvent, object: nil)

@@ -48,10 +48,6 @@ struct DailyForecast: View {
         .navigationTitle("14 Day Forecast")
       }
       .onAppear() {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-//        UINavigationBar.appearance().standardAppearance = appearance
-//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "14DayForecast View")
         Analytics.logEvent("View", parameters: ["view_name": "14DayForecast"])

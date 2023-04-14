@@ -45,13 +45,9 @@ struct HourlyForecast: View {
             }
           }
         }
-        .navigationTitle("300+ Hour Forecast")
+        .navigationTitle("Hourly Forecast")
       }
       .onAppear() {
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-//        UINavigationBar.appearance().standardAppearance = appearance
-//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "336HourForecast View")
         Analytics.logEvent("View", parameters: ["view_name": "336HourForecast"])

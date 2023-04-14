@@ -61,6 +61,7 @@ class HomeViewModel: ObservableObject {
       ForecastViewModel.shared.create14DayForecast()
       ForecastViewModel.shared.create336HourForecast()
       DayDetailViewModel.shared.fetchDayDetail(dates: [globalViewModel.today])
+      await AlertsViewModel.shared.getAlerts()
     }
   }
   

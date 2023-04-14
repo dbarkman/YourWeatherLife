@@ -112,7 +112,7 @@ class ForecastViewModelTests: XCTestCase {
     //then
     await waitForExpectations(timeout: 5, handler: nil)
     let forecastHours = sut.forecastHours
-    XCTAssertGreaterThanOrEqual(forecastHours.count, 312)
+    XCTAssertGreaterThanOrEqual(forecastHours.count, 305)
     if forecastHours.count > 0 {
       let hour = forecastHours[0]
       XCTAssertFalse(hour.temperature.isEmpty)

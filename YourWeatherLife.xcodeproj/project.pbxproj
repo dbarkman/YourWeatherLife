@@ -75,6 +75,13 @@
 		634BCCAD28629EA70062E105 /* WXA_CurrentConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAC28629EA60062E105 /* WXA_CurrentConditions.swift */; };
 		634BCCB02866D96F0062E105 /* wxa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634BCCAF2866D96F0062E105 /* wxa.swift */; };
 		6358645C29CD654C00D8387B /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358645B29CD654C00D8387B /* Tabs.swift */; };
+		6392D60529E4EAC2007F5AF8 /* NWSPointsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60429E4EAC2007F5AF8 /* NWSPointsResponse.swift */; };
+		6392D60729E51036007F5AF8 /* WxaSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60629E51036007F5AF8 /* WxaSearchResponse.swift */; };
+		6392D60929E76FC0007F5AF8 /* AlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60829E76FC0007F5AF8 /* AlertsViewModel.swift */; };
+		6392D60B29E770E1007F5AF8 /* AlertsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60A29E770E1007F5AF8 /* AlertsResponse.swift */; };
+		6392D60D29E7712B007F5AF8 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60C29E7712B007F5AF8 /* Alert.swift */; };
+		6392D60F29E7C597007F5AF8 /* AlertDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D60E29E7C597007F5AF8 /* AlertDetail.swift */; };
+		6392D61129E7E15E007F5AF8 /* NotificationSettingsModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392D61029E7E15E007F5AF8 /* NotificationSettingsModal.swift */; };
 		639D8D9D29C7A2B400333DA8 /* AsyncAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */; };
 		639D8D9F29C7AE1100333DA8 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D8D9E29C7AE1000333DA8 /* Review.swift */; };
 		639D8DA129C7B62400333DA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */; };
@@ -83,6 +90,7 @@
 		639D8DA829C7BBA200333DA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA729C7BBA200333DA8 /* FirebaseCrashlytics */; };
 		639D8DAA29C7BBA200333DA8 /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = 639D8DA929C7BBA200333DA8 /* FirebasePerformance */; };
 		63AD80FB29DE2E1C003C651E /* Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD80FA29DE2E1C003C651E /* Messaging.swift */; };
+		63AD80FD29DF3F4D003C651E /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AD80FC29DF3F4D003C651E /* Alerts.swift */; };
 		63D0FFC62978E21100ECE7A2 /* CalendarEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */; };
 		63D0FFC82978E21F00ECE7A2 /* Calendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC72978E21F00ECE7A2 /* Calendars.swift */; };
 		63D0FFCA2978E3A300ECE7A2 /* EventStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */; };
@@ -189,11 +197,19 @@
 		6358645D29CDE87200D8387B /* YourWeatherLifeiCloud 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 5.xcdatamodel"; sourceTree = "<group>"; };
 		6369B63229667FB900EA03FB /* YourWeatherLifeiCloud 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLifeiCloud 3.xcdatamodel"; sourceTree = "<group>"; };
 		6369B6332966811C00EA03FB /* YourWeatherLife 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "YourWeatherLife 3.xcdatamodel"; sourceTree = "<group>"; };
+		6392D60429E4EAC2007F5AF8 /* NWSPointsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWSPointsResponse.swift; sourceTree = "<group>"; };
+		6392D60629E51036007F5AF8 /* WxaSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WxaSearchResponse.swift; sourceTree = "<group>"; };
+		6392D60829E76FC0007F5AF8 /* AlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsViewModel.swift; sourceTree = "<group>"; };
+		6392D60A29E770E1007F5AF8 /* AlertsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsResponse.swift; sourceTree = "<group>"; };
+		6392D60C29E7712B007F5AF8 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		6392D60E29E7C597007F5AF8 /* AlertDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDetail.swift; sourceTree = "<group>"; };
+		6392D61029E7E15E007F5AF8 /* NotificationSettingsModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsModal.swift; sourceTree = "<group>"; };
 		639D8D9C29C7A2B400333DA8 /* AsyncAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAPI.swift; sourceTree = "<group>"; };
 		639D8D9E29C7AE1000333DA8 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		639D8DA029C7B62400333DA8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		639D8DA229C7BB2B00333DA8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63AD80FA29DE2E1C003C651E /* Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messaging.swift; sourceTree = "<group>"; };
+		63AD80FC29DF3F4D003C651E /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvents.swift; sourceTree = "<group>"; };
 		63D0FFC72978E21F00ECE7A2 /* Calendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendars.swift; sourceTree = "<group>"; };
 		63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStoreViewModel.swift; sourceTree = "<group>"; };
@@ -376,6 +392,10 @@
 				63481AFB28752F4800478C11 /* Weekend.swift */,
 				63D0FFD12979F8CA00ECE7A2 /* CalendarSet.swift */,
 				63D0FFD32981F2B600ECE7A2 /* EventSet.swift */,
+				6392D60429E4EAC2007F5AF8 /* NWSPointsResponse.swift */,
+				6392D60629E51036007F5AF8 /* WxaSearchResponse.swift */,
+				6392D60A29E770E1007F5AF8 /* AlertsResponse.swift */,
+				6392D60C29E7712B007F5AF8 /* Alert.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -396,6 +416,7 @@
 				63481ADA2873450700478C11 /* SummaryViewModel.swift */,
 				63D0FFC92978E3A300ECE7A2 /* EventStoreViewModel.swift */,
 				63D0FFCB2978E3CE00ECE7A2 /* CalendarEventProvider.swift */,
+				6392D60829E76FC0007F5AF8 /* AlertsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -452,6 +473,7 @@
 			children = (
 				634BCC602860EE380062E105 /* EditDailyEvent.swift */,
 				632790A2288906F800E551CA /* UpdateLocation.swift */,
+				6392D61029E7E15E007F5AF8 /* NotificationSettingsModal.swift */,
 			);
 			path = CRUD;
 			sourceTree = "<group>";
@@ -462,6 +484,7 @@
 				634BCC642860EE440062E105 /* DayDetail.swift */,
 				634BCC622860EE440062E105 /* EventDetail.swift */,
 				634BCC632860EE440062E105 /* HourDetail.swift */,
+				6392D60E29E7C597007F5AF8 /* AlertDetail.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -487,6 +510,7 @@
 				63481B0A2876AA6300478C11 /* HourlyForecast.swift */,
 				63D0FFC52978E21100ECE7A2 /* CalendarEvents.swift */,
 				63D0FFC72978E21F00ECE7A2 /* Calendars.swift */,
+				63AD80FC29DF3F4D003C651E /* Alerts.swift */,
 			);
 			path = Lists;
 			sourceTree = "<group>";
@@ -685,14 +709,18 @@
 			files = (
 				639D8D9D29C7A2B400333DA8 /* AsyncAPI.swift in Sources */,
 				63481AC4286AC2B100478C11 /* WXA_ForecastProvider.swift in Sources */,
+				6392D60D29E7712B007F5AF8 /* Alert.swift in Sources */,
 				63481B032875E0F900478C11 /* WindDirection.swift in Sources */,
 				634BCC612860EE380062E105 /* EditDailyEvent.swift in Sources */,
 				63D0FFCA2978E3A300ECE7A2 /* EventStoreViewModel.swift in Sources */,
 				63D0FFCC2978E3CE00ECE7A2 /* CalendarEventProvider.swift in Sources */,
 				63481AD52872548B00478C11 /* EventProvider.swift in Sources */,
 				63481AD92872C93B00478C11 /* Today.swift in Sources */,
+				6392D61129E7E15E007F5AF8 /* NotificationSettingsModal.swift in Sources */,
 				634BCC742860EE5D0062E105 /* DailyEvents.swift in Sources */,
+				6392D60B29E770E1007F5AF8 /* AlertsResponse.swift in Sources */,
 				634BCCA7286298BE0062E105 /* CurrentConditionsViewModel.swift in Sources */,
+				63AD80FD29DF3F4D003C651E /* Alerts.swift in Sources */,
 				63481AFE28753B1200478C11 /* DayDetailViewModel.swift in Sources */,
 				6327909A2884F9EF00E551CA /* CloudKitManager.swift in Sources */,
 				634BCC772860EFC00062E105 /* AppDelegate.swift in Sources */,
@@ -711,15 +739,19 @@
 				63481B0028754A2A00478C11 /* HourForecast.swift in Sources */,
 				634BCC672860EE440062E105 /* HourDetail.swift in Sources */,
 				63D0FFC82978E21F00ECE7A2 /* Calendars.swift in Sources */,
+				6392D60729E51036007F5AF8 /* WxaSearchResponse.swift in Sources */,
 				634BCC702860EE500062E105 /* EventListItem.swift in Sources */,
 				63D0FFC62978E21100ECE7A2 /* CalendarEvents.swift in Sources */,
 				634BCC7F286122930062E105 /* CloudPersistenceController.swift in Sources */,
 				634BCC432860ED010062E105 /* GlobalViewModel.swift in Sources */,
+				6392D60929E76FC0007F5AF8 /* AlertsViewModel.swift in Sources */,
 				634BCC712860EE500062E105 /* WeekendSummary.swift in Sources */,
 				634BCC682860EE440062E105 /* DayDetail.swift in Sources */,
 				63481AC6286AC72400478C11 /* WXA_Forecast.swift in Sources */,
 				634BCCB02866D96F0062E105 /* wxa.swift in Sources */,
+				6392D60529E4EAC2007F5AF8 /* NWSPointsResponse.swift in Sources */,
 				634BCC5E2860EE2C0062E105 /* BackgroundColor.swift in Sources */,
+				6392D60F29E7C597007F5AF8 /* AlertDetail.swift in Sources */,
 				634BCC6E2860EE500062E105 /* TodaySummary.swift in Sources */,
 				63425DA72891A14A00430B43 /* ForecastViewModel.swift in Sources */,
 				63D0FFD22979F8CA00ECE7A2 /* CalendarSet.swift in Sources */,
@@ -911,7 +943,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2023032401;
+				CURRENT_PROJECT_VERSION = 2023041301;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
@@ -936,7 +968,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dbarkman.YourWeatherLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -956,7 +988,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YourWeatherLife/YourWeatherLife.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2023032401;
+				CURRENT_PROJECT_VERSION = 2023041301;
 				DEVELOPMENT_ASSET_PATHS = "\"YourWeatherLife/Preview Content\"";
 				DEVELOPMENT_TEAM = V66UJ72Z63;
 				ENABLE_PREVIEWS = YES;
@@ -980,7 +1012,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dbarkman.YourWeatherLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";

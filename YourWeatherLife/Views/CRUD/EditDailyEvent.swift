@@ -115,10 +115,6 @@ struct EditDailyEvent: View {
       }
     }
     .onAppear() {
-//      let appearance = UINavigationBarAppearance()
-//      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-//      UINavigationBar.appearance().standardAppearance = appearance
-//      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "EditDailyEvent View")
       Analytics.logEvent("View", parameters: ["view_name": "EditDailyEvent"])

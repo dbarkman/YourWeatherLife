@@ -66,10 +66,6 @@ struct Calendars: View {
     .onAppear() {
       eventStoreViewModel.fetchCalendars()
       
-//      let appearance = UINavigationBarAppearance()
-//      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-//      UINavigationBar.appearance().standardAppearance = appearance
-//      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       
       DispatchQueue.main.async {

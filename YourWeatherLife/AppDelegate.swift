@@ -56,6 +56,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
           Mixpanel.mainInstance().track(event: "Notifications Authorized")
           UserDefaults.standard.set(true, forKey: "notNewInstall")
           UserDefaults.standard.set(true, forKey: "sendPush")
+          UserDefaults.standard.set(false, forKey: "sendAll")
+          UserDefaults.standard.set(false, forKey: "sendArea")
         }
         let token = deviceToken.reduce("") { $0 + String(format: "%02x", $1) }
         UserDefaults.standard.set(token, forKey: "apnsToken")
@@ -66,8 +68,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 #if DEBUG
         debug = 1
 #endif
-        
+        UserDefaults.standard.set(debug, forKey: "apnsDebug")
+
         Task {
+          if UserDefaults.standard.string(forKey: "zone") == nil {
+            await AsyncAPI.shared.getZoneId()
+          }
           await AsyncAPI.shared.saveToken(token: token, debug: debug)
         }
       }
@@ -79,6 +85,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   }
   
   func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
+    GlobalViewModel.shared.selectedTab = 5
     NotificationCenter.default.post(name: .notificationReceivedEvent, object: nil)
     return .noData
   }

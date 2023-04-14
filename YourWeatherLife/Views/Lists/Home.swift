@@ -28,6 +28,7 @@ struct Home: View {
   @State private var showFeedback = false
   @State private var showUpdateLocation = false
   @State private var refreshLocation = false
+  @State private var showToday = false
   
   var body: some View {
     
@@ -81,6 +82,9 @@ struct Home: View {
                     .padding(.vertical, -25)
                 } //end of VStack
                 .padding(.horizontal, 10)
+                .onTapGesture {
+                  showToday.toggle()
+                }
                 Spacer()
                 VStack(alignment: .trailing) {
                   HStack {
@@ -333,19 +337,15 @@ struct Home: View {
       .sheet(isPresented: $showUpdateLocation) {
         UpdateLocation(refreshLocation: $refreshLocation)
       }
+      .sheet(isPresented: $showToday) {
+        DayDetail(dates: [globalViewModel.today], parent: "Home", isToday: true, navigationTitle: "Today")
+      }
       .onAppear() {
         Mixpanel.mainInstance().track(event: "Home View")
         Analytics.logEvent("View", parameters: ["view_name": "Home"])
         if globalViewModel.returningFromChildView {
           globalViewModel.returningFromChildView = false
           homeViewModel.awaitUpdateNextStartDate()
-        }
-        guard let _ = UserDefaults.standard.string(forKey: "currentVersion") else {
-          let appVersion = globalViewModel.fetchAppVersionNumber()
-          let buildNumber = globalViewModel.fetchBuildNumber()
-          let currentVersion = "\(appVersion)-\(buildNumber)"
-          UserDefaults.standard.set(currentVersion, forKey: "currentVersion")
-          return
         }
       }
       .onReceive(self.observer.$enteredForeground) { _ in
