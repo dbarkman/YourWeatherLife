@@ -58,6 +58,10 @@ class HomeViewModel: ObservableObject {
   func fetchForecast() {
     Task {
       await GetAllData.shared.updateForecasts()
+      ForecastViewModel.shared.create14DayForecast()
+      ForecastViewModel.shared.create336HourForecast()
+      DayDetailViewModel.shared.fetchDayDetail(dates: [globalViewModel.today])
+      await AlertsViewModel.shared.getAlerts()
     }
   }
   
@@ -175,39 +179,25 @@ class HomeViewModel: ObservableObject {
       return EventForecast()
     }
     for dailyEvent in dailyEventList {
-      let today = Date()
-      if let identifier = dailyEvent.identifier {
+      if let identifier = dailyEvent.identifier, var eventStartDate = dailyEvent.startDate, var eventEndDate = dailyEvent.endDate {
         if let calendarEvent = EventStoreViewModel.shared.store.event(withIdentifier: identifier) {
-          if var endDate = calendarEvent.endDate {
-            if endDate < today {
-              if let occurrenceDate = calendarEvent.occurrenceDate {
-                let components = Calendar.current.dateComponents([.month, .day], from: occurrenceDate)
-                let month = components.month ?? 0
-                let day = components.day ?? 0
-                let year = Dates.shared.makeStringFromDate(date: today, format: "yyyy")
-                if month == 0 || day == 0 {
-                  continue
-                } else {
-                  endDate = Dates.shared.makeDateFromString(date: "\(year)-\(month)-\(day)", format: "yyyy-MM-dd")
-                }
-              } else {
-                continue
-              }
-            } //going on from here is fine, no else needed
-            
+          if eventEndDate > .now  {
+            if Calendar.current.dateComponents([.day], from: eventStartDate, to: eventEndDate).day! > 0 {
+              let daysSinceStart = Calendar.current.dateComponents([.day], from: eventStartDate, to: .now).day!
+              let daysTillEnd = Calendar.current.dateComponents([.day], from: .now, to: eventEndDate).day!
+              eventStartDate = Calendar.current.date(byAdding: .day, value: daysSinceStart, to: eventStartDate) ?? Date()
+              eventEndDate = Calendar.current.date(byAdding: .day, value: daysTillEnd, to: eventEndDate) ?? Date()
+            }
             let eventName = calendarEvent.title ?? ""
             logger.debug("event: \(eventName)")
-            let start = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "HH:mm")
-            let end = Dates.shared.makeStringFromDate(date: calendarEvent.endDate ?? Date(), format: "HH:mm")
+            let start = Dates.shared.makeStringFromDate(date: eventStartDate, format: "HH:mm")
+            let end = Dates.shared.makeStringFromDate(date: eventEndDate, format: "HH:mm")
             let days = "1234567"
-            let nextStartDateTime = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "MM-dd-yyyy")
-            let nextStartDateString = String(nextStartDateTime.prefix(10))
-            let nextStartDate = Dates.shared.makeDateFromString(date: nextStartDateString, format: "yyyy-MM-dd")
             let dayFormat = Dates.shared.userFormatDayFirst() ? "EEEE, d MMMM" : "EEEE, MMMM d"
-            let when = Dates.shared.makeStringFromDate(date: nextStartDate, format: dayFormat)
-            let eventArray = Dates.shared.getEventHours(start: start, end: end, date: nextStartDate)
-            let startTime = Dates.shared.makeStringFromDate(date: calendarEvent.startDate ?? Date(), format: "HH:mm")
-            let endTime = Dates.shared.makeStringFromDate(date: calendarEvent.endDate ?? Date(), format: "HH:mm")
+            let when = Dates.shared.makeStringFromDate(date: eventStartDate, format: dayFormat)
+            let eventArray = Dates.shared.getEventHours(start: start, end: end, date: eventStartDate)
+            let startTime = Dates.shared.makeStringFromDate(date: eventStartDate, format: "HH:mm")
+            let endTime = Dates.shared.makeStringFromDate(date: eventEndDate, format: "HH:mm")
             let startDisplayTime = Dates.shared.makeDisplayTimeFromTime(time: startTime, format: "HH:mm", full: true)
             let endDisplayTime = Dates.shared.makeDisplayTimeFromTime(time: endTime, format: "HH:mm", full: true)
             
@@ -235,7 +225,7 @@ class HomeViewModel: ObservableObject {
             
             let summary = EventSummaryProvider.shared
             let eventSummary = summary.creatSummary(hoursForecast: forecastHours)
-            let event = EventForecast(eventName: eventName, startTime: startDisplayTime, endTime: endDisplayTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours, identifier: identifier)
+            let event = EventForecast(eventName: eventName, startTime: startDisplayTime, endTime: endDisplayTime, summary: eventSummary, nextStartDate: "", when: when, days: days, forecastHours: hours, identifier: identifier, isAllDay: calendarEvent.isAllDay)
             if !eventPredicate.isEmpty {
               return event
             }

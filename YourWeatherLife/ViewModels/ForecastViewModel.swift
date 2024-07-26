@@ -34,16 +34,18 @@ class ForecastViewModel: ObservableObject {
     var forecastDays = [Today]()
     do {
       let forecastDay = try viewContext.fetch(fetchRequest)
-      for day in forecastDay {
-        let todayResult = globalViewModel.configureDay(todayForecast: day)
-        var today = todayResult.0
-        let hours = todayResult.1
-        var hoursForecast = [HourForecast]()
-        for hour in hours {
-          hoursForecast.append(globalViewModel.configureHour(hour: hour))
+      if forecastDay.count > 0 {
+        for day in forecastDay {
+          let todayResult = globalViewModel.configureDay(todayForecast: day)
+          var today = todayResult.0
+          let hours = todayResult.1
+          var hoursForecast = [HourForecast]()
+          for hour in hours {
+            hoursForecast.append(globalViewModel.configureHour(hour: hour))
+          }
+          today.hours = hoursForecast
+          forecastDays.append(today)
         }
-        today.hours = hoursForecast
-        forecastDays.append(today)
       }
     } catch {
       logger.error("Couldn't fetch 14 day forecast. 😭 \(error.localizedDescription)")

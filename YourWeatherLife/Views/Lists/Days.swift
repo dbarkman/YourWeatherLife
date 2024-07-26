@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Mixpanel
+import FirebaseAnalytics
 
 struct Days: View {
   
@@ -53,12 +54,9 @@ struct Days: View {
     .listStyle(.plain)
     } //end of ZStack
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "Days View")
+      Analytics.logEvent("View", parameters: ["view_name": "Days"])
       eventViewModel.returningFromDays = true
     }
   }

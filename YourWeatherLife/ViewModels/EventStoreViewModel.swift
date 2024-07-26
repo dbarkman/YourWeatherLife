@@ -18,6 +18,7 @@ class EventStoreViewModel: ObservableObject {
   @Published var calendarSets: [CalendarSet] = []
   @Published var eventSets: [EventSet] = []
   @Published var eventIdsByName: [String:String] = [:]
+  @Published var eventsById: [String:EKEvent] = [:]
   @Published var allCalendarsSelected = false
   
   private var selectedCalendarIds: [String] = []
@@ -50,6 +51,7 @@ class EventStoreViewModel: ObservableObject {
     DispatchQueue.main.async {
       self.eventSets.removeAll()
       self.eventIdsByName.removeAll()
+      self.eventsById.removeAll()
     }
     let today = Date()
     let calendar = Calendar.current
@@ -95,6 +97,7 @@ class EventStoreViewModel: ObservableObject {
         }
         let eventTitle = "\(title) on \(date)"
         self.eventIdsByName["\(title) on \(date)"] = event.eventIdentifier
+        self.eventsById[event.eventIdentifier] = event
         let sectionHeader = event.calendar.title
         if let sectionIndex = self.eventSets.firstIndex(where: { $0.calendar == sectionHeader }) {
           self.eventSets[sectionIndex].events.append(eventTitle)

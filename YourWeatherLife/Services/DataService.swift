@@ -10,6 +10,7 @@ import CoreData
 import CloudKit
 import Mixpanel
 import OSLog
+import FirebaseCrashlytics
 
 struct DataService {
   
@@ -20,24 +21,6 @@ struct DataService {
   var viewCloudContext = CloudPersistenceController.shared.container.viewContext
   
   private init() { }
-  
-  private func fetchAPIsFromCloud() async {
-    await APIsProvider.shared.fetchAPIs()
-  }
-  
-  private func fetchPrimaryAPIFromLocal () async -> API {
-    let api = API()
-    api.apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    api.urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
-    return api
-  }
-  
-  private func fetchAPIFromLocalBy(shortName: String) -> API {
-    let api = API()
-    api.apiKey = APISettings.shared.fetchAPISettings().tgwApiKey
-    api.urlBase = APISettings.shared.fetchAPISettings().tgwUrlBase
-    return api
-  }
   
   func updateNextStartDate() async {
     logger.debug("Updating Next Start Dates")
@@ -68,6 +51,8 @@ struct DataService {
           components.minute = Int(start.suffix(2))
           let weekday = components.weekday ?? 1
           if today == weekday {
+            let keysAndValues = ["start": start, "end": end, "date": now] as [String : Any]
+            Crashlytics.crashlytics().setCustomKeysAndValues(keysAndValues)
             let isToday = Dates.shared.getEventDateTimeAndIsToday(start: start, end: end, date: now)
             if isToday.1 {
               dates.removeAll()

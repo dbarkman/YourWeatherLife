@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Mixpanel
+import FirebaseAnalytics
 
 struct FeedbackModal: View {
   
@@ -15,7 +16,7 @@ struct FeedbackModal: View {
   @StateObject private var globalViewModel = GlobalViewModel.shared
 
   @State private var email = ""
-  @State private var feedback = ""
+  @State private var feedback = "\r"
   @State private var showVersion = false
   @State private var currentVersion = ""
 
@@ -117,12 +118,9 @@ struct FeedbackModal: View {
         .navigationTitle("Feedback")
       }
       .onAppear() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
         Mixpanel.mainInstance().track(event: "Feedback View")
+        Analytics.logEvent("View", parameters: ["view_name": "Feedback"])
         let appVersion = globalViewModel.fetchAppVersionNumber()
         let buildNumber = globalViewModel.fetchBuildNumber()
         currentVersion = "\(appVersion)-\(buildNumber)"

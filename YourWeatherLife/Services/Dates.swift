@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCrashlytics
 
 struct Dates {
   
@@ -108,6 +109,8 @@ struct Dates {
         }
       }
     }
+    let keysAndValues = ["startTimeDate": startTimeDate, "endTimeDate": endTimeDate] as [String : Any]
+    Crashlytics.crashlytics().setCustomKeysAndValues(keysAndValues)
     while startTimeDate < endTimeDate {
       if let nextHour = Calendar.current.date(byAdding: .hour, value: 1, to: startTimeDate) {
         timeArray.append(makeStringFromDate(date: startTimeDate, format: "yyyy-MM-dd HH:mm"))

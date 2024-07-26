@@ -38,10 +38,17 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
       } else {
         Mixpanel.mainInstance().track(event: "Location Not Authorized")
         UserDefaults.standard.set(false, forKey: "automaticLocation")
-        guard let _ = UserDefaults.standard.string(forKey: "manualLocationData") else {
+        if UserDefaults.standard.string(forKey: "manualLocationData") == nil {
           UserDefaults.standard.set("98034", forKey: "manualLocationData")
-          return
+        } else {
+          logger.debug("manual location: \(UserDefaults.standard.string(forKey: "manualLocationData") ?? "")")
         }
+      }
+      Task {
+        await AsyncAPI.shared.getZoneId()
+        let token = UserDefaults.standard.string(forKey: "apnsToken") ?? ""
+        let debug = UserDefaults.standard.integer(forKey: "apnsDebug")
+        await AsyncAPI.shared.saveToken(token: token, debug: debug)
       }
     }
   }

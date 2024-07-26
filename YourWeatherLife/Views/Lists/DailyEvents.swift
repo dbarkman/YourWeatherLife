@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct DailyEvents: View {
   
@@ -86,13 +87,10 @@ struct DailyEvents: View {
       }
     } //end of ZStack
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "DailyEvents View")
+      Analytics.logEvent("View", parameters: ["view_name": "DailyEvents"])
     }
   }
   

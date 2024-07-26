@@ -10,6 +10,7 @@ import CoreData
 import EventKit
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct CalendarEvents: View {
   
@@ -61,7 +62,7 @@ struct CalendarEvents: View {
         ToolbarItem(placement: .navigationBarLeading) {
           Button(action: {
             UserDefaults.standard.set(Array(selectedEvents), forKey: "selectedEvents")
-            CalendarEventProvider.shared.insertCalendarEvents(selectedEvents: selectedEvents, eventIdsByName: eventStoreViewModel.eventIdsByName)
+            CalendarEventProvider.shared.insertCalendarEvents(selectedEvents: selectedEvents, eventIdsByName: eventStoreViewModel.eventIdsByName, eventsById: eventStoreViewModel.eventsById)
             _ = homeViewModel.fetchImportedEvents()
             presentationMode.wrappedValue.dismiss()
           }) {
@@ -88,12 +89,9 @@ struct CalendarEvents: View {
       Text("By default, all calendars are selected. Tap Calendars above to limit the selection.")
     })
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       Mixpanel.mainInstance().track(event: "CalendarEvents View")
+      Analytics.logEvent("View", parameters: ["view_name": "CalendarEvents"])
       Review.calendarEventsViewed()
       let authStatus = EKEventStore.authorizationStatus(for: .event)
       if authStatus == .notDetermined {

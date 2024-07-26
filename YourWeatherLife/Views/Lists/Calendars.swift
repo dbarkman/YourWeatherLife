@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import EventKit
+import FirebaseAnalytics
 
 struct Calendars: View {
   
@@ -65,10 +66,6 @@ struct Calendars: View {
     .onAppear() {
       eventStoreViewModel.fetchCalendars()
       
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       
       DispatchQueue.main.async {
@@ -78,6 +75,7 @@ struct Calendars: View {
       }
       
       Mixpanel.mainInstance().track(event: "Calendars View")
+      Analytics.logEvent("View", parameters: ["view_name": "Calendars"])
     }
   }
 }

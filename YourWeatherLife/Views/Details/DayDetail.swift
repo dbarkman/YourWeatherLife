@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct DayDetail: View {
   
@@ -24,137 +25,137 @@ struct DayDetail: View {
   var navigationTitle: String
   
   var body: some View {
-    ZStack {
-      BackgroundColor()
-      List (dayDetail.todayArray, id: \.self) { day in
-        Section(header: Text("\(day.dayOfWeek)'s Temperatures")) {
-          Group { //temps
-            HStack {
-              Text("Coldest:")
-                .fontWeight(.semibold)
-              Text("\(day.coldestTemp) at \(day.coldestTime)")
-            }
-            HStack {
-              Text("Sunrise:")
-                .fontWeight(.semibold)
-              Text("\(day.sunriseTemp) at \(day.sunriseTime)")
-            }
-            HStack {
-              Text("Warmest:")
-                .fontWeight(.semibold)
-              Text("\(day.warmestTemp) at \(day.warmestTime)")
-            }
-            HStack {
-              Text("Sunset:")
-                .fontWeight(.semibold)
-              Text("\(day.sunsetTemp) at \(day.sunsetTime)")
-            }
-          }
-        }
-        .listRowBackground(Color("ListBackground"))
-        Section(header: Text("\(day.dayOfWeek)'s Conditions")) {
-          Group {
-            HStack {
-              Text("Conditions:")
-                .fontWeight(.semibold)
-              Text("\(day.condition)")
-            }
-            if day.precipitation {
+    NavigationStack {
+      ZStack {
+        BackgroundColor()
+        List (dayDetail.todayArray, id: \.self) { day in
+          Section(header: Text("\(day.dayOfWeek)'s Temperatures")) {
+            Group { //temps
               HStack {
-                Text("\(day.precipitationType):")
+                Text("Coldest:")
                   .fontWeight(.semibold)
-                Text("\(day.precipitationPercent) chance")
-              }
-            }
-            HStack {
-              Text("Winds:")
-                .fontWeight(.semibold)
-              Text("\(day.wind)")
-            }
-            HStack {
-              Text("Humidity:")
-                .fontWeight(.semibold)
-              Text("\(day.humidity)%")
-            }
-            HStack {
-              Text("Max UV:")
-                .fontWeight(.semibold)
-              Text("\(day.uv)")
-            }
-          }
-        }
-        .listRowBackground(Color("ListBackground"))
-        Section(header: Text("\(day.dayOfWeek)'s Lunar Details")) {
-          Group { //moon stuff
-            HStack {
-              Text("Moon Phase:")
-                .fontWeight(.semibold)
-              Text("\(day.moonPhase)")
-            }
-            VStack(alignment: .leading) {
-              HStack {
-                Text("Moonrise:")
-                  .fontWeight(.semibold)
-                Text("\(day.moonRiseTime)")
+                Text("\(day.coldestTemp) at \(day.coldestTime)")
               }
               HStack {
-                Text("Moonset:")
+                Text("Sunrise:")
                   .fontWeight(.semibold)
-                Text("\(day.moonSetTime)")
+                Text("\(day.sunriseTemp) at \(day.sunriseTime)")
+              }
+              HStack {
+                Text("Warmest:")
+                  .fontWeight(.semibold)
+                Text("\(day.warmestTemp) at \(day.warmestTime)")
+              }
+              HStack {
+                Text("Sunset:")
+                  .fontWeight(.semibold)
+                Text("\(day.sunsetTemp) at \(day.sunsetTime)")
               }
             }
           }
-        }
-        .listRowBackground(Color("ListBackground"))
-        Section (header: Text(day.dayOfWeek)) {
-          ForEach(day.hours, id: \.self) { hour in
-            NavigationLink(destination: HourDetail(hour: hour, navigationTitle: parent == "Home" ? "\(day.dayOfWeek), \(hour.timeFull)" : "\(hour.shortDisplayDate)")) {
+          .listRowBackground(Color("ListBackground"))
+          Section(header: Text("\(day.dayOfWeek)'s Conditions")) {
+            Group {
               HStack {
-                VStack(alignment: .leading) {
-                  Text("\(hour.time)")
+                Text("Conditions:")
+                  .fontWeight(.semibold)
+                Text("\(day.condition)")
+              }
+              if day.precipitation {
+                HStack {
+                  Text("\(day.precipitationType):")
                     .fontWeight(.semibold)
-                  Text("\(hour.temperature) \(hour.condition)")
+                  Text("\(day.precipitationPercent) chance")
                 }
-                Spacer()
-                AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
-                  image.resizable()
-                } placeholder: {
-                  Image("day/113")
-                }
-                .frame(width: 64, height: 64)
+              }
+              HStack {
+                Text("Winds:")
+                  .fontWeight(.semibold)
+                Text("\(day.wind)")
+              }
+              HStack {
+                Text("Humidity:")
+                  .fontWeight(.semibold)
+                Text("\(day.humidity)%")
+              }
+              HStack {
+                Text("Max UV:")
+                  .fontWeight(.semibold)
+                Text("\(day.uv)")
               }
             }
           }
-        } //end of Section
-        .listRowBackground(Color("ListBackground"))
-      } //end of List
-      .listStyle(.plain)
-      .navigationTitle(navigationTitle)
-    } //end of ZStack
-    .toolbar {
-      ToolbarItem {
-        Button(action: {
-          showFeedback.toggle()
-        }) {
-          Label("Feedback", systemImage: "star")
-        }
-        .sheet(isPresented: $showFeedback) {
-          FeedbackModal()
+          .listRowBackground(Color("ListBackground"))
+          Section(header: Text("\(day.dayOfWeek)'s Lunar Details")) {
+            Group { //moon stuff
+              HStack {
+                Text("Moon Phase:")
+                  .fontWeight(.semibold)
+                Text("\(day.moonPhase)")
+              }
+              VStack(alignment: .leading) {
+                HStack {
+                  Text("Moonrise:")
+                    .fontWeight(.semibold)
+                  Text("\(day.moonRiseTime)")
+                }
+                HStack {
+                  Text("Moonset:")
+                    .fontWeight(.semibold)
+                  Text("\(day.moonSetTime)")
+                }
+              }
+            }
+          }
+          .listRowBackground(Color("ListBackground"))
+          Section (header: Text(day.dayOfWeek)) {
+            ForEach(day.hours, id: \.self) { hour in
+              NavigationLink(destination: HourDetail(hour: hour, navigationTitle: parent == "Home" ? "\(day.dayOfWeek), \(hour.timeFull)" : "\(hour.shortDisplayDate)")) {
+                HStack {
+                  VStack(alignment: .leading) {
+                    Text("\(hour.time)")
+                      .fontWeight(.semibold)
+                    Text("\(hour.temperature) \(hour.condition)")
+                  }
+                  Spacer()
+                  AsyncImage(url: URL(string: "https:\(hour.conditionIcon)")) { image in
+                    image.resizable()
+                  } placeholder: {
+                    Image("day/113")
+                  }
+                  .frame(width: 64, height: 64)
+                }
+              }
+            }
+          } //end of Section
+          .listRowBackground(Color("ListBackground"))
+        } //end of List
+//        .overlay(dayDetail.todayArray.count == 0 ? Text("No Data Available") : nil, alignment: .center)
+        .listStyle(.plain)
+        .navigationTitle(navigationTitle)
+      } //end of ZStack
+      .toolbar {
+        ToolbarItem {
+          Button(action: {
+            showFeedback.toggle()
+          }) {
+            Label("Feedback", systemImage: "star")
+          }
+          .sheet(isPresented: $showFeedback) {
+            FeedbackModal()
+          }
         }
       }
+      .onAppear() {
+        UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
+        Mixpanel.mainInstance().track(event: "DayDetail View")
+        Analytics.logEvent("View", parameters: ["view_name": "DayDetail"])
+
+        if parent == "Home" {
+          globalViewModel.returningFromChildView = true
+        }
+        dayDetail.fetchDayDetail(dates: dates, isToday: isToday)
     }
-    .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
-      UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
-      Mixpanel.mainInstance().track(event: "DayDetail View")
-      
-      if parent == "Home" {
-        globalViewModel.returningFromChildView = true
-      }
-      dayDetail.fetchDayDetail(dates: dates, isToday: isToday)
     }
   }
 }

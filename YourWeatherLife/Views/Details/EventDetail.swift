@@ -8,6 +8,7 @@
 import SwiftUI
 import Mixpanel
 import OSLog
+import FirebaseAnalytics
 
 struct EventDetail: View {
   
@@ -41,14 +42,17 @@ struct EventDetail: View {
         }
         .listRowBackground(Color("ListBackground"))
       } // end of List
+      .overlay(event.forecastHours.isEmpty ? Text("No Data Available") : nil, alignment: .center)
       .navigationTitle(event.eventName)
       .listStyle(.plain)
     } //end of ZStack
     .toolbar {
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button("Edit", action: {
-          showEditEvent = true
-        })
+      if dailyEvent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button("Edit", action: {
+            showEditEvent = true
+          })
+        }
       }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button(action: {
@@ -69,13 +73,10 @@ struct EventDetail: View {
       .accentColor(Color("AccentColor"))
     }
     .onAppear() {
-      let appearance = UINavigationBarAppearance()
-      appearance.backgroundColor = UIColor(Color("NavigationBackground"))
-      UINavigationBar.appearance().standardAppearance = appearance
-      UINavigationBar.appearance().scrollEdgeAppearance = appearance
       UINavigationBar.appearance().tintColor = UIColor(Color("AccentColor"))
       globalViewModel.returningFromChildView = true
       Mixpanel.mainInstance().track(event: "EventDetail View")
+      Analytics.logEvent("View", parameters: ["view_name": "EventDetail"])
       Review.eventDetailViewed()
       
       if dailyEvent {
